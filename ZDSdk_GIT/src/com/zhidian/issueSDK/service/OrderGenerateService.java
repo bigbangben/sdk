@@ -1,0 +1,109 @@
+/**
+ * @author ZingQBo
+ * @time 2014年12月15日下午5:33:51
+ */
+package com.zhidian.issueSDK.service;
+
+import org.json.JSONObject;
+
+import android.app.Activity;
+
+import com.zhidian.issueSDK.ICallback;
+import com.zhidian.issueSDK.api.OrderGenerateApi;
+import com.zhidian.issueSDK.model.GameInfo;
+import com.zhidian.issueSDK.net.JsonResponse;
+import com.zhidian.issueSDK.net.NetTask;
+import com.zhidian.issueSDK.platform.Iplatform;
+import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKUtils;
+
+/**
+ * @Description
+ * @author ZengQBo
+ * @time 2014年12月15日
+ */
+public class OrderGenerateService {
+	private Iplatform iplatform;
+	private Activity mActivity;
+	private ICallback callback;
+	private String money;
+	private String notifyUrl;
+
+	public interface OrderGenerateListener {
+		public void onSuccess();
+
+		public void onFail(String value);
+	}
+
+	public OrderGenerateService(Activity activity, Iplatform iplateform) {
+		this.mActivity = activity;
+		this.iplatform = iplateform;
+	}
+
+	public void dopay(GameInfo model, String money, String cpOrderId,
+			String extInfo, String notifyUrl, ICallback callback) {
+		this.callback = callback;
+		this.money = money;
+		// 生成订单
+		orderGenerate(model, money, cpOrderId, extInfo, notifyUrl);
+	}
+
+	private OrderGenerateListener listener = new OrderGenerateListener() {
+
+		@Override
+		public void onSuccess() {
+			callback.paySuccess(notifyUrl);
+		}
+
+		@Override
+		public void onFail(String value) {
+			callback.onError(ICallback.PAY, value);
+
+		}
+	};
+
+	private void orderGenerate(GameInfo model, String money, String cpOrderId,
+			String extInfo, String notifyUrl) {
+		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
+		OrderGenerateApi api = new OrderGenerateApi();
+		String fixed = "0";
+		if (money != null && Integer.parseInt(money) > 0) {
+			fixed = "1";
+		}
+		api.appId = SDKUtils.getAppId(mActivity);
+		api.platformId = iplatform.getPlatformId();
+		api.uid = InitService.mUserInfoModel.id;
+		api.zoneId = model.getZoneId();
+		api.roleId = model.getRoleId();
+		api.cpOrderId = cpOrderId;
+		api.extInfo = extInfo;
+		api.amount = money;
+		api.notifyUrl = notifyUrl;
+		api.fixed = fixed;
+		api.loginTime = LoginService.loginTime;
+		api.deviceId = phoneInformation.getDeviceCode();
+		api.setResponse(jsonResponse);
+		new NetTask().execute(api);
+	}
+
+	private JsonResponse jsonResponse = new JsonResponse() {
+
+		@Override
+		public void requestError(String string) {
+			super.requestError(string);
+		}
+
+		@Override
+		public void requestSuccess(JSONObject jsonObject) {
+			int code = jsonObject.optInt("code");
+			if (code == 0) {
+				String orderId = jsonObject.optString("orderId");
+				notifyUrl = jsonObject.optString("notifyUrl");
+				iplatform.pay(mActivity, money, orderId, listener);
+			} else {
+				callback.onError(ICallback.PAY, jsonObject.toString());
+			}
+		}
+	};
+
+}
