@@ -7,8 +7,11 @@ import android.widget.Toast;
 import com.nd.commplatform.NdCommplatform;
 import com.nd.commplatform.NdErrorCode;
 import com.nd.commplatform.NdMiscCallbackListener;
+import com.nd.commplatform.NdMiscCallbackListener.OnPayProcessListener;
+import com.nd.commplatform.NdPageCallbackListener.OnExitCompleteListener;
 import com.nd.commplatform.OnInitCompleteListener;
 import com.nd.commplatform.entry.NdAppInfo;
+import com.nd.commplatform.entry.NdBuyInfo;
 import com.nd.commplatform.entry.NdLoginStatus;
 import com.nd.commplatform.gc.widget.NdToolBar;
 import com.nd.commplatform.gc.widget.NdToolBarPlace;
@@ -16,6 +19,7 @@ import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
+import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
 import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
@@ -58,31 +62,56 @@ public class NdPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
+		NdCommplatform.getInstance().ndLogout(NdCommplatform.LOGOUT_TO_RESET_AUTO_LOGIN_CONFIG, activity);
+		gameLogoutListener.logoutSuccess();
+	}
+	
+	@Override
+	public void exit(Activity mActivity, final GameExitListener listener) {
+		NdCommplatform.getInstance().ndExit(
+				new OnExitCompleteListener(mActivity){
 
+					@Override
+					public void onComplete() {
+						listener.onSuccess();
+					}
+			
+		});
 	}
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			OrderGenerateListener listener) {
-		// TODO Auto-generated method stub
+			final OrderGenerateListener listener) {
+		NdBuyInfo info = new NdBuyInfo();
+		info.setCount(1);
+		info.setPayDescription("");
+		info.setProductId("1");
+		info.setProductName("");
+		info.setProductOrginalPrice(Integer.valueOf(money));
+		info.setProductPrice(Integer.valueOf(money));
+		info.setSerial(order);
+		NdCommplatform.getInstance().ndUniPay(info, activity, new OnPayProcessListener() {
+			
+			@Override
+			public void finishPayProcess(int arg0) {
+				listener.onSuccess();
+			}
+		});
 
 	}
 
 	@Override
 	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
-		// TODO Auto-generated method stub
-
+		 listener.onSuccess();
 	}
 
 	@Override
 	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
-		// TODO Auto-generated method stub
-
+		 listener.onSuccess();	
 	}
 
 	@Override
 	public boolean suportLogoutUI() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -188,4 +217,6 @@ public class NdPlatform implements Iplatform {
 		}
 
 	}
+
+
 }
