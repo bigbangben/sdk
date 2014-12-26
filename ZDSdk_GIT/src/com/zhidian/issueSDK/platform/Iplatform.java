@@ -5,6 +5,7 @@ import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.service.CreateRoleService;
+import com.zhidian.issueSDK.service.ExitService;
 import com.zhidian.issueSDK.service.InitService;
 import com.zhidian.issueSDK.service.LogOutService;
 import com.zhidian.issueSDK.service.LoginService;
@@ -33,6 +34,8 @@ public interface Iplatform {
 	 */
 	public void login(Activity activity,
 			LoginService.GameLoginListener gameLoginListener);
+	
+	
 
 	/**
 	 * @param activity
@@ -46,6 +49,12 @@ public interface Iplatform {
 	 */
 	public void logOut(Activity activity,
 			LogOutService.GameLogoutListener gameLogoutListener);
+	
+	/**
+	 * @param mActivity
+	 * @param listener
+	 */
+	public void exit(Activity mActivity, ExitService.GameExitListener listener);
 
 	/**
 	 * @param activity
@@ -75,5 +84,8 @@ public interface Iplatform {
 	public void onPause();
 
 	public void onDestory();
+
+	
+
 
 }
