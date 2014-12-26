@@ -27,6 +27,27 @@ public class ExitService {
 	private Iplatform iplatform;
 	private Activity mActivity;
 	private ICallback callback;
+	private GameExitListener listener = new GameExitListener() {
+		
+		@Override
+		public void onSuccess() {
+			exit(gameInfo);
+		}
+		
+		@Override
+		public void onFail(String value) {
+			
+		}
+	};
+	private GameInfo gameInfo;
+	
+	public interface GameExitListener {
+		public void onSuccess();
+
+		public void onFail(String value);
+	}
+	
+	
 
 	public ExitService(Activity activity, Iplatform iplateform) {
 		this.mActivity = activity;
@@ -35,22 +56,29 @@ public class ExitService {
 
 	public void exit(GameInfo gameInfo, ICallback callback) {
 		this.callback = callback;
-		exit(gameInfo);
+		this.gameInfo = gameInfo;
+		iplatform.exit(mActivity,listener);
+		
 
 	}
 
 	private void exit(GameInfo model) {
-			PhoneInformation phoneInformation = new PhoneInformation(mActivity);
-			ExitApi api = new ExitApi();
-			api.appId = SDKUtils.getAppId(mActivity);
-			api.platformId = iplatform.getPlatformId();
-			api.uid = InitService.mUserInfoModel.id;
-			api.zoneId = model.getZoneId();
-			api.roleId = model.getRoleId();
-			api.deviceId = phoneInformation.getDeviceCode();
-			api.setResponse(jsonResponse);
-			new NetTask().execute(api);
+		
+			sendToSDKServer(model);
 		}
+
+	private void sendToSDKServer(GameInfo model) {
+		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
+		ExitApi api = new ExitApi();
+		api.appId = SDKUtils.getAppId(mActivity);
+		api.platformId = iplatform.getPlatformId();
+		api.uid = InitService.mUserInfoModel.id;
+		api.zoneId = model.getZoneId();
+		api.roleId = model.getRoleId();
+		api.deviceId = phoneInformation.getDeviceCode();
+		api.setResponse(jsonResponse);
+		new NetTask().execute(api);
+	}
 
 		private JsonResponse jsonResponse = new JsonResponse() {
 			@Override
@@ -62,7 +90,6 @@ public class ExitService {
 			public void requestSuccess(JSONObject jsonObject) {
 				int code = jsonObject.optInt("code");
 				if (code == 0) {
-					// exit success TODO
 					callback.exitSuccess();
 					SDKLog.e("", "Exit Success");
 				} else {
