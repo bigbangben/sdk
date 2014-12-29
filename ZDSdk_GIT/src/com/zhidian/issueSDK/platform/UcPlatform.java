@@ -16,6 +16,7 @@ import cn.uc.gamesdk.UCLoginFaceType;
 import cn.uc.gamesdk.UCOrientation;
 import cn.uc.gamesdk.info.FeatureSwitch;
 import cn.uc.gamesdk.info.GameParamInfo;
+import cn.uc.gamesdk.info.OrderInfo;
 import cn.uc.gamesdk.info.PaymentInfo;
 
 import com.zhidian.issueSDK.model.GameInfo;
@@ -137,7 +138,6 @@ public class UcPlatform implements Iplatform {
 						}
 					});
 		} catch (UCCallbackListenerNullException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -180,7 +180,6 @@ public class UcPlatform implements Iplatform {
 						}
 					});
 		} catch (UCCallbackListenerNullException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -208,7 +207,6 @@ public class UcPlatform implements Iplatform {
 				} catch (UCCallbackListenerNullException e) {
 					e.printStackTrace();
 				} catch (UCFloatButtonCreateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -239,15 +237,14 @@ public class UcPlatform implements Iplatform {
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order,
-			OrderGenerateListener listener) {
-		ucSdkPay(activity,money,order,listener);
+	public void pay(Activity activity, String money, String order,GameInfo gameInfo, 
+ OrderGenerateListener listener) {
+		ucSdkPay(activity, money, order, gameInfo, listener);
 	}
 
 	@Override
 	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
@@ -263,13 +260,11 @@ public class UcPlatform implements Iplatform {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onDestory() {
-		// TODO Auto-generated method stub
 
 	}
 	
@@ -320,8 +315,9 @@ public class UcPlatform implements Iplatform {
 	 * @param order 
 	 * @param money 
 	 * @param activity 
+	 * @param gameInfo 
 	 */
-	private void ucSdkPay(Activity activity, String money, String order, OrderGenerateListener listener) {
+	private void ucSdkPay(Activity activity, String money, String order, GameInfo gameInfo, final OrderGenerateListener listener) {
 		PaymentInfo pInfo = new PaymentInfo(); // 创建Payment对象，用于传递充值信息
 
 		// 设置充值自定义参数，此参数不作任何处理，
@@ -332,24 +328,75 @@ public class UcPlatform implements Iplatform {
 		// 如无法支付，请在开放平台检查是否已经配置了对应环境的支付回调地址，如无请配置，如有但仍无法支付请联系UC技术接口人。
 		pInfo.setServerId(0);
 
-		pInfo.setRoleId("102"); // 设置用户的游戏角色的ID，此为必选参数，请根据实际业务数据传入真实数据
-		pInfo.setRoleName("游戏角色名"); // 设置用户的游戏角色名字，此为必选参数，请根据实际业务数据传入真实数据
-		pInfo.setGrade("12"); // 设置用户的游戏角色等级，此为可选参数
+		pInfo.setRoleId(gameInfo.getRoleId()); // 设置用户的游戏角色的ID，此为必选参数，请根据实际业务数据传入真实数据
+		pInfo.setRoleName(gameInfo.getRoleName()); // 设置用户的游戏角色名字，此为必选参数，请根据实际业务数据传入真实数据
+		pInfo.setGrade(gameInfo.getRoleLevel()); // 设置用户的游戏角色等级，此为可选参数
 
 		// 非必填参数，设置游戏在支付完成后的游戏接收订单结果回调地址，必须为带有http头的URL形式。
-		pInfo.setNotifyUrl("http://192.168.1.1/notifypage.do");
+		pInfo.setNotifyUrl(order);
 
 		// 当传入一个amount作为金额值进行调用支付功能时，SDK会根据此amount可用的支付方式显示充值渠道
 		// 如你传入6元，则不显示充值卡选项，因为市面上暂时没有6元的充值卡，建议使用可以显示充值卡方式的金额
-		pInfo.setAmount(amount);// 设置充值金额，此为可选参数
+		pInfo.setAmount(Float.parseFloat(money));// 设置充值金额，此为可选参数
 
 		try {
-			UCGameSDK.defaultSDK().pay(getApplicationContext(), pInfo,
-					payResultListener);
+			UCGameSDK.defaultSDK().pay(activity, pInfo,
+					new UCCallbackListener<OrderInfo>() {
+						@Override
+						public void callback(int statudcode, OrderInfo orderInfo) {
+							if (statudcode == UCGameSDKStatusCode.NO_INIT) {
+								// 没有初始化就进行登录调用，需要游戏调用SDK初始化方法
+							}
+							if (statudcode == UCGameSDKStatusCode.SUCCESS) {
+								// 成功充值
+								listener.onSuccess();
+								if (orderInfo != null) {
+									String ordereId = orderInfo.getOrderId();// 获取订单号
+									float orderAmount = orderInfo
+											.getOrderAmount();// 获取订单金额
+									int payWay = orderInfo.getPayWay();
+									String payWayName = orderInfo
+											.getPayWayName();
+									System.out.print(ordereId + ","
+											+ orderAmount + "," + payWay + ","
+											+ payWayName);
+								}
+							}
+							if (statudcode == UCGameSDKStatusCode.PAY_USER_EXIT) {
+								// 用户退出充值界面。
+							}
+						}
+					});
 		} catch (UCCallbackListenerNullException e) {
 			// 异常处理
 		}
 
 	}
+	
+
+/*	private UCCallbackListener<OrderInfo> payResultListener = new UCCallbackListener<OrderInfo>() {
+		@Override
+		public void callback(int statudcode, OrderInfo orderInfo) {
+			if (statudcode == UCGameSDKStatusCode.NO_INIT) {
+				// 没有初始化就进行登录调用，需要游戏调用SDK初始化方法
+			}
+			if (statudcode == UCGameSDKStatusCode.SUCCESS) {
+				// 成功充值
+				if (orderInfo != null) {
+					String ordereId = orderInfo.getOrderId();// 获取订单号
+					float orderAmount = orderInfo.getOrderAmount();// 获取订单金额
+					int payWay = orderInfo.getPayWay();
+					String payWayName = orderInfo.getPayWayName();
+					System.out.print(ordereId + "," + orderAmount + ","
+							+ payWay + "," + payWayName);
+				}
+			}
+			if (statudcode == UCGameSDKStatusCode.PAY_USER_EXIT) {
+				// 用户退出充值界面。
+			}
+		}
+
+	};*/
+
 
 }
