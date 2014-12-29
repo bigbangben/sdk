@@ -60,10 +60,11 @@ public interface Iplatform {
 	 * @param activity
 	 * @param money
 	 * @param order
+	 * @param model 
 	 * @param listener
 	 */
 	public void pay(Activity activity, String money, String order,
-			OrderGenerateService.OrderGenerateListener listener);
+			GameInfo model, OrderGenerateService.OrderGenerateListener listener);
 
 	/**
 	 * @param gameInfo
