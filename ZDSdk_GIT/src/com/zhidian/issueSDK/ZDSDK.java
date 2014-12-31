@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.platform.Iplatform;
+import com.zhidian.issueSDK.platform.QihooPlatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
 import com.zhidian.issueSDK.service.InitService;
@@ -24,6 +25,7 @@ public class ZDSDK {
 	private ZDSDK(Activity activity) {
 		this.mActivity = activity;
 		// 初始化 plateform
+		iplateform = new QihooPlatform();
 	}
 
 	public static ZDSDK getInstance(Activity activity) {
