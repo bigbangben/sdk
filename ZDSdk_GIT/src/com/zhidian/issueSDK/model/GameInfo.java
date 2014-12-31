@@ -10,6 +10,7 @@ public class GameInfo {
    private String  roleId;
    private String  roleName;
    private String roleLevel;
+   private String serverId;
 
     public String getZoneId() {
         return zoneId;
@@ -50,4 +51,12 @@ public class GameInfo {
     public void setRoleLevel(String roleLevel) {
         this.roleLevel = roleLevel;
     }
+
+	public String getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(String serverId) {
+		this.serverId = serverId;
+	}
 }
