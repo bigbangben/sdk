@@ -1,6 +1,7 @@
 package com.zhidian.issueSDK.platform;
 
 import net.umipay.android.GameParamInfo;
+import net.umipay.android.GameRolerInfo;
 import net.umipay.android.GameUserInfo;
 import net.umipay.android.UmiPaySDKManager;
 import net.umipay.android.UmiPaymentInfo;
@@ -21,6 +22,12 @@ import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 
 public class OuWanPlatform implements Iplatform {
+
+	private Activity mActivity;
+
+	public OuWanPlatform(Activity activity) {
+		this.mActivity = activity;
+	}
 
 	@Override
 	public String getPlatformId() {
@@ -96,14 +103,12 @@ public class OuWanPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		// TODO Auto-generated method stub
-
+		UmiPaySDKManager.logoutAccount(activity);// 登出账户接口
 	}
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
@@ -121,8 +126,9 @@ public class OuWanPlatform implements Iplatform {
 		paymentInfo.setRoleGrade(model.getRoleLevel()); // 【必填】设置用户的游戏角色等级
 		paymentInfo.setRoleId(model.getRoleId());// 【必填】设置用户的游戏角色的ID
 		paymentInfo.setRoleName(model.getRoleName());// 【必填】设置用户的游戏角色名字
-		paymentInfo.setServerId("10086");// 【必填】设置用户所在的服务器ID
-		//paymentInfo.setCustomInfo("");// 【可选】游戏开发商自定义数据。该值将在用户充值成功后，在充值回调接口通知给游戏开发商时携带该数据
+		paymentInfo.setServerId(model.getServerId());// 【必填】设置用户所在的服务器ID
+		// paymentInfo.setCustomInfo("");//
+		// 【可选】游戏开发商自定义数据。该值将在用户充值成功后，在充值回调接口通知给游戏开发商时携带该数据
 		UmiPaySDKManager.showPayView(activity, paymentInfo);// 调用充值接口
 	}
 
@@ -133,6 +139,13 @@ public class OuWanPlatform implements Iplatform {
 
 	@Override
 	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+        GameRolerInfo gameRolerInfo = new GameRolerInfo();
+        gameRolerInfo.setServerId(gameInfo.getServerId());
+        gameRolerInfo.setServerName("");
+        gameRolerInfo.setRoleId(gameInfo.getRoleId());
+        gameRolerInfo.setRoleName(gameInfo.getRoleName());
+        gameRolerInfo.setRoleLevel(gameInfo.getRoleLevel());
+        UmiPaySDKManager.setGameRolerInfo(mActivity,gameRolerInfo);//调用上报角色信息接口
 		listener.onSuccess();
 	}
 
