@@ -87,8 +87,8 @@ public class UcPlatform implements Iplatform {
 		}
 
 		GameParamInfo gpi = new GameParamInfo();// 下面的值仅供参考
-		gpi.setCpId(initInfo.getAppId());
-		gpi.setGameId(initInfo.getAppId());
+		gpi.setCpId(Integer.parseInt(initInfo.getAppId()));
+		gpi.setGameId(Integer.parseInt(initInfo.getAppId()));
 		gpi.setServerId(0); // 服务器ID可根据游戏自身定义设置，或传入0
 		// gpi.setChannelId(2); // 渠道号统一处理，已不需设置，此参数已废弃，服务端此参数请设置值为2
 
