@@ -159,7 +159,7 @@ public class NdPlatform implements Iplatform {
 
 		NdAppInfo appInfo = new NdAppInfo();
 		appInfo.setCtx(initInfo.getCtx());
-		appInfo.setAppId(initInfo.getAppId());// 应用ID
+		appInfo.setAppId(Integer.parseInt(initInfo.getAppId()));// 应用ID
 		appInfo.setAppKey(initInfo.getAppKey());// 应用Key
 		/*
 		 * NdVersionCheckLevelNormal 版本检查失败可以继续进行游戏 NdVersionCheckLevelStrict
