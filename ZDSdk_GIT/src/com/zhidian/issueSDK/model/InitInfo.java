@@ -9,14 +9,14 @@ import android.content.Context;
  * 
  */
 public class InitInfo {
-	private int appId;
+	private String appId;
 	private String appKey;
 	private int screenOrientation;
 	private Context ctx;
-	public int getAppId() {
+	public String getAppId() {
 		return appId;
 	}
-	public void setAppId(int appId) {
+	public void setAppId(String appId) {
 		this.appId = appId;
 	}
 	public String getAppKey() {
