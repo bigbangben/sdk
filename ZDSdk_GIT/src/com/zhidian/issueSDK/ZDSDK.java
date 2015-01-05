@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
+import com.zhidian.issueSDK.platform.BaiduPlatform;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
@@ -24,6 +25,7 @@ public class ZDSDK {
 	private ZDSDK(Activity activity) {
 		this.mActivity = activity;
 		// 初始化 plateform
+		iplateform = new BaiduPlatform();
 	}
 
 	public static ZDSDK getInstance(Activity activity) {
