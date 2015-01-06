@@ -182,8 +182,7 @@ public class SogouPlatform implements Iplatform {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
-
+		mFloatMenu.hide();
 	}
 
 	@Override
