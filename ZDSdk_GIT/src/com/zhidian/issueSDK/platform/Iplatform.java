@@ -64,7 +64,7 @@ public interface Iplatform {
 	 * @param listener
 	 */
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, OrderGenerateService.OrderGenerateListener listener);
+			GameInfo model, String notifyUrl, OrderGenerateService.OrderGenerateListener listener);
 
 	/**
 	 * @param gameInfo
