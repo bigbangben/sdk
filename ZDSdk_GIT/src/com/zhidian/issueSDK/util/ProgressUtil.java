@@ -21,11 +21,11 @@ public class ProgressUtil {
         return null;
     }
 
-    public static ProgressDialog show(Context context, int titleResId, int messageResId, OnCancelListener cancelListener) {
+    public static ProgressDialog show(Context context, String title, String message, OnCancelListener cancelListener) {
         try {
             ProgressDialog pd = new ProgressDialog(context);
-            pd.setTitle(titleResId);
-            pd.setMessage(context.getText(messageResId));
+            pd.setTitle(title);
+            pd.setMessage(message);
             pd.setCancelable(true);
             pd.setOnCancelListener(cancelListener);
             pd.show();
