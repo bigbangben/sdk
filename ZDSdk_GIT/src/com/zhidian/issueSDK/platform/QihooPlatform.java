@@ -94,7 +94,7 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, OrderGenerateListener listener) {
+			GameInfo model, String notifyUri, OrderGenerateListener listener) {
 		this.mActivity = activity;
 		String name = activity.getApplicationInfo().packageName;
 		String moneyAmount = String.valueOf(Integer.parseInt(money) * 100);
