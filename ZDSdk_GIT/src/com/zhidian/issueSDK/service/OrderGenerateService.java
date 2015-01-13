@@ -101,7 +101,7 @@ public class OrderGenerateService {
 			if (code == 0) {
 				String orderId = jsonObject.optString("orderId");
 				notifyUrl = jsonObject.optString("notifyUrl");
-				iplatform.pay(mActivity, money, orderId, model, listener);
+				iplatform.pay(mActivity, money, orderId, model, notifyUrl, listener);
 			} else {
 				callback.onError(ICallback.PAY, jsonObject.toString());
 			}
