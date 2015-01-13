@@ -106,7 +106,7 @@ public class MiPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, OrderGenerateListener listener) {
+			GameInfo model, String notifyUrl, String exInfo, OrderGenerateListener listener) {
 		Bundle mBundle = new Bundle();
 		mBundle.putString(GameInfoField.GAME_USER_BALANCE, ""); // 用户余额
 		mBundle.putString(GameInfoField.GAME_USER_GAMER_VIP, ""); // vip等级
