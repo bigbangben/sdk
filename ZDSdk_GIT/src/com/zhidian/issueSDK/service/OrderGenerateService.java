@@ -29,6 +29,7 @@ public class OrderGenerateService {
 	private String money;
 	private String notifyUrl;
 	private GameInfo model;
+	private String extInfo;
 
 	public interface OrderGenerateListener {
 		public void onSuccess();
@@ -46,6 +47,7 @@ public class OrderGenerateService {
 		this.callback = callback;
 		this.money = money;
 		this.model = model;
+		this.extInfo = extInfo;
 		// 生成订单
 		orderGenerate(model, money, cpOrderId, extInfo, notifyUrl);
 	}
@@ -101,7 +103,7 @@ public class OrderGenerateService {
 			if (code == 0) {
 				String orderId = jsonObject.optString("orderId");
 				notifyUrl = jsonObject.optString("notifyUrl");
-				iplatform.pay(mActivity, money, orderId, model, notifyUrl, listener);
+				iplatform.pay(mActivity, money, orderId, model, notifyUrl, extInfo, listener);
 			} else {
 				callback.onError(ICallback.PAY, jsonObject.toString());
 			}
