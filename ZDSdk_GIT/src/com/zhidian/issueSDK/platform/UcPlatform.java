@@ -237,7 +237,7 @@ public class UcPlatform implements Iplatform {
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order,GameInfo gameInfo, 
+	public void pay(Activity activity, String money, String order,GameInfo gameInfo, String notifyUrl, String exInfo, 
  OrderGenerateListener listener) {
 		ucSdkPay(activity, money, order, gameInfo, listener);
 	}
