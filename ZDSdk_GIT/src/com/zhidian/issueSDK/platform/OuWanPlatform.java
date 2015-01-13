@@ -113,7 +113,7 @@ public class OuWanPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, OrderGenerateListener listener) {
+			GameInfo model, String notifyUrl, String exInfo, OrderGenerateListener listener) {
 		UmiPaymentInfo paymentInfo = new UmiPaymentInfo();
 		// 业务类型，SERVICE_TYPE_QUOTA(固定额度模式，充值金额在支付页面不可修改)，SERVICE_TYPE_RATE(汇率模式，充值金额在支付页面可修改）
 		paymentInfo.setServiceType(UmiPaymentInfo.SERVICE_TYPE_QUOTA);
