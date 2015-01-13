@@ -121,7 +121,7 @@ public class SogouPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, final OrderGenerateListener listener) {
+			GameInfo model, String notifyUrl, String exInfo, final OrderGenerateListener listener) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		// 游戏中货币名字
 		data.put("currency", "符石");
