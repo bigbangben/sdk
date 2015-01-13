@@ -80,7 +80,7 @@ public class NdPlatform implements Iplatform {
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order, GameInfo gameInfo,
+	public void pay(Activity activity, String money, String order, GameInfo gameInfo, String notifyUrl, String exInfo, 
 			final OrderGenerateListener listener) {
 		NdBuyInfo info = new NdBuyInfo();
 		info.setCount(1);
