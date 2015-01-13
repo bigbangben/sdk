@@ -152,7 +152,7 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, OrderGenerateListener orderGenerateListener) {
+			GameInfo model, String notifyUrl, String exInfo, OrderGenerateListener orderGenerateListener) {
 		this.orderGenerateListener = orderGenerateListener;
 		mAnzhiCenter.pay(activity, 0, Float.valueOf(money), "", "");
 	}
