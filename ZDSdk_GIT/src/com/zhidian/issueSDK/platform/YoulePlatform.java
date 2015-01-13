@@ -141,7 +141,7 @@ public class YoulePlatform implements Iplatform {
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order,GameInfo gameInfo,
+	public void pay(Activity activity, String money, String order,GameInfo gameInfo, String notifyUrl, String exInfo,
 			OrderGenerateListener listener) {
 		if (money != null || Integer.parseInt(money) > 0) {
 			ZhiDianManager.customPay(activity, Integer.parseInt(money), order);
