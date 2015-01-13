@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,7 +45,9 @@ public class QihooPlatform implements Iplatform {
 	protected static boolean isAccessTokenValid = true;
 	protected Activity mActivity = null;
 	// 登录返回的TokenInfo
-	private TokenInfo mTokenInfo;
+	private static TokenInfo mTokenInfo = null;
+	//
+	private static QihooUserInfo mUserInfo = null;
 	private QihooUserInfoTask mUserInfoTask;
 
 	// 进度等待框
@@ -94,21 +97,28 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, String notifyUri, String extInfo, OrderGenerateListener listener) {
+			GameInfo model, String notifyUri, String extInfo,
+			OrderGenerateListener listener) {
 		this.mActivity = activity;
-		String name = activity.getApplicationInfo().packageName;
+		PackageManager pm = activity.getPackageManager();
+		String name = (String) pm.getApplicationLabel(activity
+				.getApplicationInfo());
 		String moneyAmount = String.valueOf(Integer.parseInt(money) * 100);
 		QihooPayInfo pay = new QihooPayInfo();
 		pay.setAccessToken(mTokenInfo.getAccessToken());
-		pay.setQihooUserId(model.getRoleId());
+		pay.setQihooUserId(mUserInfo.getId());
 		pay.setMoneyAmount(moneyAmount);
 		pay.setExchangeRate("1");
 		pay.setProductName("商品");
 		pay.setProductId("1111");
-		pay.setNotifyUri(order);
-		
-		doSdkPay((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? true
-				: false,true,pay);
+		pay.setNotifyUri(notifyUri);
+		pay.setAppName(name);
+		pay.setAppUserName(model.getRoleName());
+		pay.setAppUserId(model.getRoleId());
+		pay.setAppOrderId(order);
+		doSdkPay(
+				(orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? true
+						: false, true, pay);
 
 	}
 
@@ -136,8 +146,7 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void onDestory() {
-		// TODO Auto-generated method stub
-
+		mTokenInfo = null;
 	}
 
 	/**
@@ -269,7 +278,10 @@ public class QihooPlatform implements Iplatform {
 												Toast.LENGTH_LONG).show();
 									}
 								} else {
+									mUserInfo = userInfo;
 									UserInfoModel model = new UserInfoModel();
+									model.id = userInfo.getId();
+									model.userName = userInfo.getName();
 									gameLoginListener.LoginSuccess(model);
 
 								}
@@ -293,7 +305,8 @@ public class QihooPlatform implements Iplatform {
 	 * @param isFixed
 	 *            是否定额支付
 	 */
-	protected void doSdkPay(final boolean isLandScape, final boolean isFixed, QihooPayInfo pay) {
+	protected void doSdkPay(final boolean isLandScape, final boolean isFixed,
+			QihooPayInfo pay) {
 
 		if (!isAccessTokenValid) {
 			Toast.makeText(mActivity, "AccessToken已失效，请重新登录",
@@ -323,7 +336,8 @@ public class QihooPlatform implements Iplatform {
 	 * @param pay
 	 * @return Intent
 	 */
-	protected Intent getPayIntent(boolean isLandScape, boolean isFixed, QihooPayInfo pay) {
+	protected Intent getPayIntent(boolean isLandScape, boolean isFixed,
+			QihooPayInfo pay) {
 
 		Bundle bundle = new Bundle();
 
@@ -381,7 +395,6 @@ public class QihooPlatform implements Iplatform {
 		return intent;
 	}
 
-
 	// 支付的回调
 	protected IDispatcherCallback mPayCallback = new IDispatcherCallback() {
 
@@ -407,17 +420,15 @@ public class QihooPlatform implements Iplatform {
 				case -2: {
 					isAccessTokenValid = true;
 					String errorMsg = jsonRes.optString("error_msg");
-					String text = "状态码: " + errorCode + ", 状态描述：" + errorMsg; 
-					Toast.makeText(mActivity, text,
-							Toast.LENGTH_SHORT).show();
+					String text = "状态码: " + errorCode + ", 状态描述：" + errorMsg;
+					Toast.makeText(mActivity, text, Toast.LENGTH_SHORT).show();
 
 				}
 					break;
 				case 4010201:
 					isAccessTokenValid = false;
-					Toast.makeText(mActivity,
-							"AccessToken已失效，请重新登录", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(mActivity, "AccessToken已失效，请重新登录",
+							Toast.LENGTH_SHORT).show();
 					break;
 				default:
 					break;
@@ -428,8 +439,7 @@ public class QihooPlatform implements Iplatform {
 
 			// 用于测试数据格式是否异常。
 			if (!isCallbackParseOk) {
-				Toast.makeText(mActivity,
-						"严重错误！！接口返回数据格式错误！！",
+				Toast.makeText(mActivity, "严重错误！！接口返回数据格式错误！！",
 						Toast.LENGTH_LONG).show();
 			}
 		}
