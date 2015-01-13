@@ -115,7 +115,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, final OrderGenerateListener listener) {
+			GameInfo model, String notifyUrl, String exInfo, final OrderGenerateListener listener) {
 
 		PayOrderInfo payOrderInfo = buildOrderInfo(money,order,model);
 		if (payOrderInfo == null) {
