@@ -24,8 +24,7 @@ public interface Iplatform {
 	 * @param gameInitListener
 	 * @param gameLoginListener
 	 */
-	public void init(InitInfo initInfo,
-			InitService.GameInitListener gameInitListener,
+	public void init(InitService.GameInitListener gameInitListener,
 			LoginService.GameLoginListener gameLoginListener);
 
 	/**

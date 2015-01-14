@@ -105,7 +105,7 @@ public class InitService {
 	};
 
 	private void initPlatform(InitInfo initInfo) {
-		iplatform.init(initInfo, gameInitListener, gameLoginListener);
+		iplatform.init(gameInitListener, gameLoginListener);
 	}
 
 	private void initSDKServer() {
