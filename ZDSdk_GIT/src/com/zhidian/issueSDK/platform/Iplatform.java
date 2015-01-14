@@ -20,11 +20,11 @@ public interface Iplatform {
 	public String getPlatformId();
 
 	/**
-	 * @param initInfo
+	 * @param mActivity 
 	 * @param gameInitListener
 	 * @param gameLoginListener
 	 */
-	public void init(InitService.GameInitListener gameInitListener,
+	public void init(Activity mActivity, InitService.GameInitListener gameInitListener,
 			LoginService.GameLoginListener gameLoginListener);
 
 	/**

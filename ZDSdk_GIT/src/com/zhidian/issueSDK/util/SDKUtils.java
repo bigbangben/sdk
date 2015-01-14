@@ -1,18 +1,55 @@
 package com.zhidian.issueSDK.util;
 
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.util.Map;
+import com.zhidian.issueSDK.model.InitInfo;
 
 
 public class SDKUtils {
+	public static InitInfo getMeteData(Context context) {
+		ApplicationInfo info;
+		InitInfo model = new InitInfo();
+		try {
+			info = context.getPackageManager().getApplicationInfo(
+					context.getPackageName(), PackageManager.GET_META_DATA);
+			String appId = info.metaData.getString("appId");
+			String appKey = info.metaData.getString("appKey");
+			String screenOrientation = info.metaData.getString("screenOrientation");
+			if (appId.startsWith("appId:")) {
+				model.setAppId(appId.split(":")[1]);
+			} else {
+				return null;
+			}
+
+			if (appKey.startsWith("appKey")) {
+				model.setAppKey(appKey.split(":")[1]);
+			} else {
+				return null;
+			}
+
+			if (screenOrientation.startsWith("screenOrientation")) {
+				model.setScreenOrientation(Integer.valueOf(screenOrientation.split(":")[1]));
+			} else {
+				return null;
+			}
+			return model;
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
     public static String getAppId(Context context) {
     /*    ApplicationInfo info;
         try {

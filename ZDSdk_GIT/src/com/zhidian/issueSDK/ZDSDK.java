@@ -39,8 +39,8 @@ public class ZDSDK {
 	 * @param initInfo  初始化参数
 	 * @param callback  回调
 	 */
-	public void init(InitInfo initInfo, ICallback callback) {
-		new InitService(mActivity, iplateform).init(initInfo, callback);
+	public void init(ICallback callback) {
+		new InitService(mActivity, iplateform).init(callback);
 	};
 
 	/**
