@@ -37,6 +37,7 @@ import com.zhidian.issueSDK.util.ProgressUtil;
 import com.zhidian.issueSDK.util.QihooUserInfoListener;
 import com.zhidian.issueSDK.util.QihooUserInfoTask;
 import com.zhidian.issueSDK.util.SDKLog;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 public class QihooPlatform implements Iplatform {
 
@@ -61,8 +62,11 @@ public class QihooPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo, GameInitListener gameInitListener,
+	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		this.mActivity = activity;
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(mActivity);
 		orientation = initInfo.getScreenOrientation();
 		gameInitListener.initSuccess(false, null);
 
