@@ -44,9 +44,9 @@ public class InitService {
 		new InitLBS().initLBS(activity);
 	}
 
-	public void init(InitInfo initInfo, ICallback callback) {
+	public void init(ICallback callback) {
 		this.callback = callback;
-		initPlatform(initInfo);
+		initPlatform();
 	}
 
 	private JsonResponse jsonResponse = new JsonResponse() {
@@ -104,8 +104,8 @@ public class InitService {
 		}
 	};
 
-	private void initPlatform(InitInfo initInfo) {
-		iplatform.init(initInfo, gameInitListener, gameLoginListener);
+	private void initPlatform() {
+		iplatform.init(mActivity,gameInitListener, gameLoginListener);
 	}
 
 	private void initSDKServer() {
