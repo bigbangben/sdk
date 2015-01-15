@@ -82,8 +82,8 @@ public class ZDSDK {
 	 * @param gameInfo
 	 * @param callback
 	 */
-	public void logOut(GameInfo gameInfo, ICallback callback) {
-		new LogOutService(mActivity, iplateform).logout(gameInfo, callback);
+	public void logOut(Activity activity, GameInfo gameInfo, ICallback callback) {
+		new LogOutService(activity, iplateform).logout(gameInfo, callback);
 	};
 
 	/**
