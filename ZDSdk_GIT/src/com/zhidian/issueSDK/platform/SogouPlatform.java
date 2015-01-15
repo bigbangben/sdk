@@ -24,6 +24,7 @@ import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 import com.zhidian.issueSDK.util.SDKLog;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -46,9 +47,11 @@ public class SogouPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo,
+	public void init(Activity activity,
 			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		// 配置游戏信息（gid、appKey由搜狗游戏平台统一分配）
 		SogouGameConfig config = new SogouGameConfig();
 		// 开发模式为true，false是正式环境
@@ -60,8 +63,8 @@ public class SogouPlatform implements Iplatform {
 		config.gameName = "测试应用";
 
 		// SDK准备初始化
-		mSogouGamePlatform.prepare(initInfo.getCtx(), config);
-		mSogouGamePlatform.init(initInfo.getCtx(), new InitCallbackListener() {
+		mSogouGamePlatform.prepare(activity, config);
+		mSogouGamePlatform.init(activity, new InitCallbackListener() {
 
 			@Override
 			public void initSuccess() {
