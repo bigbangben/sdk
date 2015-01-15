@@ -20,6 +20,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 public class OuWanPlatform implements Iplatform {
 
@@ -36,16 +37,18 @@ public class OuWanPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo,
+	public void init(Activity activity,
 			final GameInitListener gameInitListener,
 			final GameLoginListener gameLoginListener) {
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		GameParamInfo gameParamInfo = new GameParamInfo();
 		gameParamInfo.setAppId(String.valueOf(initInfo.getAppId()));// 设置AppID
 		gameParamInfo.setAppSecret(initInfo.getAppKey());// 设置AppSecret
 		// gameParamInfo.setTestMode(false); //【可选】设置测试模式，默认为false
 		// gameParamInfo.setChannel("0","0"); //【可选】设置渠道及子渠道id
 		// 调用初始化接口
-		UmiPaySDKManager.initSDK(initInfo.getCtx(), gameParamInfo,
+		UmiPaySDKManager.initSDK(activity, gameParamInfo,
 				new InitCallbackListener() {
 					@Override
 					public void onSdkInitFinished(int code, String message) {
