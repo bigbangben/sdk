@@ -23,6 +23,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -38,9 +39,11 @@ public class BaiduPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo,
+	public void init(Activity activity,
 			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {// 初始化游戏SDK
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		BDGameSDKSetting mBDGameSDKSetting = new BDGameSDKSetting();
 		mBDGameSDKSetting.setAppID(Integer.parseInt(initInfo.getAppId()));// APPID设置
 		mBDGameSDKSetting.setAppKey(initInfo.getAppKey());// APPKEY设置
@@ -49,7 +52,7 @@ public class BaiduPlatform implements Iplatform {
 				.setOrientation((initInfo.getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
 						: BDGameSDKSetting.Orientation.PORTRAIT);
 
-		BDGameSDK.init((Activity) initInfo.getCtx(), mBDGameSDKSetting,
+		BDGameSDK.init(activity, mBDGameSDKSetting,
 				new IResponse<Void>() {
 
 					@Override
