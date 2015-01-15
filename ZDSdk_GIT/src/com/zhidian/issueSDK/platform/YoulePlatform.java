@@ -21,6 +21,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -100,12 +101,14 @@ public class YoulePlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo, GameInitListener gameInitListener,
+	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		this.gameInitListener = gameInitListener;
 		this.gameLoginListener = gameLoginListener;
-		ZhiDianManager.init((Activity) initInfo.getCtx(),
-				ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, mInitListener,
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
+		ZhiDianManager.init(activity,
+				initInfo.getScreenOrientation(), mInitListener,
 				loginListener);
 	}
 
