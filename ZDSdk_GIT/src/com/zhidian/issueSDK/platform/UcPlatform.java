@@ -29,6 +29,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 public class UcPlatform implements Iplatform {
 
@@ -42,10 +43,11 @@ public class UcPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(final InitInfo initInfo,
+	public void init(final Activity activity,
 			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
-		
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		// 监听用户注销登录消息
 				// 九游社区-退出当前账号功能执行时会触发此监听
 		try {
@@ -69,7 +71,7 @@ public class UcPlatform implements Iplatform {
 							// 退出账号成功
 							if (statuscode == UCGameSDKStatusCode.SUCCESS) {
 								// 执行销毁悬浮按钮接口
-								ucSdkDestoryFloatButton((Activity)initInfo.getCtx());
+								ucSdkDestoryFloatButton(activity);
 								gameLogoutListener.logoutSuccess();
 								// 调用SDK登录接口
 								//ucSdkLogin();
@@ -117,7 +119,7 @@ public class UcPlatform implements Iplatform {
 		// UCGameSDK.defaultSDK().setUIStyle(UCUIStyle.STANDARD);
 
 		try {
-			UCGameSDK.defaultSDK().initSDK((Activity) initInfo.getCtx(),
+			UCGameSDK.defaultSDK().initSDK(activity,
 					UCLogLevel.DEBUG, debugMode, gpi,
 					new UCCallbackListener<String>() {
 						@Override
