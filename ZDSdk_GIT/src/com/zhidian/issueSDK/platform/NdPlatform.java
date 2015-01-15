@@ -26,6 +26,7 @@ import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 import com.zhidian.issueSDK.util.AppPreferences;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -47,6 +48,7 @@ public class NdPlatform implements Iplatform {
 			GameLoginListener gameLoginListener) {
 		this.mActivity  = activity;
 		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		initSDK(initInfo, gameInitListener);
 	}
 
