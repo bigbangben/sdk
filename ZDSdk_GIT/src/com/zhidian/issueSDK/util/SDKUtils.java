@@ -25,29 +25,23 @@ public class SDKUtils {
 			String appId = info.metaData.getString("appId");
 			String appKey = info.metaData.getString("appKey");
 			String screenOrientation = info.metaData.getString("screenOrientation");
-			if (appId.startsWith("appId:")) {
+			if (appId != null & appId.startsWith("appId:")) {
 				model.setAppId(appId.split(":")[1]);
-			} else {
-				return null;
 			}
 
-			if (appKey.startsWith("appKey")) {
+			if (appKey != null & appKey.startsWith("appKey")) {
 				model.setAppKey(appKey.split(":")[1]);
-			} else {
-				return null;
 			}
 
-			if (screenOrientation.startsWith("screenOrientation")) {
+			if (screenOrientation != null & screenOrientation.startsWith("screenOrientation")) {
 				model.setScreenOrientation(Integer.valueOf(screenOrientation.split(":")[1]));
-			} else {
-				return null;
 			}
 			return model;
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return model;
 	}
 	
     public static String getAppId(Context context) {
