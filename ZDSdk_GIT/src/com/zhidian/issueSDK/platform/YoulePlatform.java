@@ -137,7 +137,7 @@ public class YoulePlatform implements Iplatform {
 				public void onClick(DialogInterface dialog, int which) {
 					ZhiDianManager.logout(activity, iLogOutListener);
 				}
-			}).create().show();
+			}).setCancelable(false).create().show();
 		}
 		
 
