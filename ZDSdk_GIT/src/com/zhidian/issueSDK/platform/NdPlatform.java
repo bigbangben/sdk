@@ -35,6 +35,7 @@ import com.zhidian.issueSDK.util.AppPreferences;
 public class NdPlatform implements Iplatform {
 
 	private NdToolBar toolBar;
+	private Activity mActivity = null;
 
 	@Override
 	public String getPlatformId() {
@@ -42,8 +43,10 @@ public class NdPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo, GameInitListener gameInitListener,
+	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		this.mActivity  = activity;
+		InitInfo initInfo = new InitInfo();
 		initSDK(initInfo, gameInitListener);
 	}
 
@@ -134,7 +137,7 @@ public class NdPlatform implements Iplatform {
 	 */
 	private void initSDK(InitInfo initInfo,
 			final GameInitListener gameInitListener) {
-		if (AppPreferences.isDebugMode(initInfo.getCtx())) {
+		if (AppPreferences.isDebugMode(mActivity)) {
 			NdCommplatform.getInstance().ndSetDebugMode(0);// 设置调试模式
 		}
 
@@ -158,7 +161,7 @@ public class NdPlatform implements Iplatform {
 		};
 
 		NdAppInfo appInfo = new NdAppInfo();
-		appInfo.setCtx(initInfo.getCtx());
+		appInfo.setCtx(mActivity);
 		appInfo.setAppId(Integer.parseInt(initInfo.getAppId()));// 应用ID
 		appInfo.setAppKey(initInfo.getAppKey());// 应用Key
 		/*
@@ -168,7 +171,7 @@ public class NdPlatform implements Iplatform {
 		appInfo.setNdVersionCheckStatus(NdAppInfo.ND_VERSION_CHECK_LEVEL_STRICT);
 
 		// 初始化91SDK
-		NdCommplatform.getInstance().ndInit((Activity) initInfo.getCtx(),
+		NdCommplatform.getInstance().ndInit(mActivity,
 				appInfo, mOnInitCompleteListener);
 	}
 
