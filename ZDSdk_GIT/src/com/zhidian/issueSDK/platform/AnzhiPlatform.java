@@ -21,6 +21,7 @@ import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 import com.zhidian.issueSDK.util.SDKLog;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -106,8 +107,11 @@ public class AnzhiPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo, GameInitListener gameInitListener,
+	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		this.mActivity = activity;
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		final CPInfo info = new CPInfo();
 		info.setOpenOfficialLogin(false);// 官方账号登录接口，默认关闭
 		info.setAppKey(initInfo.getAppId());
