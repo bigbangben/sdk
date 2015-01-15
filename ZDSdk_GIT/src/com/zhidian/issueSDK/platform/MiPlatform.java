@@ -25,6 +25,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -39,15 +40,17 @@ public class MiPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(InitInfo initInfo, GameInitListener gameInitListener,
+	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		InitInfo initInfo = new InitInfo();
+		initInfo = SDKUtils.getMeteData(activity);
 		/** SDK初始化 */
 		MiAppInfo appInfo = new MiAppInfo();
 		appInfo.setAppId(initInfo.getAppId());
 		appInfo.setAppKey(initInfo.getAppKey());
 		appInfo.setOrientation(initInfo.getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ? ScreenOrientation.horizontal
 				: ScreenOrientation.vertical); // 横竖屏
-		MiCommplatform.Init(initInfo.getCtx(), appInfo);
+		MiCommplatform.Init(activity, appInfo);
 	}
 
 	@Override
