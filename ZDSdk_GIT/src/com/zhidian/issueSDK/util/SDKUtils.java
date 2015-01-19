@@ -45,17 +45,20 @@ public class SDKUtils {
 	}
 	
     public static String getAppId(Context context) {
-    /*    ApplicationInfo info;
+       ApplicationInfo info;
         try {
             info = context.getPackageManager().getApplicationInfo(
                     context.getPackageName(), PackageManager.GET_META_DATA);
-            String appId = info.metaData.getString("ZD_APPID");
-            return appId;
+            String gameId = info.metaData.getString("gameId");
+        	if (gameId.startsWith("gameId:")) {
+        		gameId = gameId.split(":")[1];
+        	}
+            return gameId;
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
-        return "1";
+        }
+        return null;
     }
 
     public static String getSKCardPath() {

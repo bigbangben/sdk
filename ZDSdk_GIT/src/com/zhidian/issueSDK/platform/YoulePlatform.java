@@ -97,7 +97,7 @@ public class YoulePlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return "1";
+		return "15";
 	}
 
 	@Override
