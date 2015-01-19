@@ -16,6 +16,7 @@ import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.util.PhoneInformation;
 import com.zhidian.issueSDK.util.SDKLog;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * Created by Administrator on 2014/12/11.
@@ -112,8 +113,7 @@ public class InitService {
 		Log.e(TAG, "======= initSDKServer =======");// FIXME
 		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
 		InitApi api = new InitApi();
-		// api.appId = SDKUtils.getAppId(mActivity);
-		api.appId = "1";
+		api.appId = SDKUtils.getAppId(mActivity);
 		api.deviceId = phoneInformation.getDeviceCode();
 		api.imsi = phoneInformation.getImsi();
 		api.latitude = latitued;
