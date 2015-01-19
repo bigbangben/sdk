@@ -12,6 +12,7 @@ import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
@@ -62,7 +63,7 @@ public class SetGameInfoService {
 		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
 		LoginApi api = new LoginApi();
 		// api.appId = SDKUtils.getAppId(mActivity);
-		api.appId = "1";
+		api.appId = SDKUtils.getAppId(mActivity);
 		api.platformId = iplatform.getPlatformId();
 		api.uid = InitService.mUserInfoModel.id;
 		api.zoneId = model.getZoneId();
