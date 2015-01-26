@@ -39,7 +39,7 @@ public class ZDSDK {
 	 * @param initInfo  初始化参数
 	 * @param callback  回调
 	 */
-	public void init(ICallback callback) {
+	public void sdkInit(ICallback callback) {
 		new InitService(mActivity, iplateform).init(callback);
 	};
 
@@ -48,7 +48,7 @@ public class ZDSDK {
 	 * 
 	 * @param callback
 	 */
-	public void login(Activity activity, ICallback callback) {
+	public void sdkLogin(Activity activity, ICallback callback) {
 		new LoginService(activity, iplateform).login(callback);
 	};
 
@@ -80,7 +80,7 @@ public class ZDSDK {
 	 * @param gameInfo
 	 * @param callback
 	 */
-	public void logOut(Activity activity, GameInfo gameInfo, ICallback callback) {
+	public void onSdkLogOut(Activity activity, GameInfo gameInfo, ICallback callback) {
 		new LogOutService(activity, iplateform).logout(gameInfo, callback);
 	};
 
@@ -90,7 +90,7 @@ public class ZDSDK {
 	 * @param gameInfo
 	 * @param callback
 	 */
-	public void exit(GameInfo gameInfo, ICallback callback) {
+	public void onSdkExit(GameInfo gameInfo, ICallback callback) {
 		new ExitService(mActivity, iplateform).exit(gameInfo, callback);
 	};
 
@@ -119,14 +119,14 @@ public class ZDSDK {
 	/**
 	 * 暂停
 	 */
-	public void onPause() {
+	public void onSdkPause() {
 		iplateform.onPause();
 	}
 
 	/**
 	 * 销毁
 	 */
-	public void onDestory() {
+	public void onSdkDestory() {
 		iplateform.onDestory();
 	}
 }
