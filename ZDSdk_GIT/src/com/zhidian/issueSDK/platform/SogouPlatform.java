@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import com.sogou.gamecenter.sdk.FloatMenu;
 import com.sogou.gamecenter.sdk.SogouGamePlatform;
@@ -106,9 +109,31 @@ public class SogouPlatform implements Iplatform {
 	}
 
 	@Override
-	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		mSogouGamePlatform.loginout(activity);
-		gameLogoutListener.logoutSuccess();
+	public void logOut(final Activity activity, final GameLogoutListener gameLogoutListener) {
+		if (suportLogoutUI()) {
+			mSogouGamePlatform.loginout(activity);
+			gameLogoutListener.logoutSuccess();
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mSogouGamePlatform.loginout(activity);
+					gameLogoutListener.logoutSuccess();
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 	}
 
 	@Override
@@ -184,14 +209,22 @@ public class SogouPlatform implements Iplatform {
 	}
 
 	@Override
-	public void onPause() {
+	public void onPause(Activity activity) {
 		mFloatMenu.hide();
 	}
+	
 
 	@Override
 	public void onDestory() {
 		// 防止内存泄露，清理相关数据务必调用SDK结束接口
 		mSogouGamePlatform.onTerminate();
+	}
+
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
