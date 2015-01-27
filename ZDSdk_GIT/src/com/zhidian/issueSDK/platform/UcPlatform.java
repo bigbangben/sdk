@@ -1,6 +1,9 @@
 package com.zhidian.issueSDK.platform;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.View;
@@ -224,11 +227,36 @@ public class UcPlatform implements Iplatform {
 		 * 把退出消息返回给游戏，游戏可根据状态码进行相应的处理。<br>
 		 */
 		this.gameLogoutListener = gameLogoutListener;
+		if (suportLogoutUI()) {
 			try {
 				UCGameSDK.defaultSDK().logout();
 			} catch (UCCallbackListenerNullException e) {
 				// 未设置退出侦听器
 			}
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					try {
+						UCGameSDK.defaultSDK().logout();
+					} catch (UCCallbackListenerNullException e) {
+						// 未设置退出侦听器
+					}
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 		
 	}
 
@@ -260,10 +288,6 @@ public class UcPlatform implements Iplatform {
 		return false;
 	}
 
-	@Override
-	public void onPause() {
-
-	}
 
 	@Override
 	public void onDestory() {
@@ -373,6 +397,18 @@ public class UcPlatform implements Iplatform {
 			// 异常处理
 		}
 
+	}
+
+	@Override
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
