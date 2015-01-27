@@ -177,14 +177,22 @@ public class AnzhiPlatform implements Iplatform {
 		return false;
 	}
 
-	@Override
-	public void onPause() {
-
-	}
 
 	@Override
 	public void onDestory() {
 		mAnzhiCenter.gameOver(mActivity);
+	}
+
+	@Override
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
