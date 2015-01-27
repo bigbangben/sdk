@@ -4,9 +4,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -89,8 +91,26 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		// TODO Auto-generated method stub
+		if (suportLogoutUI()) {
+			// TODO logout
+		} else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+					.setMessage("不多待一会吗？")
+					.setNegativeButton("取消", new OnClickListener() {
 
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO logout
+						}
+					}).setCancelable(false).create().show();
+
+		}
 	}
 
 	@Override
@@ -140,12 +160,6 @@ public class QihooPlatform implements Iplatform {
 	public boolean suportLogoutUI() {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -448,4 +462,16 @@ public class QihooPlatform implements Iplatform {
 			}
 		}
 	};
+
+	@Override
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+
+	}
 }
