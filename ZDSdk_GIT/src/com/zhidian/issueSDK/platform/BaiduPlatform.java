@@ -165,11 +165,6 @@ public class BaiduPlatform implements Iplatform {
 	}
 
 	@Override
-	public void onPause() {
-
-	}
-
-	@Override
 	public void onDestory() {
 		BDGameSDK.destroy();
 	}
@@ -200,5 +195,17 @@ public class BaiduPlatform implements Iplatform {
 		payOrderInfo.setExtInfo(extInfo);// 该字段将会在支付成功后原样返回给CP(不超过500个字符)
 
 		return payOrderInfo;
+	}
+
+	@Override
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 }
