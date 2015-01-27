@@ -90,6 +90,7 @@ public class ExitService {
 			public void requestSuccess(JSONObject jsonObject) {
 				int code = jsonObject.optInt("code");
 				if (code == 0) {
+					cleanCach();
 					callback.exitSuccess();
 					SDKLog.e("", "Exit Success");
 				} else {
@@ -97,6 +98,12 @@ public class ExitService {
 				}
 			}
 		};
+		
+		private void cleanCach() {
+			LoginService.loginTime = "";
+			LoginService.isLogin = false;
+			InitService.mUserInfoModel = null;
+		}
 		
 	}
 
