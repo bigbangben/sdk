@@ -3,6 +3,9 @@ package com.zhidian.issueSDK.platform;
 import java.util.UUID;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -106,9 +109,31 @@ public class BaiduPlatform implements Iplatform {
 	}
 
 	@Override
-	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		BDGameSDK.logout();
-		gameLogoutListener.logoutSuccess();
+	public void logOut(Activity activity, final GameLogoutListener gameLogoutListener) {
+		if (suportLogoutUI()) {
+			BDGameSDK.logout();
+			gameLogoutListener.logoutSuccess();
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					BDGameSDK.logout();
+					gameLogoutListener.logoutSuccess();
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 	}
 
 	@Override
