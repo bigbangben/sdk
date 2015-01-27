@@ -3,7 +3,6 @@ package com.zhidian.issueSDK;
 import android.app.Activity;
 
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.platform.YoulePlatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
@@ -19,18 +18,16 @@ import com.zhidian.issueSDK.service.SetGameInfoService;
  */
 public class ZDSDK {
 	private static ZDSDK instance;
-	private Activity mActivity;
 	private Iplatform iplateform;
 
-	private ZDSDK(Activity activity) {
-		this.mActivity = activity;
+	private ZDSDK() {
 		// 初始化 plateform
 		iplateform = new YoulePlatform();
 	}
 
-	public static ZDSDK getInstance(Activity activity) {
+	public static ZDSDK getInstance() {
 		if (instance == null) {
-			instance = new ZDSDK(activity);
+			instance = new ZDSDK();
 		}
 		return instance;
 	}
@@ -38,11 +35,13 @@ public class ZDSDK {
 	/**
 	 * 初始化
 	 * 
-	 * @param initInfo  初始化参数
-	 * @param callback  回调
+	 * @param initInfo
+	 *            初始化参数
+	 * @param callback
+	 *            回调
 	 */
-	public void sdkInit(ICallback callback) {
-		new InitService(mActivity, iplateform).init(callback);
+	public void sdkInit(Activity activity, ICallback callback) {
+		new InitService(activity, iplateform).init(callback);
 	};
 
 	/**
@@ -57,11 +56,13 @@ public class ZDSDK {
 	/**
 	 * 设置角色信息
 	 * 
-	 * @param gameInfo 角色信息
-	 * @param showFloat 是否显示浮动工具栏
+	 * @param gameInfo
+	 *            角色信息
+	 * @param showFloat
+	 *            是否显示浮动工具栏
 	 */
-	public void setGameInfo(Activity activity,GameInfo gameInfo, boolean showFloat,
-			ICallback callback) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo,
+			boolean showFloat, ICallback callback) {
 		new SetGameInfoService(activity, iplateform).setGameInfo(gameInfo,
 				showFloat, callback);
 
@@ -72,8 +73,10 @@ public class ZDSDK {
 	 * 
 	 * @param gameInfo
 	 */
-	public void createRole(GameInfo gameInfo, ICallback callback) {
-		new CreateRoleService(mActivity, iplateform).creatRole(gameInfo, callback);
+	public void createRole(Activity activity, GameInfo gameInfo,
+			ICallback callback) {
+		new CreateRoleService(activity, iplateform).creatRole(gameInfo,
+				callback);
 	};
 
 	/**
@@ -82,7 +85,8 @@ public class ZDSDK {
 	 * @param gameInfo
 	 * @param callback
 	 */
-	public void onSdkLogOut(Activity activity, GameInfo gameInfo, ICallback callback) {
+	public void onSdkLogOut(Activity activity, GameInfo gameInfo,
+			ICallback callback) {
 		new LogOutService(activity, iplateform).logout(gameInfo, callback);
 	};
 
@@ -92,8 +96,9 @@ public class ZDSDK {
 	 * @param gameInfo
 	 * @param callback
 	 */
-	public void onSdkExit(GameInfo gameInfo, ICallback callback) {
-		new ExitService(mActivity, iplateform).exit(gameInfo, callback);
+	public void onSdkExit(Activity activity, GameInfo gameInfo,
+			ICallback callback) {
+		new ExitService(activity, iplateform).exit(gameInfo, callback);
 	};
 
 	/**
@@ -112,22 +117,22 @@ public class ZDSDK {
 	 * @param callback
 	 *            回调
 	 */
-	public void doPay(GameInfo gameInfo, String money, String cpOrderId,
-			String extInfo, String notifyUrl, ICallback callback) {
-		new OrderGenerateService(mActivity, iplateform).dopay(gameInfo, money,
+	public void doPay(Activity activity, GameInfo gameInfo, String money,
+			String cpOrderId, String extInfo, String notifyUrl,
+			ICallback callback) {
+		new OrderGenerateService(activity, iplateform).dopay(gameInfo, money,
 				cpOrderId, extInfo, notifyUrl, callback);
 	};
 
-
-	public void onSdkResume() {
-		iplateform.onResume();
+	public void onSdkResume(Activity activity) {
+		iplateform.onResume(activity);
 	}
-	
+
 	/**
 	 * 暂停
 	 */
-	public void onSdkPause() {
-		iplateform.onPause();
+	public void onSdkPause(Activity activity) {
+		iplateform.onPause(activity);
 	}
 
 	/**

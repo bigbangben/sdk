@@ -107,9 +107,8 @@ public class YoulePlatform implements Iplatform {
 		this.gameLoginListener = gameLoginListener;
 		InitInfo initInfo = new InitInfo();
 		initInfo = SDKUtils.getMeteData(activity);
-		ZhiDianManager.init(activity,
-				initInfo.getScreenOrientation(), mInitListener,
-				loginListener);
+		ZhiDianManager.init(activity, initInfo.getScreenOrientation(),
+				mInitListener, loginListener);
 	}
 
 	@Override
@@ -120,31 +119,34 @@ public class YoulePlatform implements Iplatform {
 	}
 
 	@Override
-	public void logOut(final Activity activity, GameLogoutListener gameLogoutListener) {
+	public void logOut(final Activity activity,
+			GameLogoutListener gameLogoutListener) {
 		this.gameLogoutListener = gameLogoutListener;
 		if (suportLogoutUI()) {
 			ZhiDianManager.logout(activity, iLogOutListener);
 		} else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏").setMessage("不多待一会吗？").setNegativeButton("取消", new OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-				}
-			}).setPositiveButton("确定", new OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					ZhiDianManager.logout(activity, iLogOutListener);
-				}
-			}).setCancelable(false).create().show();
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+					.setMessage("不多待一会吗？")
+					.setNegativeButton("取消", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							ZhiDianManager.logout(activity, iLogOutListener);
+						}
+					}).setCancelable(false).create().show();
 		}
-		
 
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order,GameInfo gameInfo, String notifyUrl, String exInfo,
+	public void pay(Activity activity, String money, String order,
+			GameInfo gameInfo, String notifyUrl, String exInfo,
 			OrderGenerateListener listener) {
 		if (money != null || Integer.parseInt(money) > 0) {
 			ZhiDianManager.customPay(activity, Integer.parseInt(money), order);
@@ -157,11 +159,6 @@ public class YoulePlatform implements Iplatform {
 	@Override
 	public boolean suportLogoutUI() {
 		return false;
-	}
-
-	@Override
-	public void onPause() {
-
 	}
 
 	@Override
@@ -190,8 +187,15 @@ public class YoulePlatform implements Iplatform {
 	}
 
 	@Override
-	public void onResume() {
-		
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
