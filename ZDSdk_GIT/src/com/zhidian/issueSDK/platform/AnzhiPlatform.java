@@ -97,8 +97,7 @@ public class AnzhiPlatform implements Iplatform {
 	private GameLogoutListener gameLogoutListener;
 	private OrderGenerateListener orderGenerateListener;
 
-	public AnzhiPlatform(Activity activity) {
-		this.mActivity = activity;
+	public AnzhiPlatform() {
 	}
 
 	@Override
@@ -133,12 +132,14 @@ public class AnzhiPlatform implements Iplatform {
 		 * 登入方法，入有自动登录的账号会自动登录，如果没有会跳至安智的登录界面，如果本地没有账号会跳至
 		 * 注册界面，另外如果发下SDK无法记住账号则查看FAQ文档或技术论坛查找问题
 		 */
+		this.mActivity = activity;
 		this.gameLoginListener = gameLoginListener;
 		mAnzhiCenter.login(activity, true);// 第二个参数为预留参数，无实际意义
 	}
 
 	@Override
 	public void showFloat(Activity activity) {
+		this.mActivity = activity;
 		mAnzhiCenter.createFloatView(activity);
 	}
 
@@ -157,6 +158,7 @@ public class AnzhiPlatform implements Iplatform {
 	@Override
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String exInfo, OrderGenerateListener orderGenerateListener) {
+		this.mActivity = activity;
 		this.orderGenerateListener = orderGenerateListener;
 		mAnzhiCenter.pay(activity, 0, Float.valueOf(money), "", "");
 	}

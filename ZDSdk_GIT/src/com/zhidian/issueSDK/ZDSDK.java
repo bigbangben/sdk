@@ -22,7 +22,7 @@ public class ZDSDK {
 
 	private ZDSDK() {
 		// 初始化 plateform
-		iplateform = new AnzhiPlatform(null);
+		iplateform = new AnzhiPlatform();
 	}
 
 	public static ZDSDK getInstance() {
