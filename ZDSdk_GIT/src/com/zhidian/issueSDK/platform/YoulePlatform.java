@@ -189,4 +189,9 @@ public class YoulePlatform implements Iplatform {
 		listener.onSuccess();
 	}
 
+	@Override
+	public void onResume() {
+		
+	}
+
 }

@@ -85,6 +85,8 @@ public interface Iplatform {
 
 	public void onDestory();
 
+	public void onResume();
+
 	
 
 

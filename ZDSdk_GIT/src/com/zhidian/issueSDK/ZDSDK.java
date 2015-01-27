@@ -118,6 +118,11 @@ public class ZDSDK {
 				cpOrderId, extInfo, notifyUrl, callback);
 	};
 
+
+	public void onSdkResume() {
+		iplateform.onResume();
+	}
+	
 	/**
 	 * 暂停
 	 */
