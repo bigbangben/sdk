@@ -48,7 +48,15 @@ public class YoulePlatform implements Iplatform {
 
 		@Override
 		public void initFail(String message) {
-			gameInitListener.initFail(message);
+			if (message == "-2") {
+				gameInitListener.initFail("请检查配置文件参数");
+			} else if (message == "-1") {
+				gameInitListener.initFail("没有SD卡不能使用SDK");
+			} else if (message == "-3") {
+				gameInitListener.initFail("下载失败html。。。");
+			} else {
+				gameInitListener.initFail(message);
+			}
 		}
 	};
 

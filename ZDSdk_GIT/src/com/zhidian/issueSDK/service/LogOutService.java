@@ -72,18 +72,20 @@ public class LogOutService {
 			Log.e("", "eeeeeeeeeeeeeeeeeeeee");//FIXME
 			int code = jsonObject.optInt("code");
 			if (code == 0) {
+				cleanCach();
 				callback.logoutSuccess();
 			} else {
 				callback.onError(ICallback.LOGOUT, jsonObject.toString());
 			}
 		}
+
 	};
 
 	private GameLogoutListener listener = new GameLogoutListener() {
 
 		@Override
 		public void logoutSuccess() {
-			Log.e("", "000000000000000000");//FIXME
+			Log.e("", "000000000  000000000");//FIXME
 
 			logout(gameInfo);
 		}
@@ -93,4 +95,11 @@ public class LogOutService {
 			callback.onError(ICallback.LOGOUT, value);
 		}
 	};
+	
+
+	private void cleanCach() {
+		LoginService.loginTime = "";
+		LoginService.isLogin = false;
+		InitService.mUserInfoModel = null;
+	}
 }

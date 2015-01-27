@@ -62,6 +62,7 @@ public class InitService {
 			if (code == 0) {
 				callback.initSuccess();
 				if (logined) {
+					LoginService.isLogin = true;
 					callback.loginSuccess(mUserInfoModel);
 				}
 			} else {

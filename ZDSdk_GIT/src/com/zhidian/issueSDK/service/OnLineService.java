@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.zhidian.issueSDK.api.OnLineApi;
 import com.zhidian.issueSDK.model.GameInfo;
@@ -80,7 +81,7 @@ public class OnLineService implements Runnable {
 	public void run() {
 		if (LoginService.isLogin) {
 			onLine(model);
-			mHandler.postDelayed(this, 60 * 1000);
+			mHandler.postDelayed(this, 20 * 1000);
 		}
 	}
 }
