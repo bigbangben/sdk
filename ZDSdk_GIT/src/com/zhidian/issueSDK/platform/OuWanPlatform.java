@@ -9,6 +9,9 @@ import net.umipay.android.UmipaySDKStatusCode;
 import net.umipay.android.interfaces.AccountCallbackListener;
 import net.umipay.android.interfaces.InitCallbackListener;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
@@ -26,8 +29,7 @@ public class OuWanPlatform implements Iplatform {
 
 	private Activity mActivity;
 
-	public OuWanPlatform(Activity activity) {
-		this.mActivity = activity;
+	public OuWanPlatform() {
 	}
 
 	@Override
@@ -105,8 +107,29 @@ public class OuWanPlatform implements Iplatform {
 	}
 
 	@Override
-	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		UmiPaySDKManager.logoutAccount(activity);// 登出账户接口
+	public void logOut(final Activity activity, GameLogoutListener gameLogoutListener) {
+          if (suportLogoutUI()) {
+        	  UmiPaySDKManager.logoutAccount(activity);// 登出账户接口
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					UmiPaySDKManager.logoutAccount(activity);// 登出账户接口
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 	}
 
 	@Override
@@ -158,12 +181,19 @@ public class OuWanPlatform implements Iplatform {
 	}
 
 	@Override
-	public void onPause() {
-
+	public void onDestory() {
 	}
 
 	@Override
-	public void onDestory() {
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

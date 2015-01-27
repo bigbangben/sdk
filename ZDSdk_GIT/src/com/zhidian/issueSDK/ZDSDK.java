@@ -22,7 +22,7 @@ public class ZDSDK {
 
 	private ZDSDK() {
 		// 初始化 plateform
-		iplateform = new OuWanPlatform(activity);
+		iplateform = new OuWanPlatform();
 	}
 
 	public static ZDSDK getInstance() {
