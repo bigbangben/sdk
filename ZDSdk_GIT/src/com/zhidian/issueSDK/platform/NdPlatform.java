@@ -1,7 +1,10 @@
 package com.zhidian.issueSDK.platform;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.widget.Toast;
 
 import com.nd.commplatform.NdCommplatform;
@@ -67,8 +70,29 @@ public class NdPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		NdCommplatform.getInstance().ndLogout(NdCommplatform.LOGOUT_TO_RESET_AUTO_LOGIN_CONFIG, activity);
-		gameLogoutListener.logoutSuccess();
+		if (suportLogoutUI()) {
+			NdCommplatform.getInstance().ndLogout(NdCommplatform.LOGOUT_TO_RESET_AUTO_LOGIN_CONFIG, activity);
+			gameLogoutListener.logoutSuccess();
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO logout
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 	}
 	
 	@Override
