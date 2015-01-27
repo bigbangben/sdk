@@ -69,7 +69,6 @@ public class LogOutService {
 
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
-			Log.e("", "eeeeeeeeeeeeeeeeeeeee");//FIXME
 			int code = jsonObject.optInt("code");
 			if (code == 0) {
 				cleanCach();
@@ -86,7 +85,6 @@ public class LogOutService {
 		@Override
 		public void logoutSuccess() {
 			Log.e("", "000000000  000000000");//FIXME
-
 			logout(gameInfo);
 		}
 
@@ -95,7 +93,6 @@ public class LogOutService {
 			callback.onError(ICallback.LOGOUT, value);
 		}
 	};
-	
 
 	private void cleanCach() {
 		LoginService.loginTime = "";
