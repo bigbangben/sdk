@@ -3,6 +3,9 @@ package com.zhidian.issueSDK.platform;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.util.Log;
 
 import com.anzhi.usercenter.sdk.AnzhiUserCenter;
@@ -145,8 +148,30 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
+		this.mActivity = activity;
 		this.gameLogoutListener = gameLogoutListener;
-		mAnzhiCenter.logout(activity);
+		if (suportLogoutUI()) {
+			mAnzhiCenter.logout(activity);
+		}else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+			.setMessage("不多待一会吗？")
+			.setNegativeButton("取消", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+				}
+			}).setPositiveButton("确定", new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mAnzhiCenter.logout(mActivity);
+				}
+			}).setCancelable(false).create().show();
+
+
+			
+		}
 
 	}
 
