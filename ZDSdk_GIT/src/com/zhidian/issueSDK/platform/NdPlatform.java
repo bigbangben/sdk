@@ -120,11 +120,6 @@ public class NdPlatform implements Iplatform {
 		return false;
 	}
 
-	@Override
-	public void onPause() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void onDestory() {
@@ -221,6 +216,18 @@ public class NdPlatform implements Iplatform {
 
 		}
 
+	}
+
+	@Override
+	public void onPause(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
