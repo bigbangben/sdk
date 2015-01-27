@@ -20,11 +20,12 @@ public interface Iplatform {
 	public String getPlatformId();
 
 	/**
-	 * @param mActivity 
+	 * @param mActivity
 	 * @param gameInitListener
 	 * @param gameLoginListener
 	 */
-	public void init(Activity mActivity, InitService.GameInitListener gameInitListener,
+	public void init(Activity mActivity,
+			InitService.GameInitListener gameInitListener,
 			LoginService.GameLoginListener gameLoginListener);
 
 	/**
@@ -33,8 +34,6 @@ public interface Iplatform {
 	 */
 	public void login(Activity activity,
 			LoginService.GameLoginListener gameLoginListener);
-	
-	
 
 	/**
 	 * @param activity
@@ -48,7 +47,7 @@ public interface Iplatform {
 	 */
 	public void logOut(Activity activity,
 			LogOutService.GameLogoutListener gameLogoutListener);
-	
+
 	/**
 	 * @param mActivity
 	 * @param listener
@@ -59,11 +58,12 @@ public interface Iplatform {
 	 * @param activity
 	 * @param money
 	 * @param order
-	 * @param model 
+	 * @param model
 	 * @param listener
 	 */
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, String notifyUrl, String extInfo, OrderGenerateService.OrderGenerateListener listener);
+			GameInfo model, String notifyUrl, String extInfo,
+			OrderGenerateService.OrderGenerateListener listener);
 
 	/**
 	 * @param gameInfo
@@ -81,11 +81,9 @@ public interface Iplatform {
 
 	public boolean suportLogoutUI();
 
-	public void onPause();
+	public void onPause(Activity activity);
+
+	public void onResume(Activity activity);
 
 	public void onDestory();
-
-	
-
-
 }
