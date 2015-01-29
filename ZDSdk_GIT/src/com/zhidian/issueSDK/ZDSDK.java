@@ -50,10 +50,11 @@ public class ZDSDK {
 	};
 
 	/**
-	 * 设置角色信息
-	 * 
+	 * 提交角色信息
+	 * @param activity 上下文
 	 * @param gameInfo 角色信息
 	 * @param showFloat 是否显示浮动工具栏
+	 * @param callback 回调
 	 */
 	public void setGameInfo(Activity activity,GameInfo gameInfo, boolean showFloat,
 			ICallback callback) {
@@ -63,9 +64,15 @@ public class ZDSDK {
 	};
 
 	/**
-	 * 创建角色
+	 * 
 	 * 
 	 * @param gameInfo
+	 */
+	/**
+	 * 创建角色
+	 * @param activity 上下文
+	 * @param gameInfo 角色信息
+	 * @param callback 回调
 	 */
 	public void createRole(Activity activity,GameInfo gameInfo, ICallback callback) {
 		new CreateRoleService(activity, iplateform).creatRole(gameInfo, callback);
@@ -73,9 +80,9 @@ public class ZDSDK {
 
 	/**
 	 * 注销
-	 * 
-	 * @param gameInfo
-	 * @param callback
+	 * @param activity 上下文
+	 * @param gameInfo 角色信息
+	 * @param callback 回调
 	 */
 	public void onSdkLogOut(Activity activity, GameInfo gameInfo, ICallback callback) {
 		new LogOutService(activity, iplateform).logout(gameInfo, callback);
@@ -83,9 +90,9 @@ public class ZDSDK {
 
 	/**
 	 * 退出
-	 * 
-	 * @param gameInfo
-	 * @param callback
+	 * @param activity 上下文
+	 * @param gameInfo 角色信息
+	 * @param callback 回调
 	 */
 	public void onSdkExit(Activity activity, GameInfo gameInfo, ICallback callback) {
 		new ExitService(activity, iplateform).exit(gameInfo, callback);
@@ -93,19 +100,13 @@ public class ZDSDK {
 
 	/**
 	 * 支付接口
-	 * 
-	 * @param gameInfo
-	 *            游戏用户信息
-	 * @param money
-	 *            充值金额
-	 * @param cpOrderId
-	 *            CP订单号
-	 * @param extInfo
-	 *            自定义参数
-	 * @param notifyUrl
-	 *            CP支付结果通知地址
-	 * @param callback
-	 *            回调
+	 * @param activity 上下文
+	 * @param gameInfo 游戏用户信息
+	 * @param money 充值金额
+	 * @param cpOrderId CP订单号
+	 * @param extInfo 自定义参数
+	 * @param notifyUrl CP支付结果通知地址
+	 * @param callback 回调
 	 */
 	public void doPay(Activity activity, GameInfo gameInfo, String money, String cpOrderId,
 			String extInfo, String notifyUrl, ICallback callback) {
