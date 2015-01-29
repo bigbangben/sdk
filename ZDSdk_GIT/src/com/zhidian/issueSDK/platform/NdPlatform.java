@@ -172,9 +172,14 @@ public class NdPlatform implements Iplatform {
 				case OnInitCompleteListener.FLAG_NORMAL:
 					gameInitListener.initSuccess(false, null);
 					break;
+					
 				case OnInitCompleteListener.FLAG_FORCE_CLOSE:
+					gameInitListener.initFail("初始化失败");
+					break;
+					
 				default:
 					// 如果还有别的Activity或资源要关闭的在这里处理
+					gameInitListener.initFail("初始化失败");
 					break;
 				}
 			}
