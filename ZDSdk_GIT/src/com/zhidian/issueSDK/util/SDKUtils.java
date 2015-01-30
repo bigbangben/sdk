@@ -11,57 +11,53 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.model.InitInfo;
 
 
 public class SDKUtils {
-	public static InitInfo getMeteData(Context context) {
+	
+	public static String getMeteData(Context context, String tag) {
 		ApplicationInfo info;
-		InitInfo model = new InitInfo();
 		try {
 			info = context.getPackageManager().getApplicationInfo(
 					context.getPackageName(), PackageManager.GET_META_DATA);
-			String appId = info.metaData.getString("appId");
-			String appKey = info.metaData.getString("appKey");
-			String screenOrientation = info.metaData.getString("screenOrientation");
-			if (appId.startsWith("appId:")) {
-				model.setAppId(appId.split(":")[1]);
-			} else {
+			String rex = info.metaData.getString(tag);
+			if (rex == null) {
 				return null;
 			}
-
-			if (appKey.startsWith("appKey")) {
-				model.setAppKey(appKey.split(":")[1]);
-			} else {
+			if (rex.startsWith(tag + ":")) {
+				return rex.split(":")[1];
+			}else {
 				return null;
 			}
-
-			if (screenOrientation.startsWith("screenOrientation")) {
-				model.setScreenOrientation(Integer.valueOf(screenOrientation.split(":")[1]));
-			} else {
-				return null;
-			}
-			return model;
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
     public static String getAppId(Context context) {
-    /*    ApplicationInfo info;
+        ApplicationInfo info;
         try {
             info = context.getPackageManager().getApplicationInfo(
                     context.getPackageName(), PackageManager.GET_META_DATA);
             String appId = info.metaData.getString("ZD_APPID");
-            return appId;
+        	if (appId == null) {
+				return null;
+			}
+			if (appId.startsWith("ZD_APPID:")) {
+				
+				return appId.split(":")[1];
+			}else {
+				return null;
+			}
         } catch (NameNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
-        return "1";
+        }
+        return null;
     }
 
     public static String getSKCardPath() {

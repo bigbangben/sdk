@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import cn.uc.gamesdk.UCCallbackListener;
 import cn.uc.gamesdk.UCCallbackListenerNullException;
@@ -32,25 +33,25 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 public class UcPlatform implements Iplatform {
 
 	// 值为true时，为调试环境模式，当值为false时，是生产环境模式，验收及对外发布时，要求必须使用生产环境模式
+	public static final String TAG = "UcPlatform";
 	public static boolean debugMode = true;
 	private GameLogoutListener gameLogoutListener;
 
 	@Override
 	public String getPlatformId() {
-		return "1";
+		return "20";
 	}
 
 	@Override
 	public void init(final Activity activity,
 			final GameInitListener gameInitListener,
-			GameLoginListener gameLoginListener) {
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+			final GameLoginListener gameLoginListener) {
 		// 监听用户注销登录消息
 				// 九游社区-退出当前账号功能执行时会触发此监听
 		try {
@@ -64,12 +65,12 @@ public class UcPlatform implements Iplatform {
 							// 未成功初始化
 							if (statuscode == UCGameSDKStatusCode.NO_INIT) {
 								// 调用SDK初始化接口
-								//ucSdkInit();
+								//init(activity,gameInitListener,gameLoginListener);
 							}
 							// 未登录成功
 							if (statuscode == UCGameSDKStatusCode.NO_LOGIN) {
 								// 调用SDK登录接口
-								//ucSdkLogin();
+								//login(activity, gameLoginListener);
 							}
 							// 退出账号成功
 							if (statuscode == UCGameSDKStatusCode.SUCCESS) {
@@ -92,8 +93,15 @@ public class UcPlatform implements Iplatform {
 		}
 
 		GameParamInfo gpi = new GameParamInfo();// 下面的值仅供参考
-		gpi.setCpId(Integer.parseInt(initInfo.getAppId()));
-		gpi.setGameId(Integer.parseInt(initInfo.getAppId()));
+		String cpId = SDKUtils.getMeteData(activity, "cpId");
+		String gameId = SDKUtils.getMeteData(activity, "gameId");
+		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
+		if (cpId == null || gameId == null || screenOrientation == null) {
+			Toast.makeText(activity, "MetaData设置出错，请检查!!!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		gpi.setCpId(Integer.parseInt(cpId));
+		gpi.setGameId(Integer.parseInt(gameId));
 		gpi.setServerId(0); // 服务器ID可根据游戏自身定义设置，或传入0
 		// gpi.setChannelId(2); // 渠道号统一处理，已不需设置，此参数已废弃，服务端此参数请设置值为2
 
@@ -110,7 +118,7 @@ public class UcPlatform implements Iplatform {
 		UCGameSDK
 				.defaultSDK()
 				.setOrientation(
-						(initInfo.getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? UCOrientation.LANDSCAPE
+						(Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? UCOrientation.LANDSCAPE
 								: UCOrientation.PORTRAIT);
 
 		// 设置登录界面：
@@ -118,18 +126,12 @@ public class UcPlatform implements Iplatform {
 		// USE_STANDARD - 标准版登录界面
 		UCGameSDK.defaultSDK().setLoginUISwitch(UCLoginFaceType.USE_WIDGET);
 
-		// setUIStyle已过时，不需调用。
-		// UCGameSDK.defaultSDK().setUIStyle(UCUIStyle.STANDARD);
-
 		try {
 			UCGameSDK.defaultSDK().initSDK(activity,
 					UCLogLevel.DEBUG, debugMode, gpi,
 					new UCCallbackListener<String>() {
 						@Override
 						public void callback(int code, String msg) {
-							Log.e("UCGameSDK", "UCGameSDK初始化接口返回数据 msg:" + msg
-									+ ",code:" + code + ",debug:" + debugMode
-									+ "\n");
 							switch (code) {
 							// 初始化成功,可以执行后续的登录充值操作
 							case UCGameSDKStatusCode.SUCCESS:
