@@ -381,17 +381,6 @@ public class UcPlatform implements Iplatform {
 							if (statudcode == UCGameSDKStatusCode.SUCCESS) {
 								// 成功充值
 								listener.onSuccess();
-								if (orderInfo != null) {
-									String ordereId = orderInfo.getOrderId();// 获取订单号
-									float orderAmount = orderInfo
-											.getOrderAmount();// 获取订单金额
-									int payWay = orderInfo.getPayWay();
-									String payWayName = orderInfo
-											.getPayWayName();
-									System.out.print(ordereId + ","
-											+ orderAmount + "," + payWay + ","
-											+ payWayName);
-								}
 							}
 							if (statudcode == UCGameSDKStatusCode.PAY_USER_EXIT) {
 								// 用户退出充值界面。
