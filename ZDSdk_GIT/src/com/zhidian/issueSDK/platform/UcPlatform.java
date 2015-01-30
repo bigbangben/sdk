@@ -271,7 +271,7 @@ public class UcPlatform implements Iplatform {
 	@Override
 	public void pay(Activity activity, String money, String order,GameInfo gameInfo, String notifyUrl, String exInfo, 
  OrderGenerateListener listener) {
-		ucSdkPay(activity, money, order, gameInfo, listener);
+		ucSdkPay(activity, money, order, notifyUrl, exInfo, gameInfo, listener);
 	}
 
 	@Override
@@ -341,16 +341,18 @@ public class UcPlatform implements Iplatform {
 	 * 当卡号卡密全部输入为1时，是支付失败的订单，服务器将会收到订单状态为F的订单信息<br>
 	 * @param listener 
 	 * @param order 
+	 * @param notifyUrl 
+	 * @param exInfo 
 	 * @param money 
 	 * @param activity 
 	 * @param gameInfo 
 	 */
-	private void ucSdkPay(Activity activity, String money, String order, GameInfo gameInfo, final OrderGenerateListener listener) {
+	private void ucSdkPay(Activity activity, String money, String order, String notifyUrl, String exInfo,GameInfo gameInfo, final OrderGenerateListener listener) {
 		PaymentInfo pInfo = new PaymentInfo(); // 创建Payment对象，用于传递充值信息
 
 		// 设置充值自定义参数，此参数不作任何处理，
 		// 在充值完成后，sdk服务器通知游戏服务器充值结果时原封不动传给游戏服务器传值，字段为服务端回调的callbackInfo字段
-		pInfo.setCustomInfo("callback");
+		pInfo.setCustomInfo(exInfo);
 
 		// 非必选参数，可不设置，此参数已废弃,默认传入0即可。
 		// 如无法支付，请在开放平台检查是否已经配置了对应环境的支付回调地址，如无请配置，如有但仍无法支付请联系UC技术接口人。
@@ -361,7 +363,8 @@ public class UcPlatform implements Iplatform {
 		pInfo.setGrade(gameInfo.getRoleLevel()); // 设置用户的游戏角色等级，此为可选参数
 
 		// 非必填参数，设置游戏在支付完成后的游戏接收订单结果回调地址，必须为带有http头的URL形式。
-		pInfo.setNotifyUrl(order);
+		pInfo.setNotifyUrl(notifyUrl);
+		pInfo.setTransactionNumCP(order);
 
 		// 当传入一个amount作为金额值进行调用支付功能时，SDK会根据此amount可用的支付方式显示充值渠道
 		// 如你传入6元，则不显示充值卡选项，因为市面上暂时没有6元的充值卡，建议使用可以显示充值卡方式的金额
