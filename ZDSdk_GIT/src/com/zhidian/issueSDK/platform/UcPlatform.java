@@ -1,5 +1,8 @@
 package com.zhidian.issueSDK.platform;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,9 +26,14 @@ import cn.uc.gamesdk.info.GameParamInfo;
 import cn.uc.gamesdk.info.OrderInfo;
 import cn.uc.gamesdk.info.PaymentInfo;
 
+import com.zhidian.issueSDK.ICallback;
+import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
+import com.zhidian.issueSDK.net.JsonResponse;
+import com.zhidian.issueSDK.net.NetTask;
+import com.zhidian.issueSDK.service.InitService;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -156,7 +164,7 @@ public class UcPlatform implements Iplatform {
 		ucSdkLogin(activity, gameLoginListener);
 	}
 
-	private void ucSdkLogin(Activity activity,
+	private void ucSdkLogin(final Activity activity,
 			final GameLoginListener gameLoginListener) {
 		try {
 			UCGameSDK.defaultSDK().login(activity,
@@ -166,9 +174,38 @@ public class UcPlatform implements Iplatform {
 						public void callback(int code, String msg) {
 							switch (code) {
 							case UCGameSDKStatusCode.SUCCESS:
-								UserInfoModel model = new UserInfoModel();
-								model.sessionId = UCGameSDK.defaultSDK().getSid();
-								gameLoginListener.LoginSuccess(model);
+								//向服务器请求用户信息
+								UserInfoApi api = new UserInfoApi();
+								Log.e(TAG, "sid  ==== " + UCGameSDK.defaultSDK().getSid());
+								api.sid = UCGameSDK.defaultSDK().getSid();
+								api.gameId = SDKUtils.getMeteData(activity, "gameId");
+								api.setResponse(new JsonResponse(){
+
+									@Override
+									public void requestError(String string) {
+										super.requestError(string);
+									}
+
+									@Override
+									public void requestSuccess(JSONObject jsonObject) {
+										JSONObject state = jsonObject.optJSONObject("state");
+										String code = state.optString("code");
+									if (code.equals("1")) {
+											JSONObject data = jsonObject.optJSONObject("data");
+											String accountId = data.optString("accountId");
+											String creator = data.optString("creator");
+											UserInfoModel model = new UserInfoModel();
+											model.id = accountId;
+											model.userName = creator;
+											model.sessionId = UCGameSDK.defaultSDK().getSid();
+											gameLoginListener.LoginSuccess(model);
+										} else {
+											gameLoginListener.LoginFail("用户信息获取失败！");
+										}
+									}
+								
+								});
+								new NetTask().execute(api);
 								break;
 
 							// 登录失败。应该先执行初始化成功后再进行登录调用。
@@ -283,6 +320,7 @@ public class UcPlatform implements Iplatform {
 	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
 		UCGameSDK.defaultSDK().notifyZone(gameInfo.getZoneName(),
 				gameInfo.getRoleId(), gameInfo.getRoleName());
+		listener.onSuccess();
 	}
 
 	@Override
