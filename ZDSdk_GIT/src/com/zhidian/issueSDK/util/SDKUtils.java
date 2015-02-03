@@ -11,9 +11,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
-import android.widget.Toast;
-
-import com.zhidian.issueSDK.model.InitInfo;
 
 
 public class SDKUtils {
