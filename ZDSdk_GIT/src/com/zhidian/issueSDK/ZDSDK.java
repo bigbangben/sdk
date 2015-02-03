@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.platform.Iplatform;
+import com.zhidian.issueSDK.platform.OppoPlatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
 import com.zhidian.issueSDK.service.InitService;
@@ -21,6 +22,7 @@ public class ZDSDK {
 
 	private ZDSDK() {
 		// 初始化 plateform
+		iplateform = new OppoPlatform();
 	}
 
 	public static ZDSDK getInstance() {
