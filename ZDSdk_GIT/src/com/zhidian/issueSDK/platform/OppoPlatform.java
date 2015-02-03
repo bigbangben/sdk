@@ -26,8 +26,6 @@ public class OppoPlatform implements Iplatform {
 	@Override
 	public void init(Activity mActivity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
-		GameCenterSettings.isOritationPort = SDKUtils.getMeteData("screenOrientation");
-          GameCenterSDK.init(gameCenterSettings, context)
 	}
 
 	@Override
