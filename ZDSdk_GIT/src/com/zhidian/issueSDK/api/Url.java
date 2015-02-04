@@ -4,7 +4,8 @@ package com.zhidian.issueSDK.api;
  * Created by Administrator on 2014/12/11.
  */
 public class Url {
-	public static String BASE_URL= "http://zdsdktest.zhidian3g.cn/" ;
+//	public static String BASE_URL= "http://zdsdktest.zhidian3g.cn/" ;   //测试环境
+	public static String BASE_URL= "http://rsservice.y6.cn/" ;          //正式环境
     /**
      * 初始化URL
      */
