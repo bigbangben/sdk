@@ -28,7 +28,7 @@ public class UserInfoApi extends StringRequest {
 
 	@Override
 	public HttpEngine.Method getMethod() {
-		return HttpEngine.Method.GET;
+		return HttpEngine.Method.POST;
 	}
 	
 	@Override
