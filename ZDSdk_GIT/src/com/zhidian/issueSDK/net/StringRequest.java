@@ -13,7 +13,7 @@ public abstract class StringRequest implements Request {
 
     @Override
     public HttpEngine.Method getMethod() {
-        return method;
+        return method;                       
     }
     public void setResponse(IHttpResponse response){
        this.mResponse = response ;

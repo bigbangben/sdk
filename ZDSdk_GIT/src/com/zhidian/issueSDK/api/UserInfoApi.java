@@ -17,6 +17,8 @@ public class UserInfoApi extends StringRequest {
 
 	public String sid;
 	public String gameId;
+	public String appId;
+	public String platformId;
 	
 	
 	@Override
@@ -26,7 +28,7 @@ public class UserInfoApi extends StringRequest {
 
 	@Override
 	public HttpEngine.Method getMethod() {
-		return HttpEngine.Method.POST;
+		return HttpEngine.Method.GET;
 	}
 	
 	@Override
@@ -34,6 +36,8 @@ public class UserInfoApi extends StringRequest {
 		Map paramMap = new HashMap();
 		paramMap.put("sid", sid);
 		paramMap.put("gameId", gameId);
+		paramMap.put("appId", appId);
+		paramMap.put("platformId", platformId);
 		return paramMap;
 	}
 }

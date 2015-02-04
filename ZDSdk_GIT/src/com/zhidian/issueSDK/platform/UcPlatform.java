@@ -54,6 +54,7 @@ public class UcPlatform implements Iplatform {
 	@Override
 	public String getPlatformId() {
 		return "16";
+//		return "1001";
 	}
 
 	@Override
@@ -179,6 +180,8 @@ public class UcPlatform implements Iplatform {
 								Log.e(TAG, "sid  ==== " + UCGameSDK.defaultSDK().getSid());
 								api.sid = UCGameSDK.defaultSDK().getSid();
 								api.gameId = SDKUtils.getMeteData(activity, "gameId");
+								api.appId = SDKUtils.getAppId(activity);
+								api.platformId = getPlatformId();
 								api.setResponse(new JsonResponse(){
 
 									@Override
