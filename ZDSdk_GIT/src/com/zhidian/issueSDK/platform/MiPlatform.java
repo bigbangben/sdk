@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.xiaomi.gamecenter.sdk.GameInfoField;
 import com.xiaomi.gamecenter.sdk.MiCommplatform;
@@ -28,6 +29,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
@@ -36,6 +38,8 @@ import com.zhidian.issueSDK.util.SDKUtils;
  * @time 2015年1月7日
  */
 public class MiPlatform implements Iplatform {
+
+	protected static final String TAG = "MiPlatform";
 
 	@Override
 	public String getPlatformId() {
@@ -47,6 +51,12 @@ public class MiPlatform implements Iplatform {
 			GameLoginListener gameLoginListener) {
 		String appId = SDKUtils.getMeteData(activity,"appId");
 		String appKey = SDKUtils.getMeteData(activity,"appKey");
+		if (appId == null || appKey == null) {
+			Toast.makeText(activity, "MetaData配置出错！", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		SDKLog.e(TAG, "appId =====" + appId);
+		SDKLog.e(TAG, "appKey =====" + appKey);
 		String screenOrientation = SDKUtils.getMeteData(activity,"screenOrientation");
 		/** SDK初始化 */
 		MiAppInfo appInfo = new MiAppInfo();
@@ -80,6 +90,7 @@ public class MiPlatform implements Iplatform {
 
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_LOGIN_FAIL:
+							SDKLog.e(TAG, "login fail");
 							gameLoginListener.LoginFail(code + "");
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_CANCEL:
