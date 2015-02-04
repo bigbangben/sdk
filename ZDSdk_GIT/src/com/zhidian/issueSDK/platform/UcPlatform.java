@@ -53,8 +53,8 @@ public class UcPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return "16";
-//		return "1001";
+  //	return "16";     //测试用
+		return "1001";   //正式
 	}
 
 	@Override
@@ -182,6 +182,10 @@ public class UcPlatform implements Iplatform {
 								api.gameId = SDKUtils.getMeteData(activity, "gameId");
 								api.appId = SDKUtils.getAppId(activity);
 								api.platformId = getPlatformId();
+								if (api.sid ==null || api.gameId ==null || api.appId ==null || api.platformId ==null) {
+									Toast.makeText(activity, "请求参数不能为空", Toast.LENGTH_SHORT).show();
+									return;
+								}
 								api.setResponse(new JsonResponse(){
 
 									@Override
