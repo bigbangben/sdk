@@ -37,5 +37,5 @@ public class Url {
     /**
      * 请求用户信息URL
      */
-    public static final String GET_USERINFO_URL = "platform/ucgame/usersession";
+    public static final String GET_USERINFO_URL = "platform/ucgame/session";
 }

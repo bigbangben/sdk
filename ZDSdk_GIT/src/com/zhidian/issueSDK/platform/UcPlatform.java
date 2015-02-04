@@ -195,6 +195,10 @@ public class UcPlatform implements Iplatform {
 
 									@Override
 									public void requestSuccess(JSONObject jsonObject) {
+										if (jsonObject == null) {
+											gameLoginListener.LoginFail("用户信息获取失败！");
+											return;
+										}
 										JSONObject state = jsonObject.optJSONObject("state");
 										String code = state.optString("code");
 									if (code.equals("1")) {
