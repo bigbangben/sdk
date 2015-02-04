@@ -4,7 +4,7 @@ import android.util.Log;
 
 
 public class SDKLog {
-	private static  boolean DEBUG= false;
+	private static  boolean DEBUG= true;
 	public static void v(String tag,Object o){
 		if(DEBUG){
 			Log.v(tag, o.toString()) ;

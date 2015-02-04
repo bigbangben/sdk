@@ -84,7 +84,7 @@ public class HttpEngine {
     private String doPostRequest() {
         try {
             Log.e("HttpEngine","POST >> "+mUrl+"?"+mParam) ;
-            URL url = new URL(mUrl+"?"+mParam) ;
+            URL url = new URL(mUrl) ;
             mConnection = (HttpURLConnection) url.openConnection();
             mConnection.setRequestMethod("POST");
             mConnection.setReadTimeout(TIME_OUT);
