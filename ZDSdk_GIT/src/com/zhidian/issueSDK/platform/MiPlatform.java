@@ -39,21 +39,23 @@ public class MiPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return "1";
+		return "1002";
 	}
 
 	@Override
 	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+		String appId = SDKUtils.getMeteData(activity,"appId");
+		String appKey = SDKUtils.getMeteData(activity,"appKey");
+		String screenOrientation = SDKUtils.getMeteData(activity,"screenOrientation");
 		/** SDK初始化 */
 		MiAppInfo appInfo = new MiAppInfo();
-		appInfo.setAppId(initInfo.getAppId());
-		appInfo.setAppKey(initInfo.getAppKey());
-		appInfo.setOrientation(initInfo.getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ? ScreenOrientation.horizontal
+		appInfo.setAppId(appId);
+		appInfo.setAppKey(appKey);
+		appInfo.setOrientation(Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE ? ScreenOrientation.horizontal
 				: ScreenOrientation.vertical); // 横竖屏
 		MiCommplatform.Init(activity, appInfo);
+		gameInitListener.initSuccess(false, null);
 	}
 
 	@Override
