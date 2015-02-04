@@ -53,7 +53,7 @@ public class UcPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return "20";
+		return "16";
 	}
 
 	@Override
