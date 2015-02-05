@@ -34,4 +34,9 @@ public class Url {
      * 生成订单URL
      */
     public static final String ORDER_GENERATE_URL = "account/order/generate";
+    /**
+     * 请求用户信息URL
+     */
+    public static final String GET_USERINFO_URL = "platform/xiaomi/session";
+    
 }
