@@ -216,7 +216,7 @@ public class MiPlatform implements Iplatform {
 	@Override
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String exInfo,
-			OrderGenerateListener listener) {
+			final OrderGenerateListener listener) {
 		Bundle mBundle = new Bundle();
 		mBundle.putString(GameInfoField.GAME_USER_BALANCE, ""); // 用户余额
 		mBundle.putString(GameInfoField.GAME_USER_GAMER_VIP, ""); // vip等级
@@ -229,8 +229,8 @@ public class MiPlatform implements Iplatform {
 				model.getServerId()); // 所在服务器
 		MiBuyInfo miBuyInfo = new MiBuyInfo();
 		miBuyInfo.setExtraInfo(mBundle); // 设置用户信息
-		miBuyInfo.setCpOrderId(UUID.randomUUID().toString());// 订单号唯一（不为空）
-		miBuyInfo.setCpUserInfo("cpUserInfo"); // 此参数在用户支付成功后会透传给CP的服务器
+		miBuyInfo.setCpOrderId(order);// 订单号唯一（不为空）
+		miBuyInfo.setCpUserInfo(exInfo); // 此参数在用户支付成功后会透传给CP的服务器
 		miBuyInfo.setAmount(Integer.parseInt(money)); // 必须是大于1的整数，10代表10米币，即10元人民币（不为空
 
 		MiCommplatform.getInstance().miUniPay(activity, miBuyInfo,
@@ -240,12 +240,14 @@ public class MiPlatform implements Iplatform {
 						switch (code) {
 						case MiErrorCode.MI_XIAOMI_PAYMENT_SUCCESS:
 							// 购买成功
+							listener.onSuccess();
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_PAY_CANCEL:
 							// 取消购买
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_PAY_FAILURE:
 							// 购买失败
+							listener.onFail(code + "");
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_ACTION_EXECUTED:
 							// 操作正在进行中

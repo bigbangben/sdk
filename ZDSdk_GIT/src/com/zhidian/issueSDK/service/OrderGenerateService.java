@@ -30,6 +30,7 @@ public class OrderGenerateService {
 	private String notifyUrl;
 	private GameInfo model;
 	private String extInfo;
+	private String orderId;
 
 	public interface OrderGenerateListener {
 		public void onSuccess();
@@ -56,7 +57,7 @@ public class OrderGenerateService {
 
 		@Override
 		public void onSuccess() {
-			callback.paySuccess(notifyUrl);
+			callback.paySuccess(orderId);
 		}
 
 		@Override
@@ -92,6 +93,7 @@ public class OrderGenerateService {
 
 	private JsonResponse jsonResponse = new JsonResponse() {
 
+
 		@Override
 		public void requestError(String string) {
 			super.requestError(string);
@@ -101,7 +103,7 @@ public class OrderGenerateService {
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
 			if (code == 0) {
-				String orderId = jsonObject.optString("orderId");
+				orderId = jsonObject.optString("orderId");
 				notifyUrl = jsonObject.optString("notifyUrl");
 				iplatform.pay(mActivity, money, orderId, model, notifyUrl, extInfo, listener);
 			} else {
