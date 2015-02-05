@@ -12,6 +12,7 @@ import com.zhidian.issueSDK.service.LogOutService;
 import com.zhidian.issueSDK.service.LoginService;
 import com.zhidian.issueSDK.service.OrderGenerateService;
 import com.zhidian.issueSDK.service.SetGameInfoService;
+import com.zhidian.issueSDK.util.SDKLog;
 
 /**
  * Created by Administrator on 2014/12/11.
@@ -39,6 +40,7 @@ public class ZDSDK {
 	 * @param callback  回调
 	 */
 	public void sdkInit(Activity activity, ICallback callback) {
+		SDKLog.e("", "@@@@@@@@@@@@初始化@@@@@@@@@@");//FIXME
 		new InitService(activity, iplateform).init(callback);
 	};
 

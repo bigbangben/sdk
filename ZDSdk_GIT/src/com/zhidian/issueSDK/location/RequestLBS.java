@@ -1,6 +1,7 @@
 package com.zhidian.issueSDK.location;
 
-import com.zhidian.issueSDK.service.InitService;
+import java.io.InterruptedIOException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -10,7 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InterruptedIOException;
+import com.zhidian.issueSDK.service.InitService;
 
 public class RequestLBS extends Thread{
 	private String url;

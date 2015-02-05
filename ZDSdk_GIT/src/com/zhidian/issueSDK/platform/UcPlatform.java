@@ -1,6 +1,5 @@
 package com.zhidian.issueSDK.platform;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -9,10 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
-
 import cn.uc.gamesdk.UCCallbackListener;
 import cn.uc.gamesdk.UCCallbackListenerNullException;
 import cn.uc.gamesdk.UCFloatButtonCreateException;
@@ -26,14 +22,11 @@ import cn.uc.gamesdk.info.GameParamInfo;
 import cn.uc.gamesdk.info.OrderInfo;
 import cn.uc.gamesdk.info.PaymentInfo;
 
-import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
-import com.zhidian.issueSDK.service.InitService;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -100,7 +93,7 @@ public class UcPlatform implements Iplatform {
 		} catch (UCCallbackListenerNullException e) {
 			// 处理异常
 		}
-
+SDKLog.e(TAG, "@@@@@@@@@@@@@@@@@@@@@@");//FIXME
 		GameParamInfo gpi = new GameParamInfo();// 下面的值仅供参考
 		String cpId = SDKUtils.getMeteData(activity, "cpId");
 		String gameId = SDKUtils.getMeteData(activity, "gameId");
@@ -136,6 +129,7 @@ public class UcPlatform implements Iplatform {
 		UCGameSDK.defaultSDK().setLoginUISwitch(UCLoginFaceType.USE_WIDGET);
 
 		try {
+			SDKLog.e(TAG, "@@@@@@@@@@@@initSDK@@@@@@@@@@");//FIXME
 			UCGameSDK.defaultSDK().initSDK(activity,
 					UCLogLevel.DEBUG, debugMode, gpi,
 					new UCCallbackListener<String>() {
@@ -311,9 +305,21 @@ public class UcPlatform implements Iplatform {
 	}
 
 	@Override
-	public void exit(Activity mActivity, GameExitListener listener) {
-		ucSdkExit(mActivity);
-		listener.onSuccess();
+	public void exit(Activity mActivity, final GameExitListener listener) {
+		UCGameSDK.defaultSDK().exitSDK(mActivity, new UCCallbackListener<String>() {
+            @Override
+            public void callback(int code, String msg) {
+                    if (UCGameSDKStatusCode.SDK_EXIT_CONTINUE == code) {
+                            // 此加入继续游戏的代码
+
+                    } else if (UCGameSDKStatusCode.SDK_EXIT == code) {
+                            // 在此加入退出游戏的代码
+                            Log.e(TAG, "退出SDK");
+                            listener.onSuccess();
+                    }
+            }
+    });
+		
 	}
 
 	@Override

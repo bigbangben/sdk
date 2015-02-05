@@ -5,8 +5,6 @@ import java.util.Map;
 
 import com.zhidian.issueSDK.net.HttpEngine;
 import com.zhidian.issueSDK.net.StringRequest;
-import com.zhidian.issueSDK.service.InitService;
-import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
  * @Description
