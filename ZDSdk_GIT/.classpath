@@ -4,10 +4,9 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="libs/alipaysdk.jar"/>
 	<classpathentry kind="lib" path="libs/MobileSecSdk.jar"/>
-	<classpathentry kind="lib" path="libs/utdid4all-1.0.4.jar"/>
 	<classpathentry kind="lib" path="libs/UCGameSDK-3.5.3.1.jar"/>
+	<classpathentry kind="lib" path="libs/utdid4all-1.0.4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

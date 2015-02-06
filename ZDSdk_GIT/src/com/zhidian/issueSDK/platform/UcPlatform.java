@@ -9,6 +9,18 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.widget.Toast;
+import cn.uc.gamesdk.UCCallbackListener;
+import cn.uc.gamesdk.UCCallbackListenerNullException;
+import cn.uc.gamesdk.UCFloatButtonCreateException;
+import cn.uc.gamesdk.UCGameSDK;
+import cn.uc.gamesdk.UCGameSDKStatusCode;
+import cn.uc.gamesdk.UCLogLevel;
+import cn.uc.gamesdk.UCLoginFaceType;
+import cn.uc.gamesdk.UCOrientation;
+import cn.uc.gamesdk.info.FeatureSwitch;
+import cn.uc.gamesdk.info.GameParamInfo;
+import cn.uc.gamesdk.info.OrderInfo;
+import cn.uc.gamesdk.info.PaymentInfo;
 
 import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
