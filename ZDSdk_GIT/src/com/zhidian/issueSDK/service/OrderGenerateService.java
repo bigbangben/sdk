@@ -4,9 +4,12 @@
  */
 package com.zhidian.issueSDK.service;
 
+import java.util.UUID;
+
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.OrderGenerateApi;
@@ -72,8 +75,15 @@ public class OrderGenerateService {
 		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
 		OrderGenerateApi api = new OrderGenerateApi();
 		String fixed = "0";
+		if (money == null || money.equals("") || money.equals("0")) {
+			Toast.makeText(mActivity, "金额不能为空！！", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		if (money != null && Integer.parseInt(money) > 0) {
 			fixed = "1";
+		}
+		if (cpOrderId == null || "".equals(cpOrderId)) {
+			cpOrderId = UUID.randomUUID().toString();
 		}
 		api.appId = SDKUtils.getAppId(mActivity);
 		api.platformId = iplatform.getPlatformId();

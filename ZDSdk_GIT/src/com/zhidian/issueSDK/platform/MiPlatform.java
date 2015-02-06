@@ -231,7 +231,16 @@ public class MiPlatform implements Iplatform {
 		miBuyInfo.setExtraInfo(mBundle); // 设置用户信息
 		miBuyInfo.setCpOrderId(order);// 订单号唯一（不为空）
 		miBuyInfo.setCpUserInfo(exInfo); // 此参数在用户支付成功后会透传给CP的服务器
-		miBuyInfo.setAmount(Integer.parseInt(money)); // 必须是大于1的整数，10代表10米币，即10元人民币（不为空
+		if (money == null || money.equals("") || money.equals("0")) {
+			Toast.makeText(activity, "金额不能为空！！", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		int amount = Integer.parseInt(money);
+		if (amount < 100) {
+			Toast.makeText(activity, "金额不合法，请重新输入！", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		miBuyInfo.setAmount(amount/100); // 必须是大于1的整数，10代表10米币，即10元人民币（不为空
 
 		MiCommplatform.getInstance().miUniPay(activity, miBuyInfo,
 				new OnPayProcessListener() {
