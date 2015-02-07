@@ -42,7 +42,7 @@ public class UcPlatform implements Iplatform {
 
 	// 值为true时，为调试环境模式，当值为false时，是生产环境模式，验收及对外发布时，要求必须使用生产环境模式
 	public static final String TAG = "UcPlatform";
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
 	private GameLogoutListener gameLogoutListener;
 
 	@Override
