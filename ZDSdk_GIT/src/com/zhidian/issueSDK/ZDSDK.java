@@ -40,7 +40,6 @@ public class ZDSDK {
 	 * @param callback  回调
 	 */
 	public void sdkInit(Activity activity, ICallback callback) {
-		SDKLog.e("", "@@@@@@@@@@@@初始化@@@@@@@@@@");//FIXME
 		new InitService(activity, iplateform).init(callback);
 	};
 
