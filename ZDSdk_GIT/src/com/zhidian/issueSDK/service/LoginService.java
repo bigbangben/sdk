@@ -42,6 +42,7 @@ public class LoginService {
 
 		@Override
 		public void LoginSuccess(UserInfoModel model) {
+			model.id = iplatform.getPlatformId() + "_" + model.id;
 			Log.e(TAG, model.sessionId + "--->" + model.id);
 			LoginService.isLogin = true;
 			InitService.mUserInfoModel = model;
