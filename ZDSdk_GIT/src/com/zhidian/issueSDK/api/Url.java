@@ -6,6 +6,7 @@ package com.zhidian.issueSDK.api;
 public class Url {
 //	public static String BASE_URL= "http://zdsdktest.zhidian3g.cn/" ;   //测试环境
 	public static String BASE_URL= "http://rsservice.y6.cn/" ;          //正式环境
+	public static String BASE_URL2= "http://sdbxapp.msdk.mobilem.360.cn/" ;          //360测试服务器
     /**
      * 初始化URL
      */

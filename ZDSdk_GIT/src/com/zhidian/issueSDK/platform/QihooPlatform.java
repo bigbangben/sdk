@@ -60,16 +60,15 @@ public class QihooPlatform implements Iplatform {
 	@Override
 	public String getPlatformId() {
 		// TODO Auto-generated method stub
-		return null;
+		return "1003";
 	}
 
 	@Override
 	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		this.mActivity = activity;
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(mActivity);
-		orientation = initInfo.getScreenOrientation();
+		orientation  = Integer.parseInt(SDKUtils.getMeteData(activity, "screenOrientation"));
+		Matrix.init(activity);
 		gameInitListener.initSuccess(false, null);
 
 	}
@@ -133,8 +132,8 @@ public class QihooPlatform implements Iplatform {
 		pay.setQihooUserId(mUserInfo.getId());
 		pay.setMoneyAmount(moneyAmount);
 		pay.setExchangeRate("1");
-		pay.setProductName("商品");
-		pay.setProductId("1111");
+		pay.setProductName("钻石");
+		pay.setProductId("001");
 		pay.setNotifyUri(notifyUri);
 		pay.setAppName(name);
 		pay.setAppUserName(model.getRoleName());

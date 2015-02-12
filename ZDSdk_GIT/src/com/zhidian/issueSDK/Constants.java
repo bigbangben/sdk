@@ -1,5 +1,7 @@
 package com.zhidian.issueSDK;
 
+import com.zhidian.issueSDK.api.Url;
+
 
 
 public interface Constants {
@@ -32,13 +34,13 @@ public interface Constants {
      * 应用服务器为360服务器提供的支付结果通知接口，由360服务器把支付结果通知到这个URI。URI最大255字符。具体协议请查看文档中，
      * 支付结果通知接口。 (这是DEMO专用的URL，请使用方自己搭建自己的应用服务器，此服务器只认DEMO的AppKey。)
      */
-    public static final String DEMO_APP_SERVER_NOTIFY_URI = "http://sdbxapp.msdk.mobilem.360.cn/pay_callback.php";
+    public static final String DEMO_APP_SERVER_NOTIFY_URI = Url.BASE_URL2 + "pay_callback.php";
 
     /**
      * 应用服务器为应用客户端提供的接口Url，用于通过AccessToken获取QihooUserInfo
      * (这是DEMO专用的URL，请使用方自己搭建自己的应用服务器，此服务器只认DEMO的AppKey。)
      */
-    public static final String DEMO_APP_SERVER_URL_GET_USER = "http://sdbxapp.msdk.mobilem.360.cn/mobileSDK/api.php?type=get_userinfo_by_token&debug=1&token=";
+    public static final String DEMO_APP_SERVER_URL_GET_USER =  Url.BASE_URL2 + "mobileSDK/api.php?type=get_userinfo_by_token&debug=1&token=";
 
     public static final String IS_LANDSCAPE = "is_landscape";
 
