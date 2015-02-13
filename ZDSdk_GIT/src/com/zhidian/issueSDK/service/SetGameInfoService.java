@@ -42,7 +42,7 @@ public class SetGameInfoService {
 		this.callback = callback;
 		this.gameInfo = gameInfo;
 		this.showFloat = showFloat;
-		iplatform.setGameInfo(gameInfo, listener);
+		iplatform.setGameInfo(mActivity, gameInfo, listener);
 
 	}
 
@@ -90,13 +90,8 @@ public class SetGameInfoService {
 				LoginService.loginTime = jsonObject.optString("loginTime");
 				// 启动心跳
 				Handler h = new Handler();
-				/*
-				 * h.postDelayed(new OnLineService(mActivity, h, iplatform,
-				 * gameInfo), 20 * 60 * 1000);
-				 */
 				callback.setGameInfoSuccess(LoginService.loginTime);
-				h.post(new OnLineService(mActivity, h, iplatform, gameInfo));// FIXME
-																				// 測試環境專用
+				h.post(new OnLineService(mActivity, h, iplatform, gameInfo));
 				if (showFloat) {
 					// 显示浮动工具栏
 					iplatform.showFloat(mActivity);
