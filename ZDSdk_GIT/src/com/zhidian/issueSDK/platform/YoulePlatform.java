@@ -114,7 +114,11 @@ public class YoulePlatform implements Iplatform {
 		this.gameInitListener = gameInitListener;
 		this.gameLoginListener = gameLoginListener;
 		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+		initInfo.setAppId(SDKUtils.getMeteData(activity, "appId"));
+		initInfo.setAppKey(SDKUtils.getMeteData(activity, "appKey"));
+		initInfo.setScreenOrientation(Integer.parseInt(SDKUtils.getMeteData(
+				activity, "screenOrientation")));
+
 		ZhiDianManager.init(activity, initInfo.getScreenOrientation(),
 				mInitListener, loginListener);
 	}
@@ -180,7 +184,8 @@ public class YoulePlatform implements Iplatform {
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo,
+			SetGameInfoListener listener) {
 		listener.onSuccess();
 	}
 
