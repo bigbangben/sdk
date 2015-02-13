@@ -3,11 +3,14 @@ package com.zhidian.issueSDK.platform;
 import java.util.Random;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.nearme.gamecenter.open.api.ApiCallback;
 import com.nearme.gamecenter.open.api.FixedPayInfo;
 import com.nearme.gamecenter.open.api.GameCenterSDK;
 import com.nearme.gamecenter.open.api.GameCenterSettings;
+import com.nearme.gamecenter.open.api.PayInfo;
+import com.nearme.gamecenter.open.core.util.Util;
 import com.nearme.oauth.model.UserInfo;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
@@ -24,6 +27,7 @@ import com.zhidian.issueSDK.util.SDKUtils;
 public class OppoPlatform implements Iplatform {
 
 	private static final String TAG = "OppoPlatform";
+	private Activity mActivity;
 
 	public OppoPlatform() {
 	}
@@ -34,14 +38,14 @@ public class OppoPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(Activity activity, final GameInitListener gameInitListener,
+	public void init(Activity activity,
+			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		SDKLog.e(TAG, "begin init");
+		this.mActivity = activity;
 		GameCenterSDK.setmCurrentContext(activity);
-		String appKey =  SDKUtils.getMeteData(activity,
-				"appKey");
-		String appSecret =  SDKUtils.getMeteData(activity,
-				"appSecret");
+		String appKey = SDKUtils.getMeteData(activity, "appKey");
+		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
 		String screenOrientation = SDKUtils.getMeteData(activity,
 				"screenOrientation");
 		GameCenterSettings.isOritationPort = screenOrientation.equals("0") ? false
@@ -50,8 +54,8 @@ public class OppoPlatform implements Iplatform {
 		GameCenterSettings.proInnerSwitcher = false;
 		// 测试用的appkey和secret
 		// TODO 这个里的为测试key和secret，请务必替换为正式的！
-		GameCenterSettings gameCenterSettings = new GameCenterSettings(
-				appKey, appSecret) {
+		GameCenterSettings gameCenterSettings = new GameCenterSettings(appKey,
+				appSecret) {
 
 			@Override
 			public void onForceReLogin() {
@@ -74,23 +78,26 @@ public class OppoPlatform implements Iplatform {
 	}
 
 	@Override
-	public void login(final Activity activity, final GameLoginListener gameLoginListener) {
+	public void login(final Activity activity,
+			final GameLoginListener gameLoginListener) {
 		GameCenterSDK.setmCurrentContext(activity);
+		this.mActivity = activity;
 		GameCenterSDK.getInstance().doLogin(new ApiCallback() {
 
 			@Override
 			public void onSuccess(String content, int code) {
-				//获取用户信息
+				// 获取用户信息
 				GameCenterSDK.getInstance().doGetUserInfo(new ApiCallback() {
 
 					@Override
 					public void onSuccess(String content, int code) {
 						try {
+							SDKLog.e("", ">>>>>>>>>>>>  " + content);//FIXME
 							UserInfo userInfo = new UserInfo(content);
 							UserInfoModel model = new UserInfoModel();
 							model.id = userInfo.id;
 							model.userName = userInfo.username;
-							
+
 							gameLoginListener.LoginSuccess(model);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -102,7 +109,7 @@ public class OppoPlatform implements Iplatform {
 						gameLoginListener.LoginFail(content);
 					}
 				}, activity);
-				
+
 			}
 
 			@Override
@@ -115,8 +122,7 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
-		// TODO Auto-generated method stub
-
+		GameCenterSDK.getInstance().doShowSprite(switchAccountCB, activity);
 	}
 
 	@Override
@@ -132,49 +138,72 @@ public class OppoPlatform implements Iplatform {
 	}
 
 	@Override
-	public void pay(Activity activity, String money, String order,
+	public void pay(final Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
-			OrderGenerateListener listener) {
-		final FixedPayInfo payInfo = new FixedPayInfo(
-				System.currentTimeMillis() + new Random().nextInt(1000) + "",
-				"自定义字段", amount);
+			final OrderGenerateListener listener) {
+		final PayInfo payInfo = new PayInfo(order, extInfo,
+				Integer.parseInt(money));
 		payInfo.setProductDesc("商品描述");
-		payInfo.setProductName("符石");
+		payInfo.setProductName("商品名");
 		payInfo.setCallbackUrl("http://gamecenter.wanyol.com:8080/gamecenter/callback_test_url");
-		payInfo.setGoodsCount(300);
-		GameCenterSDK.getInstance().doFixedKebiPayment(kebiPayment, payInfo,
-				this);
-	
+		GameCenterSDK.getInstance().doNormalKebiPayment(new ApiCallback() {
+			@Override
+			public void onSuccess(String content, int code) {
+				Util.makeToast("消耗可币成功:" + content + "#" + code, activity);
+				listener.onSuccess();
+			}
+
+			@Override
+			public void onFailure(String content, int code) {
+				Util.makeToast("消耗可币失败:" + content, activity);
+				listener.onFail(content);
+			}
+		}, payInfo, activity);
 	}
 
 	@Override
 	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
-		// TODO Auto-generated method stub
+	public void setGameInfo(GameInfo gameInfo, final SetGameInfoListener listener) {
+		String extendInfo = new StringBuilder()
+		.append("gameId=").append(SDKUtils.getMeteData(mActivity, "appId"))
+		.append("&service=").append("0")
+		.append("&role=").append(gameInfo.getRoleName())
+		.append("&grade=").append(gameInfo.getRoleLevel()).toString();
 
+		GameCenterSDK.getInstance().doSubmitExtendInfo(new ApiCallback() {
+			
+			@Override
+			public void onSuccess(String content, int code) {
+				listener.onSuccess();
+			}
+			
+			@Override
+			public void onFailure(String content, int code) {
+				listener.onFail(content);
+			}
+		},
+				extendInfo, mActivity);
+
+	
 	}
 
 	@Override
 	public boolean suportLogoutUI() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void onPause(Activity activity) {
-		// TODO Auto-generated method stub
-
+		GameCenterSDK.getInstance().doDismissSprite(activity);
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
-
+		GameCenterSDK.getInstance().doShowSprite(switchAccountCB, activity);
 	}
 
 	@Override
@@ -182,5 +211,16 @@ public class OppoPlatform implements Iplatform {
 		// TODO Auto-generated method stub
 
 	}
+	
+	private ApiCallback switchAccountCB = new ApiCallback() {
+
+		@Override
+		public void onSuccess(String content, int code) {
+		}
+
+		@Override
+		public void onFailure(String content, int code) {
+		}
+	};
 
 }
