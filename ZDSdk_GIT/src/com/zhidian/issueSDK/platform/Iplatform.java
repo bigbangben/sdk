@@ -71,10 +71,11 @@ public interface Iplatform {
 			CreateRoleService.CreateRoleListener listener);
 
 	/**
+	 * @param mActivity 
 	 * @param gameInfo
 	 * @param listener
 	 */
-	public void setGameInfo(GameInfo gameInfo,
+	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
 			SetGameInfoService.SetGameInfoListener listener);
 
 	public boolean suportLogoutUI();
