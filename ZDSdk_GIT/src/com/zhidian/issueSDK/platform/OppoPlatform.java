@@ -1,8 +1,11 @@
 package com.zhidian.issueSDK.platform;
 
+import java.util.Random;
+
 import android.app.Activity;
 
 import com.nearme.gamecenter.open.api.ApiCallback;
+import com.nearme.gamecenter.open.api.FixedPayInfo;
 import com.nearme.gamecenter.open.api.GameCenterSDK;
 import com.nearme.gamecenter.open.api.GameCenterSettings;
 import com.nearme.oauth.model.UserInfo;
@@ -27,14 +30,18 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return "1";
+		return "1017";
 	}
 
 	@Override
-	public void init(Activity activity, GameInitListener gameInitListener,
+	public void init(Activity activity, final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		SDKLog.e(TAG, "begin init");
 		GameCenterSDK.setmCurrentContext(activity);
+		String appKey =  SDKUtils.getMeteData(activity,
+				"appKey");
+		String appSecret =  SDKUtils.getMeteData(activity,
+				"appSecret");
 		String screenOrientation = SDKUtils.getMeteData(activity,
 				"screenOrientation");
 		GameCenterSettings.isOritationPort = screenOrientation.equals("0") ? false
@@ -44,7 +51,7 @@ public class OppoPlatform implements Iplatform {
 		// 测试用的appkey和secret
 		// TODO 这个里的为测试key和secret，请务必替换为正式的！
 		GameCenterSettings gameCenterSettings = new GameCenterSettings(
-				"c5217trjnrmU6gO5jG8VvUFU0", "e2eCa732422245E8891F6555e999878B") {
+				appKey, appSecret) {
 
 			@Override
 			public void onForceReLogin() {
@@ -62,6 +69,7 @@ public class OppoPlatform implements Iplatform {
 		// TODO for test old
 		// AccountAgent.useNewApi = true;
 		GameCenterSDK.init(gameCenterSettings, activity);
+		gameInitListener.initSuccess(false, null);
 
 	}
 
@@ -72,7 +80,7 @@ public class OppoPlatform implements Iplatform {
 
 			@Override
 			public void onSuccess(String content, int code) {
-
+				//获取用户信息
 				GameCenterSDK.getInstance().doGetUserInfo(new ApiCallback() {
 
 					@Override
@@ -82,6 +90,7 @@ public class OppoPlatform implements Iplatform {
 							UserInfoModel model = new UserInfoModel();
 							model.id = userInfo.id;
 							model.userName = userInfo.username;
+							
 							gameLoginListener.LoginSuccess(model);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -98,6 +107,7 @@ public class OppoPlatform implements Iplatform {
 
 			@Override
 			public void onFailure(String content, int code) {
+				gameLoginListener.LoginFail(content);
 			}
 		}, activity);
 
@@ -125,8 +135,16 @@ public class OppoPlatform implements Iplatform {
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
 			OrderGenerateListener listener) {
-		// TODO Auto-generated method stub
-
+		final FixedPayInfo payInfo = new FixedPayInfo(
+				System.currentTimeMillis() + new Random().nextInt(1000) + "",
+				"自定义字段", amount);
+		payInfo.setProductDesc("商品描述");
+		payInfo.setProductName("符石");
+		payInfo.setCallbackUrl("http://gamecenter.wanyol.com:8080/gamecenter/callback_test_url");
+		payInfo.setGoodsCount(300);
+		GameCenterSDK.getInstance().doFixedKebiPayment(kebiPayment, payInfo,
+				this);
+	
 	}
 
 	@Override
