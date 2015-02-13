@@ -151,7 +151,7 @@ public class QihooPlatform implements Iplatform {
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo, SetGameInfoListener listener) {
 		listener.onSuccess();
 	}
 
