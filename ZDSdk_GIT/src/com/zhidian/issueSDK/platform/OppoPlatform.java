@@ -118,7 +118,6 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
-		GameCenterSDK.setmCurrentContext(activity);
 		GameCenterSDK.getInstance().doShowSprite(switchAccountCB, activity);
 	}
 
@@ -182,7 +181,6 @@ public class OppoPlatform implements Iplatform {
 	@Override
 	public void setGameInfo(Activity activity, GameInfo gameInfo,
 			final SetGameInfoListener listener) {
-		GameCenterSDK.setmCurrentContext(activity);
 		String extendInfo = new StringBuilder().append("gameId=")
 				.append(SDKUtils.getMeteData(activity, "appId"))
 				.append("&service=").append("0").append("&role=")
@@ -216,6 +214,7 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public void onResume(Activity activity) {
+		GameCenterSDK.setmCurrentContext(activity);
 		GameCenterSDK.getInstance().doShowSprite(switchAccountCB, activity);
 	}
 
