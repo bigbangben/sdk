@@ -1,12 +1,11 @@
 package com.zhidian.issueSDK.platform;
 
-import java.util.Random;
-
 import android.app.Activity;
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import com.nearme.gamecenter.open.api.ApiCallback;
-import com.nearme.gamecenter.open.api.FixedPayInfo;
 import com.nearme.gamecenter.open.api.GameCenterSDK;
 import com.nearme.gamecenter.open.api.GameCenterSettings;
 import com.nearme.gamecenter.open.api.PayInfo;
@@ -27,7 +26,6 @@ import com.zhidian.issueSDK.util.SDKUtils;
 public class OppoPlatform implements Iplatform {
 
 	private static final String TAG = "OppoPlatform";
-	private Activity mActivity;
 
 	public OppoPlatform() {
 	}
@@ -42,7 +40,6 @@ public class OppoPlatform implements Iplatform {
 			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		SDKLog.e(TAG, "begin init");
-		this.mActivity = activity;
 		GameCenterSDK.setmCurrentContext(activity);
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
 		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
@@ -81,7 +78,6 @@ public class OppoPlatform implements Iplatform {
 	public void login(final Activity activity,
 			final GameLoginListener gameLoginListener) {
 		GameCenterSDK.setmCurrentContext(activity);
-		this.mActivity = activity;
 		GameCenterSDK.getInstance().doLogin(new ApiCallback() {
 
 			@Override
@@ -92,7 +88,7 @@ public class OppoPlatform implements Iplatform {
 					@Override
 					public void onSuccess(String content, int code) {
 						try {
-							SDKLog.e("", ">>>>>>>>>>>>  " + content);//FIXME
+							SDKLog.e("", ">>>>>>>>>>>>  " + content);// FIXME
 							UserInfo userInfo = new UserInfo(content);
 							UserInfoModel model = new UserInfoModel();
 							model.id = userInfo.id;
@@ -122,19 +118,36 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
+		GameCenterSDK.setmCurrentContext(activity);
 		GameCenterSDK.getInstance().doShowSprite(switchAccountCB, activity);
 	}
 
 	@Override
-	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		// TODO Auto-generated method stub
+	public void logOut(Activity activity, final GameLogoutListener gameLogoutListener) {
+		if (suportLogoutUI()) {
+			gameLogoutListener.logoutSuccess();
+		} else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+					.setMessage("不多待一会吗？")
+					.setNegativeButton("取消", new OnClickListener() {
 
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							gameLogoutListener.logoutSuccess();
+						}
+					}).setCancelable(false).create().show();
+		}
 	}
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
@@ -167,28 +180,28 @@ public class OppoPlatform implements Iplatform {
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, final SetGameInfoListener listener) {
-		String extendInfo = new StringBuilder()
-		.append("gameId=").append(SDKUtils.getMeteData(mActivity, "appId"))
-		.append("&service=").append("0")
-		.append("&role=").append(gameInfo.getRoleName())
-		.append("&grade=").append(gameInfo.getRoleLevel()).toString();
+	public void setGameInfo(Activity activity, GameInfo gameInfo,
+			final SetGameInfoListener listener) {
+		GameCenterSDK.setmCurrentContext(activity);
+		String extendInfo = new StringBuilder().append("gameId=")
+				.append(SDKUtils.getMeteData(activity, "appId"))
+				.append("&service=").append("0").append("&role=")
+				.append(gameInfo.getRoleName()).append("&grade=")
+				.append(gameInfo.getRoleLevel()).toString();
 
 		GameCenterSDK.getInstance().doSubmitExtendInfo(new ApiCallback() {
-			
+
 			@Override
 			public void onSuccess(String content, int code) {
 				listener.onSuccess();
 			}
-			
+
 			@Override
 			public void onFailure(String content, int code) {
 				listener.onFail(content);
 			}
-		},
-				extendInfo, mActivity);
+		}, extendInfo, activity);
 
-	
 	}
 
 	@Override
@@ -208,10 +221,8 @@ public class OppoPlatform implements Iplatform {
 
 	@Override
 	public void onDestory() {
-		// TODO Auto-generated method stub
-
 	}
-	
+
 	private ApiCallback switchAccountCB = new ApiCallback() {
 
 		@Override
