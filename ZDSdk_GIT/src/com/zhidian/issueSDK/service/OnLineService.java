@@ -81,7 +81,7 @@ public class OnLineService implements Runnable {
 	public void run() {
 		if (LoginService.isLogin) {
 			onLine(model);
-			mHandler.postDelayed(this, 20 * 1000);
+			mHandler.postDelayed(this, 20 * 60 * 1000);
 		}
 	}
 }
