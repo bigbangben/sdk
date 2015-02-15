@@ -25,12 +25,14 @@ import com.qihoo.gamecenter.sdk.common.IDispatcherCallback;
 import com.qihoo.gamecenter.sdk.matrix.Matrix;
 import com.qihoo.gamecenter.sdk.protocols.ProtocolConfigs;
 import com.qihoo.gamecenter.sdk.protocols.ProtocolKeys;
+import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.QihooPayInfo;
 import com.zhidian.issueSDK.model.QihooUserInfo;
 import com.zhidian.issueSDK.model.TokenInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
+import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -70,7 +72,8 @@ public class QihooPlatform implements Iplatform {
 	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		this.mActivity = activity;
-		orientation  = Integer.parseInt(SDKUtils.getMeteData(activity, "screenOrientation"));
+		orientation = Integer.parseInt(SDKUtils.getMeteData(activity,
+				"screenOrientation"));
 		Matrix.init(activity);
 		gameInitListener.initSuccess(false, null);
 
@@ -154,7 +157,8 @@ public class QihooPlatform implements Iplatform {
 	}
 
 	@Override
-	public void setGameInfo(Activity activity, GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo,
+			SetGameInfoListener listener) {
 		listener.onSuccess();
 	}
 
@@ -275,43 +279,51 @@ public class QihooPlatform implements Iplatform {
 					});
 
 			// 请求应用服务器，用AccessToken换取UserInfo
-			Map<String, String> param = new HashMap<String, String>();
-			param.put("access_token", tokenInfo.getAccessToken());
-			param.put("zdappId", SDKUtils.getAppId(mActivity));
-			param.put("platformId", getPlatformId());
-			mUserInfoTask.doRequest(mActivity, param, new QihooUserInfoListener() {
+			UserInfoApi api = new UserInfoApi();
+			api.zdappId = SDKUtils.getAppId(mActivity);
+			api.access_token = tokenInfo.getAccessToken();
+			api.platformId = getPlatformId();
+			if (api.zdappId == null || api.access_token == null
+					|| api.platformId == null) {
+				Toast.makeText(mActivity, "请求参数不能为空", Toast.LENGTH_SHORT)
+						.show();
+				return;
+			}
+			api.setResponse(new JsonResponse() {
 
-						@Override
-						public void onGotUserInfo(QihooUserInfo userInfo) {
-
-							ProgressUtil.dismiss(mProgress);
-
-							if (userInfo == null) {
-								Toast.makeText(mActivity, "未获取到Qihoo UserInfo",
-										Toast.LENGTH_LONG).show();
-							} else {
-								if (!userInfo.isValid()) {
-									if (TextUtils.isEmpty(userInfo.getError())) {
-										Toast.makeText(mActivity,
-												"未获取到Qihoo UserInfo",
-												Toast.LENGTH_LONG).show();
-									} else {
-										Toast.makeText(mActivity,
-												userInfo.getError(),
-												Toast.LENGTH_LONG).show();
-									}
-								} else {
-									mUserInfo = userInfo;
-									UserInfoModel model = new UserInfoModel();
-									model.id = userInfo.getId();
-									model.userName = userInfo.getName();
-									gameLoginListener.LoginSuccess(model);
-
-								}
-							}
-
+				@Override
+				public void requestSuccess(JSONObject jsonObject) {
+					super.requestSuccess(jsonObject);
+					if (jsonObject == null) {
+						gameLoginListener.LoginFail("用户信息获取失败！");
+						return;
+					}
+					mUserInfo = parseJson(jsonObject);
+					if (!mUserInfo.isValid()) {
+						if (TextUtils.isEmpty(mUserInfo.getError())) {
+							Toast.makeText(mActivity, "未获取到Qihoo UserInfo",
+									Toast.LENGTH_LONG).show();
+							gameLoginListener.LoginFail("未获取到Qihoo UserInfo");
+						} else {
+							Toast.makeText(mActivity, mUserInfo.getError(),
+									Toast.LENGTH_LONG).show();
+							gameLoginListener.LoginFail(mUserInfo.getError());
 						}
-					});
+					} else {
+						UserInfoModel model = new UserInfoModel();
+						model.id = mUserInfo.getId();
+						model.userName = mUserInfo.getName();
+						gameLoginListener.LoginSuccess(model);
+					}
+
+				}
+
+				@Override
+				public void requestError(String string) {
+					super.requestError(string);
+					gameLoginListener.LoginFail(string);
+				}
+			});
 		} else {
 			ProgressUtil.dismiss(mProgress);
 			gameLoginListener.LoginFail("未获取到Access Token");
@@ -480,4 +492,53 @@ public class QihooPlatform implements Iplatform {
 		// TODO Auto-generated method stub
 
 	}
+	
+    public  QihooUserInfo parseJson(JSONObject jsonObj) {
+        QihooUserInfo userInfo = null;
+            try {
+                userInfo = new QihooUserInfo();
+                int errorCode = jsonObj.optInt("error_code");
+                if (errorCode == 0) {
+                    JSONObject dataJsonObj = jsonObj.getJSONObject("data");
+
+                    String id = dataJsonObj.getString("id");
+                    String name = dataJsonObj.getString("name");
+                    String avatar = dataJsonObj.getString("avatar");
+
+                    userInfo.setId(id);
+                    userInfo.setName(name);
+                    userInfo.setAvatar(avatar);
+
+                    // 非必返回项
+                    if (dataJsonObj.has("sex")) {
+                        String sex = dataJsonObj.getString("sex");
+                        userInfo.setSex(sex);
+                    }
+
+                    if (dataJsonObj.has("area")) {
+                        String area = dataJsonObj.getString("area");
+
+                        userInfo.setArea(area);
+                    }
+
+                    if (dataJsonObj.has("nick")) {
+                        String nick = dataJsonObj.getString("nick");
+                        userInfo.setNick(nick);
+                    }
+
+                } else {
+
+                    String errorMessage = jsonObj.optString("error");
+
+                    String error = "[" + errorCode + "]:" + errorMessage;
+                    userInfo.setError(error);
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        
+        return userInfo;
+    }
 }
