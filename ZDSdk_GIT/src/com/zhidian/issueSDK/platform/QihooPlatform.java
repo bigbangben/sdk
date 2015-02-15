@@ -1,8 +1,5 @@
 package com.zhidian.issueSDK.platform;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,7 +24,6 @@ import com.qihoo.gamecenter.sdk.protocols.ProtocolConfigs;
 import com.qihoo.gamecenter.sdk.protocols.ProtocolKeys;
 import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.QihooPayInfo;
 import com.zhidian.issueSDK.model.QihooUserInfo;
 import com.zhidian.issueSDK.model.TokenInfo;
@@ -42,7 +38,6 @@ import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 import com.zhidian.issueSDK.util.ProgressUtil;
-import com.zhidian.issueSDK.util.QihooUserInfoListener;
 import com.zhidian.issueSDK.util.QihooUserInfoTask;
 import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
@@ -121,8 +116,39 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
-		// TODO Auto-generated method stub
+        Bundle bundle = new Bundle();
 
+        // 界面相关参数，360SDK界面是否以横屏显示。
+        bundle.putBoolean(ProtocolKeys.IS_SCREEN_ORIENTATION_LANDSCAPE, (orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? true
+				: false);
+
+        // 必需参数，使用360SDK的退出模块。
+        bundle.putInt(ProtocolKeys.FUNCTION_CODE, ProtocolConfigs.FUNC_CODE_QUIT);
+
+        Intent intent = new Intent(mActivity, ContainerActivity.class);
+        intent.putExtras(bundle);
+
+        Matrix.invokeActivity(mActivity, intent, new IDispatcherCallback() {
+			
+			@Override
+			public void onFinished(String data) {
+				  JSONObject json;
+		            try {
+		                json = new JSONObject(data);
+		                int which = json.optInt("which", -1);
+		                String label = json.optString("label");
+		                switch (which) {
+		                    case 0: // 用户关闭退出界面
+		                        return;
+		                    default:// 退出游戏
+		                        return;
+		                }
+		            } catch (JSONException e) {
+		                e.printStackTrace();
+		            }
+			}
+		});
+    
 	}
 
 	@Override
@@ -172,6 +198,7 @@ public class QihooPlatform implements Iplatform {
 	@Override
 	public void onDestory() {
 		mTokenInfo = null;
+		Matrix.destroy(mActivity);
 	}
 
 	/**
@@ -268,7 +295,7 @@ public class QihooPlatform implements Iplatform {
 
 			// 提示用户进度
 
-			mProgress = ProgressUtil.show(mActivity, "获取Qihoo UserInfo",
+			mProgress = ProgressUtil.show(mActivity, "获取用户信息",
 					"正在请求应用服务器，请稍候……", new OnCancelListener() {
 
 						@Override
@@ -499,44 +526,30 @@ public class QihooPlatform implements Iplatform {
         QihooUserInfo userInfo = null;
             try {
                 userInfo = new QihooUserInfo();
-                int errorCode = jsonObj.optInt("error_code");
-                if (errorCode == 0) {
-                    JSONObject dataJsonObj = jsonObj.getJSONObject("data");
-
-                    String id = dataJsonObj.getString("id");
-                    String name = dataJsonObj.getString("name");
-                    String avatar = dataJsonObj.getString("avatar");
+                    String id = jsonObj.getString("id");
+                    String name = jsonObj.getString("name");
+                    String avatar = jsonObj.getString("avatar");
 
                     userInfo.setId(id);
                     userInfo.setName(name);
                     userInfo.setAvatar(avatar);
 
                     // 非必返回项
-                    if (dataJsonObj.has("sex")) {
-                        String sex = dataJsonObj.getString("sex");
+                    if (jsonObj.has("sex")) {
+                        String sex = jsonObj.getString("sex");
                         userInfo.setSex(sex);
                     }
 
-                    if (dataJsonObj.has("area")) {
-                        String area = dataJsonObj.getString("area");
+                    if (jsonObj.has("area")) {
+                        String area = jsonObj.getString("area");
 
                         userInfo.setArea(area);
                     }
 
-                    if (dataJsonObj.has("nick")) {
-                        String nick = dataJsonObj.getString("nick");
+                    if (jsonObj.has("nick")) {
+                        String nick = jsonObj.getString("nick");
                         userInfo.setNick(nick);
                     }
-
-                } else {
-
-                    String errorMessage = jsonObj.optString("error");
-
-                    String error = "[" + errorCode + "]:" + errorMessage;
-                    userInfo.setError(error);
-
-                }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

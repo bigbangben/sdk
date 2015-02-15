@@ -7,6 +7,7 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.OrderGenerateApi;
