@@ -28,7 +28,8 @@ public class NetTask extends AsyncTask<Request,Integer,String> {
         super.onPostExecute(s);
         if(TextUtils.isEmpty(s)){
             Log.e("NetTask", "net error");
-            return  ;
+            mHttpResponse.response("net error");
+            return ;
         }
         if(mHttpResponse!=null){
             mHttpResponse.response(s);

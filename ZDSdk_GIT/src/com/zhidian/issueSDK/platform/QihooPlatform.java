@@ -33,6 +33,7 @@ import com.zhidian.issueSDK.model.QihooUserInfo;
 import com.zhidian.issueSDK.model.TokenInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.net.JsonResponse;
+import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -324,6 +325,7 @@ public class QihooPlatform implements Iplatform {
 					gameLoginListener.LoginFail(string);
 				}
 			});
+			new NetTask().execute(api);
 		} else {
 			ProgressUtil.dismiss(mProgress);
 			gameLoginListener.LoginFail("未获取到Access Token");
