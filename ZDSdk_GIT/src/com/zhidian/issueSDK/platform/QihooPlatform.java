@@ -1,5 +1,8 @@
 package com.zhidian.issueSDK.platform;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -272,8 +275,11 @@ public class QihooPlatform implements Iplatform {
 					});
 
 			// 请求应用服务器，用AccessToken换取UserInfo
-			mUserInfoTask.doRequest(mActivity, tokenInfo.getAccessToken(),
-					Matrix.getAppKey(mActivity), new QihooUserInfoListener() {
+			Map<String, String> param = new HashMap<String, String>();
+			param.put("access_token", tokenInfo.getAccessToken());
+			param.put("zdappId", SDKUtils.getAppId(mActivity));
+			param.put("platformId", getPlatformId());
+			mUserInfoTask.doRequest(mActivity, param, new QihooUserInfoListener() {
 
 						@Override
 						public void onGotUserInfo(QihooUserInfo userInfo) {
@@ -308,6 +314,7 @@ public class QihooPlatform implements Iplatform {
 					});
 		} else {
 			ProgressUtil.dismiss(mProgress);
+			gameLoginListener.LoginFail("未获取到Access Token");
 			Toast.makeText(mActivity, "未获取到Access Token", Toast.LENGTH_LONG)
 					.show();
 
