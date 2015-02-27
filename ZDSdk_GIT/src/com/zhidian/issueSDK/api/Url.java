@@ -4,8 +4,8 @@ package com.zhidian.issueSDK.api;
  * Created by Administrator on 2014/12/11.
  */
 public class Url {
-//	public static String BASE_URL= "http://zdsdktest.zhidian3g.cn/" ;   //测试环境
-	public static String BASE_URL= "http://rsservice.y6.cn/" ;          //正式环境
+	public static String BASE_URL= "http://zdsdktest.zhidian3g.cn/" ;   //测试环境
+//	public static String BASE_URL= "http://rsservice.y6.cn/" ;          //正式环境
     /**
      * 初始化URL
      */
@@ -34,4 +34,8 @@ public class Url {
      * 生成订单URL
      */
     public static final String ORDER_GENERATE_URL = "account/order/generate";
+	/**
+	 * 获取用户信息URL
+	 */
+	public static final String GET_USERINFO_URL = null;
 }

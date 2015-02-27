@@ -1,10 +1,20 @@
 package com.zhidian.issueSDK.platform;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.vivo.account.base.accounts.OnVivoAccountChangedListener;
+import com.vivo.account.base.accounts.VivoAccountManager;
 import com.vivo.account.base.activity.LoginActivity;
+import com.zhidian.issueSDK.api.UserInfoApi;
 import com.zhidian.issueSDK.model.GameInfo;
+import com.zhidian.issueSDK.model.UserInfoModel;
+import com.zhidian.issueSDK.net.JsonResponse;
+import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -12,6 +22,8 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKLog;
+import com.zhidian.issueSDK.util.SDKUtils;
 
 public class VivoPlatform implements Iplatform {
 
@@ -30,10 +42,65 @@ public class VivoPlatform implements Iplatform {
 	}
 
 	@Override
-	public void login(Activity activity, GameLoginListener gameLoginListener) {
+	public void login(final Activity activity, final GameLoginListener gameLoginListener) {
 		Intent loginIntent = new Intent(activity, LoginActivity.class);
 //		loginIntent.putExtra(KEY_SHOW_TEMPLOGIN, false);
 		activity.startActivity(loginIntent);
+		VivoAccountManager mVivoAccountManager = VivoAccountManager.getInstance(activity);
+		mVivoAccountManager.registeListener(new OnVivoAccountChangedListener(){
+			@Override
+			public void onAccountLogin(String name, String openid, String authtoken) {
+				SDKLog.e("", "name="+name+", openid="+openid+", authtoken="+authtoken);
+				//向服务器请求用户信息
+				UserInfoApi api = new UserInfoApi();
+				api.authtoken = authtoken;
+				api.appId = SDKUtils.getAppId(activity);
+				api.platformId = getPlatformId();
+				if (api.authtoken ==null || api.appId ==null || api.platformId ==null) {
+					Toast.makeText(activity, "请求参数不能为空", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				api.setResponse(new JsonResponse(){
+
+					@Override
+					public void requestError(String string) {
+						super.requestError(string);
+					}
+
+					@Override
+					public void requestSuccess(JSONObject jsonObject) {
+						if (jsonObject == null) {
+							gameLoginListener.LoginFail("用户信息获取失败！");
+							return;
+						}
+						JSONObject state = jsonObject.optJSONObject("state");
+						String code = state.optString("code");
+					if (code.equals("1")) {
+							JSONObject data = jsonObject.optJSONObject("data");
+							String accountId = data.optString("accountId");
+							String creator = data.optString("creator");
+							UserInfoModel model = new UserInfoModel();
+							model.id = accountId;
+							model.userName = creator;
+							gameLoginListener.LoginSuccess(model);
+						} else {
+							gameLoginListener.LoginFail("用户信息获取失败！");
+						}
+					}
+				
+				});
+				new NetTask().execute(api);
+			}
+			//第三方游戏不需要使用此回调
+			@Override
+			public void onAccountRemove(boolean isRemoved) {
+				// TODO Auto-generated method stub
+//				if(isRemoved){
+//					Log.d(TAG, "remove success");
+//				}
+			}
+
+		});
 	}
 
 	@Override
