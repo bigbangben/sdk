@@ -332,7 +332,7 @@ public class UcPlatform implements Iplatform {
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo, SetGameInfoListener listener) {
 		UCGameSDK.defaultSDK().notifyZone(gameInfo.getZoneName(),
 				gameInfo.getRoleId(), gameInfo.getRoleName());
 		try {
