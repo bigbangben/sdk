@@ -1,15 +1,14 @@
 package com.zhidian.issueSDK.platform;
 
-import java.util.UUID;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.text.TextUtils;
-import android.widget.Toast;
+import android.util.Log;
 
+import com.baidu.gamesdk.ActivityAnalytics;
 import com.baidu.gamesdk.BDGameSDK;
 import com.baidu.gamesdk.BDGameSDKSetting;
 import com.baidu.gamesdk.BDGameSDKSetting.Domain;
@@ -17,7 +16,6 @@ import com.baidu.gamesdk.IResponse;
 import com.baidu.gamesdk.ResultCode;
 import com.baidu.platformsdk.PayOrderInfo;
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
@@ -37,22 +35,22 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		// TODO Auto-generated method stub
-		return null;
+		return "1008";
 	}
 
 	@Override
 	public void init(Activity activity,
 			final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {// 初始化游戏SDK
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+		String appId = SDKUtils.getMeteData(activity, "appId");
+		String appKey = SDKUtils.getMeteData(activity, "appKey");
+		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
 		BDGameSDKSetting mBDGameSDKSetting = new BDGameSDKSetting();
-		mBDGameSDKSetting.setAppID(Integer.parseInt(initInfo.getAppId()));// APPID设置
-		mBDGameSDKSetting.setAppKey(initInfo.getAppKey());// APPKEY设置
+		mBDGameSDKSetting.setAppID(Integer.parseInt(appId));// APPID设置
+		mBDGameSDKSetting.setAppKey(appKey);// APPKEY设置
 		mBDGameSDKSetting.setDomain(Domain.DEBUG);// 设置为正式模式
 		mBDGameSDKSetting
-				.setOrientation((initInfo.getScreenOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
+				.setOrientation((Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
 						: BDGameSDKSetting.Orientation.PORTRAIT);
 
 		BDGameSDK.init(activity, mBDGameSDKSetting,
@@ -91,7 +89,8 @@ public class BaiduPlatform implements Iplatform {
 				switch (resultCode) {
 				case ResultCode.LOGIN_SUCCESS:
 					UserInfoModel model = new UserInfoModel();
-					model.sessionId = BDGameSDK.getLoginUid();
+					model.id = BDGameSDK.getLoginUid();
+					Log.e("", "id ======== " + model.id);
 					gameLoginListener.LoginSuccess(model);
 					break;
 				case ResultCode.LOGIN_CANCEL:
@@ -144,7 +143,6 @@ public class BaiduPlatform implements Iplatform {
 	@Override
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String exInfo, final OrderGenerateListener listener) {
-
 		PayOrderInfo payOrderInfo = buildOrderInfo(money,order,model);
 		if (payOrderInfo == null) {
 			return;
@@ -179,10 +177,6 @@ public class BaiduPlatform implements Iplatform {
 		listener.onSuccess();
 	}
 
-	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
-		listener.onSuccess();
-	}
 
 	@Override
 	public boolean suportLogoutUI() {
@@ -201,6 +195,7 @@ public class BaiduPlatform implements Iplatform {
 	 * @param money 
 	 */
 	private PayOrderInfo buildOrderInfo(String money, String order, GameInfo model) {
+		
 		String cpOrderId = order;// CP订单号
 		String goodsName = "金币";
 		String totalAmount = money;// 支付总金额 （以分为单位）
@@ -224,13 +219,17 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void onPause(Activity activity) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void onResume(Activity activity) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
+			SetGameInfoListener listener) {
+		listener.onSuccess();
 	}
 }
