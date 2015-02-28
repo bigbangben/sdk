@@ -36,7 +36,7 @@ public class CreateRoleService {
 	public void creatRole(GameInfo model, ICallback callback) {
 		this.callback = callback;
 		this.model = model;
-		iplatform.createRole(model, listener);
+		iplatform.createRole(mActivity, model, listener);
 		
 
 	}
