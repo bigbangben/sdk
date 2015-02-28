@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.LoginApi;
@@ -86,19 +87,22 @@ public class SetGameInfoService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-			if (code == 0) {
-				LoginService.loginTime = jsonObject.optString("loginTime");
-				// 启动心跳
-				Handler h = new Handler();
-				callback.setGameInfoSuccess(LoginService.loginTime);
-				h.post(new OnLineService(mActivity, h, iplatform, gameInfo));
-				if (showFloat) {
-					// 显示浮动工具栏
-					iplatform.showFloat(mActivity);
+			if (callback != null) {
+				if (code == 0) {
+					LoginService.loginTime = jsonObject.optString("loginTime");
+					// 启动心跳
+					Handler h = new Handler();
+					callback.setGameInfoSuccess(LoginService.loginTime);
+					h.post(new OnLineService(mActivity, h, iplatform, gameInfo));
+					if (showFloat) {
+						// 显示浮动工具栏
+						iplatform.showFloat(mActivity);
+					}
+				} else {
+					callback.onError(ICallback.UPLOAD_GAME_INFO, "提交角色信息失败");
 				}
-			} else {
-				callback.onError(ICallback.UPLOAD_GAME_INFO,
-						jsonObject.toString());
+			}else {
+				Toast.makeText(mActivity, "Callback为空！", Toast.LENGTH_SHORT).show();
 			}
 		}
 	};

@@ -3,6 +3,8 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.CreatRoleApi;
@@ -77,14 +79,22 @@ public class CreateRoleService {
         }
 
         @Override
-        public void requestSuccess(JSONObject jsonObject) {
-            int code = jsonObject.optInt("code") ;
-            if(code == 0) {
-            	callback.createRoleSuccess();
-            }else {
-            	callback.onError(ICallback.CREATE_ROLE, jsonObject.toString());
-            }
-        }
+		public void requestSuccess(JSONObject jsonObject) {
+
+			int code = jsonObject.optInt("code");
+			if (callback != null) {
+				if (code == 0) {
+					callback.createRoleSuccess();
+				} else {
+					callback.onError(ICallback.CREATE_ROLE,
+							jsonObject.toString());
+				}
+			} else {
+				Toast.makeText(mActivity, "Callback为空！", Toast.LENGTH_SHORT)
+						.show();
+			}
+
+		}
     };
 
 
