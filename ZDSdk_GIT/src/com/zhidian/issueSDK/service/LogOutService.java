@@ -7,6 +7,7 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.LogoutApi;
@@ -69,11 +70,16 @@ public class LogOutService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-			if (code == 0) {
-				cleanCach();
-				callback.logoutSuccess();
-			} else {
-				callback.onError(ICallback.LOGOUT, jsonObject.toString());
+		    if (callback != null) {
+            	if (code == 0) {
+            		cleanCach();
+            		callback.logoutSuccess();
+            	} else {
+            		callback.onError(ICallback.LOGOUT, "logout failed");
+            	}
+			}else {
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
 			}
 		}
 	};

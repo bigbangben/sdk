@@ -67,7 +67,7 @@ public interface Iplatform {
 	 * @param gameInfo
 	 * @param listener
 	 */
-	public void createRole(GameInfo gameInfo,
+	public void createRole(Activity mActivity, GameInfo gameInfo,
 			CreateRoleService.CreateRoleListener listener);
 
 	/**

@@ -87,8 +87,8 @@ public class SetGameInfoService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-			if (callback != null) {
-				if (code == 0) {
+		    if (callback != null) {
+		    	if (code == 0) {
 					LoginService.loginTime = jsonObject.optString("loginTime");
 					// 启动心跳
 					Handler h = new Handler();
@@ -99,11 +99,14 @@ public class SetGameInfoService {
 						iplatform.showFloat(mActivity);
 					}
 				} else {
-					callback.onError(ICallback.UPLOAD_GAME_INFO, "提交角色信息失败");
+					callback.onError(ICallback.UPLOAD_GAME_INFO,
+							"Set game infomation failed");
 				}
 			}else {
-				Toast.makeText(mActivity, "Callback为空！", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
 			}
+		
 		}
 	};
 

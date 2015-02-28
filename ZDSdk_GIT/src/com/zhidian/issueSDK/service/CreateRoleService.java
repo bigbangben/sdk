@@ -3,7 +3,6 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
@@ -38,7 +37,7 @@ public class CreateRoleService {
 	public void creatRole(GameInfo model, ICallback callback) {
 		this.callback = callback;
 		this.model = model;
-		iplatform.createRole(model, listener);
+		iplatform.createRole(mActivity, model, listener);
 		
 
 	}
@@ -79,22 +78,19 @@ public class CreateRoleService {
         }
 
         @Override
-		public void requestSuccess(JSONObject jsonObject) {
-
-			int code = jsonObject.optInt("code");
-			if (callback != null) {
-				if (code == 0) {
-					callback.createRoleSuccess();
-				} else {
-					callback.onError(ICallback.CREATE_ROLE,
-							jsonObject.toString());
-				}
-			} else {
-				Toast.makeText(mActivity, "Callback为空！", Toast.LENGTH_SHORT)
-						.show();
+        public void requestSuccess(JSONObject jsonObject) {
+            int code = jsonObject.optInt("code") ;
+            if (callback != null) {
+            	if(code == 0) {
+            		callback.createRoleSuccess();
+            	}else {
+            		callback.onError(ICallback.CREATE_ROLE, "create role failed");
+            	}
+			}else {
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
 			}
-
-		}
+        }
     };
 
 
