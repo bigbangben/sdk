@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.InitApi;
@@ -59,13 +60,19 @@ public class InitService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-			if (code == 0) {
-				callback.initSuccess();
-				if (logined) {
-					callback.loginSuccess(mUserInfoModel);
+		    if (callback != null) {
+		    	if (code == 0) {
+					callback.initSuccess();
+					if (logined) {
+						callback.loginSuccess(mUserInfoModel);
+					}
+				} else {
+					callback.onError(ICallback.INIT, "Init failed");
+					SDKLog.e(TAG, jsonObject.toString());
 				}
-			} else {
-				callback.onError(ICallback.INIT, jsonObject.toString());
+			}else {
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
 			}
 		}
 	};

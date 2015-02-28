@@ -7,6 +7,7 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.OrderGenerateApi;
@@ -100,12 +101,18 @@ public class OrderGenerateService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-			if (code == 0) {
-				String orderId = jsonObject.optString("orderId");
-				notifyUrl = jsonObject.optString("notifyUrl");
-				iplatform.pay(mActivity, money, orderId, model, notifyUrl, extInfo, listener);
+			if (callback != null) {
+				if (code == 0) {
+					String orderId = jsonObject.optString("orderId");
+					notifyUrl = jsonObject.optString("notifyUrl");
+					iplatform.pay(mActivity, money, orderId, model, notifyUrl,
+							extInfo, listener);
+				} else {
+					callback.onError(ICallback.PAY, "pay failed");
+				}
 			} else {
-				callback.onError(ICallback.PAY, jsonObject.toString());
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+						.show();
 			}
 		}
 	};
