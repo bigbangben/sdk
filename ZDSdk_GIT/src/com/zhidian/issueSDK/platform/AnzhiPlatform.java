@@ -189,13 +189,13 @@ public class AnzhiPlatform implements Iplatform {
 	}
 
 	@Override
-	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
+	public void createRole(Activity activity, GameInfo gameInfo, CreateRoleListener listener) {
 		listener.onSuccess();
 
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo, SetGameInfoListener listener) {
 		listener.onSuccess();
 	}
 
