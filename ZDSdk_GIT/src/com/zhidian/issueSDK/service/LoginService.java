@@ -2,6 +2,7 @@ package com.zhidian.issueSDK.service;
 
 import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.model.GameInfo;
@@ -46,12 +47,22 @@ public class LoginService {
 			Log.e(TAG, model.sessionId + "--->" + model.id);
 			LoginService.isLogin = true;
 			InitService.mUserInfoModel = model;
-			callback.loginSuccess(model);
+			if (callback != null) {
+				callback.loginSuccess(model);
+			}else {
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
+			}
 		}
 
 		@Override
 		public void LoginFail(String value) {
-			callback.onError(ICallback.LOGIN, value);
+			if (callback != null) {
+				callback.onError(ICallback.LOGIN, "login failed");
+			}else {
+				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
+				.show();
+			}
 		}
 	};
 
