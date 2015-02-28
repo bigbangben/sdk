@@ -1,11 +1,10 @@
 package com.zhidian.issueSDK.api;
 
-import com.zhidian.issueSDK.net.HttpEngine;
-import com.zhidian.issueSDK.net.StringRequest;
-
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.zhidian.issueSDK.net.HttpEngine;
+import com.zhidian.issueSDK.net.StringRequest;
 
 /**
  * Created by Administrator on 2014/12/11.

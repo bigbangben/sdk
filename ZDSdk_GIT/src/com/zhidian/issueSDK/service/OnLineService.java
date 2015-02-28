@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.zhidian.issueSDK.api.OnLineApi;
 import com.zhidian.issueSDK.model.GameInfo;

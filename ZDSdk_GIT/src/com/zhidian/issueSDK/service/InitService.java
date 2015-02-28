@@ -8,7 +8,6 @@ import android.util.Log;
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.InitApi;
 import com.zhidian.issueSDK.location.InitLBS;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;

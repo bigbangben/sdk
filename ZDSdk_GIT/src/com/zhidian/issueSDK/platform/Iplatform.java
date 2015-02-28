@@ -1,16 +1,14 @@
 package com.zhidian.issueSDK.platform;
 
 import android.app.Activity;
-import com.zhidian.issueSDK.ICallback;
+
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
 import com.zhidian.issueSDK.service.InitService;
 import com.zhidian.issueSDK.service.LogOutService;
 import com.zhidian.issueSDK.service.LoginService;
 import com.zhidian.issueSDK.service.OrderGenerateService;
-import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService;
 
 /**
@@ -66,10 +64,11 @@ public interface Iplatform {
 			OrderGenerateService.OrderGenerateListener listener);
 
 	/**
+	 * @param mActivity 
 	 * @param gameInfo
 	 * @param listener
 	 */
-	public void createRole(GameInfo gameInfo,
+	public void createRole(Activity activity, GameInfo gameInfo,
 			CreateRoleService.CreateRoleListener listener);
 
 	/**

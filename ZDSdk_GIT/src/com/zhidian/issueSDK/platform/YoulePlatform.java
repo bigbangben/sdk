@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.ActivityInfo;
-import android.util.Log;
 
 import com.zhidian.gamesdk.listener.ILogOutListener;
 import com.zhidian.gamesdk.listener.ILoginListener;
@@ -186,11 +184,13 @@ public class YoulePlatform implements Iplatform {
 	@Override
 	public void setGameInfo(Activity activity, GameInfo gameInfo,
 			SetGameInfoListener listener) {
+		ZhiDianManager.setGame(activity, gameInfo.getZoneId(), gameInfo.getRoleId(), gameInfo.getRoleName());
 		listener.onSuccess();
 	}
 
 	@Override
-	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
+	public void createRole(Activity activity,GameInfo gameInfo, CreateRoleListener listener) {
+		ZhiDianManager.creatRole(activity, gameInfo.getZoneId(), gameInfo.getRoleId(), gameInfo.getRoleName());
 		listener.onSuccess();
 	}
 
