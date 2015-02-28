@@ -3,6 +3,7 @@ package com.zhidian.issueSDK;
 import android.app.Activity;
 
 import com.zhidian.issueSDK.model.GameInfo;
+import com.zhidian.issueSDK.platform.AmigoPlarform;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
@@ -21,6 +22,7 @@ public class ZDSDK {
 
 	private ZDSDK() {
 		// 初始化 plateform
+		iplateform = new AmigoPlarform();
 	}
 
 	public static ZDSDK getInstance() {
