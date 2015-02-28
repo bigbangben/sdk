@@ -179,7 +179,7 @@ public class QihooPlatform implements Iplatform {
 	}
 
 	@Override
-	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
+	public void createRole(Activity activity, GameInfo gameInfo, CreateRoleListener listener) {
 		listener.onSuccess();
 	}
 
