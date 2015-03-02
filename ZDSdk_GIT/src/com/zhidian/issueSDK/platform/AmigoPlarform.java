@@ -12,6 +12,7 @@ import com.gionee.gsp.GnEFloatingBoxPositionModel;
 import com.zhidian.issueSDK.Constants;
 import com.zhidian.issueSDK.R;
 import com.zhidian.issueSDK.model.GameInfo;
+import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
 import com.zhidian.issueSDK.service.InitService.GameInitListener;
@@ -34,51 +35,56 @@ public class AmigoPlarform implements Iplatform {
 	public void init(Activity mActivity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		GamePlatform mGamePlatform = GamePlatform.getInstance(mActivity);
-	      // 测试用，实际接入可以去掉。
-	        Constants.API_KEY = GamePayer.readApiKey(mActivity, Constants.API_KEY);
-	        if ("".equals(Constants.API_KEY)) {
-	            Toast.makeText(mActivity, "请先申请APP ID", Toast.LENGTH_LONG).show();
-	        }
+		// 测试用，实际接入可以去掉。
+		Constants.API_KEY = GamePayer.readApiKey(mActivity, Constants.API_KEY);
+		if ("".equals(Constants.API_KEY)) {
+			Toast.makeText(mActivity, "请先申请APP ID", Toast.LENGTH_LONG).show();
+		}
 
-	        // 设置悬浮窗的默认位置(如果不设置，则默认左下角)，最好放在init方法前调用，否则可能无效
-	        mGamePlatform.setFloatingBoxOriginPosition(GnEFloatingBoxPositionModel.LEFT_TOP);
+		// 设置悬浮窗的默认位置(如果不设置，则默认左下角)，最好放在init方法前调用，否则可能无效
+		mGamePlatform
+				.setFloatingBoxOriginPosition(GnEFloatingBoxPositionModel.LEFT_TOP);
 
-	        // 初始化依赖的组件
-	        mGamePlatform.init(Constants.API_KEY);
+		// 初始化依赖的组件
+		mGamePlatform.init(Constants.API_KEY);
 	}
 
 	@Override
-	public void login(Activity activity, GameLoginListener gameLoginListener) {
+	public void login(Activity activity,
+			final GameLoginListener gameLoginListener) {
 		GamePlatform mGamePlatform = GamePlatform.getInstance(activity);
-	    mGamePlatform.loginAccount(Constants.LOGIN_REQUEST_CODE, true, new LoginListener() {
-    		
-			@Override
-			public void onSuccess(AccountInfo accountInfo) {
-				// 登录成功，处理自己的业务。
+		mGamePlatform.loginAccount(Constants.LOGIN_REQUEST_CODE, true,
+				new LoginListener() {
 
-				// 获取playerId
-				String playerId = accountInfo.mPlayerId;
-				
-				// 获取amigoToken
-				String amigoToken = accountInfo.mToken;
+					@Override
+					public void onSuccess(AccountInfo accountInfo) {
+						// 登录成功，处理自己的业务。
 
-				Toast.makeText(mActivity,"登录成功！获取信息为：" + accountInfo.toString(),
-						Toast.LENGTH_SHORT).show();
-			}
+						// 获取playerId
+						String playerId = accountInfo.mPlayerId;
 
-			@Override
-			public void onError(Exception e) {
-				Toast.makeText(mActivity, "登录失败:" + e,
-						Toast.LENGTH_SHORT).show();
-			}
+						// 获取amigoToken
+						String amigoToken = accountInfo.mToken;
+						UserInfoModel model = new UserInfoModel();
+						model.id = playerId;
+						gameLoginListener.LoginSuccess(model);
 
-			@Override
-			public void onCancel() {
-				Toast.makeText(mActivity, "取消登录",
-						Toast.LENGTH_SHORT).show();
-			}
-		});
-    
+					}
+
+					@Override
+					public void onError(Exception e) {
+						/*
+						 * Toast.makeText(mActivity, "登录失败:" + e,
+						 * Toast.LENGTH_SHORT).show();
+						 */
+						gameLoginListener.LoginFail("登录失败");
+					}
+
+					@Override
+					public void onCancel() {
+					}
+				});
+
 	}
 
 	@Override
@@ -89,59 +95,50 @@ public class AmigoPlarform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		// TODO Auto-generated method stub
-
+		gameLogoutListener.logoutSuccess();
 	}
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
 			OrderGenerateListener listener) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void createRole(Activity mActivity, GameInfo gameInfo,
 			CreateRoleListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
 	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
 			SetGameInfoListener listener) {
-		// TODO Auto-generated method stub
-
+		listener.onSuccess();
 	}
 
 	@Override
 	public boolean suportLogoutUI() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void onPause(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onDestory() {
-		// TODO Auto-generated method stub
 
 	}
 
