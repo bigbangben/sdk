@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.gionee.gamesdk.AccountInfo;
 import com.gionee.gamesdk.GamePayer;
 import com.gionee.gamesdk.GamePlatform;
+import com.gionee.gamesdk.OrderInfo;
 import com.gionee.gamesdk.GamePlatform.LoginListener;
 import com.gionee.gsp.GnEFloatingBoxPositionModel;
 import com.zhidian.issueSDK.Constants;
@@ -47,6 +48,7 @@ public class AmigoPlarform implements Iplatform {
 
 		// 初始化依赖的组件
 		mGamePlatform.init(Constants.API_KEY);
+		gameInitListener.initSuccess(false, null);
 	}
 
 	@Override
@@ -89,7 +91,6 @@ public class AmigoPlarform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -107,6 +108,27 @@ public class AmigoPlarform implements Iplatform {
 	public void pay(Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
 			OrderGenerateListener listener) {
+
+/*        String outOrderNum = mOutOrderNumEt.getText().toString();
+        String apiKey = mApiKeyEt.getText().toString();
+        String submitTime = mSubmitTime.getText().toString();
+        if ("".equals(outOrderNum) || "".equals(apiKey) || "".equals(submitTime)) {
+            Toast.makeText(activity, "请先输入服务器创建成功的订单信息", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        //创建订单信息
+        OrderInfo orderInfo = new OrderInfo();
+        //开发者后台申请的Apikey
+        orderInfo.setApiKey(apiKey); 
+        //商户订单号，与创建支付订单中的"out_order_no"值相同
+        orderInfo.setOutOrderNo(outOrderNum);
+        //支付订单提交时间，与创建支付订单中的"submit_time"值相同
+        orderInfo.setSubmitTime(submitTime);
+        
+        //调用启动收银台接口 
+        mGamePayer.pay(orderInfo, mGamePayCallback);
+    */
 
 	}
 
