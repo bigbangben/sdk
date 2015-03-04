@@ -269,36 +269,12 @@ public class UcPlatform implements Iplatform {
 		 * 把退出消息返回给游戏，游戏可根据状态码进行相应的处理。<br>
 		 */
 		this.gameLogoutListener = gameLogoutListener;
-		if (suportLogoutUI()) {
+	
 			try {
 				UCGameSDK.defaultSDK().logout();
 			} catch (UCCallbackListenerNullException e) {
 				// 未设置退出侦听器
 			}
-		}else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏")
-			.setMessage("不多待一会吗？")
-			.setNegativeButton("取消", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-				}
-			}).setPositiveButton("确定", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					try {
-						UCGameSDK.defaultSDK().logout();
-					} catch (UCCallbackListenerNullException e) {
-						// 未设置退出侦听器
-					}
-				}
-			}).setCancelable(false).create().show();
-
-
-			
-		}
 		
 	}
 
@@ -351,7 +327,7 @@ public class UcPlatform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		return false;
+		return true;
 	}
 
 
