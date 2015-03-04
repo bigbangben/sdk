@@ -121,8 +121,8 @@ public class ZDSDK {
 	 * @param callback
 	 *            回调
 	 */
-	public void onSdkExit(final Activity activity, final GameInfo gameInfo,
-			final ICallback callback) {
+
+	public void onSdkExit(final Activity activity, final GameInfo gameInfo, final ICallback callback) {
 		if (iplateform.suportLogoutUI()) {
 			new ExitService(activity, iplateform).exit(gameInfo, callback);
 		} else {
