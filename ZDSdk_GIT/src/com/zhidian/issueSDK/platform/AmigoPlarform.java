@@ -146,7 +146,7 @@ public class AmigoPlarform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		return false;
+		return true;
 	}
 
 	@Override
