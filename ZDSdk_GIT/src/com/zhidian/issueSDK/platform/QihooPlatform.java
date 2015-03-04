@@ -92,26 +92,7 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		if (suportLogoutUI()) {
-			// TODO logout
-		} else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏")
-					.setMessage("不多待一会吗？")
-					.setNegativeButton("取消", new OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-
-						}
-					}).setPositiveButton("确定", new OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// TODO logout
-						}
-					}).setCancelable(false).create().show();
-
-		}
+		gameLogoutListener.logoutSuccess();
 	}
 
 	@Override
@@ -191,8 +172,7 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
