@@ -33,6 +33,22 @@ public class SDKUtils {
 		}
 		return null;
 	}
+	
+	public static String getMeteDataNoTag(Context context, String tag) {
+		ApplicationInfo info;
+		try {
+			info = context.getPackageManager().getApplicationInfo(
+					context.getPackageName(), PackageManager.GET_META_DATA);
+			String rex = info.metaData.getString(tag);
+			if (rex == null) {
+				return null;
+			}
+			return rex;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public static String getAppId(Context context) {
 		ApplicationInfo info;

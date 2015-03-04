@@ -64,7 +64,7 @@ public class YingyonghuiPlatform implements Iplatform {
 			GameLoginListener gameLoginListener) {
 		int orientation = "0".equals(SDKUtils.getMeteData(mActivity,
 				"screenOrientation")) ? SDKApi.LANDSCAPE_SLIM : SDKApi.PORTRAIT;
-		String appid = SDKUtils.getMeteData(mActivity,
+		String appid = SDKUtils.getMeteDataNoTag(mActivity,
 				"APPCHINA_ACCOUNT_APPKEY");
 		SDKApi.init(mActivity, orientation, appid);
 		AccountManager.initSetting(mActivity);
@@ -211,8 +211,8 @@ public class YingyonghuiPlatform implements Iplatform {
 	public void pay(final Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
 			final OrderGenerateListener listener) {
-		String appid = SDKUtils.getMeteData(activity, "APPCHINA_ACCOUNT_APPID");
-		final String appkey = SDKUtils.getMeteData(activity, "APPCHINA_ACCOUNT_APPKEY");
+		String appid = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPID");
+		final String appkey = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPKEY");
 		PayRequest payRequest = new PayRequest();
 		payRequest.addParam("notifyurl", notifyUrl);
 		payRequest.addParam("appid", appid);
