@@ -30,6 +30,12 @@ import com.zhidian.issueSDK.util.SDKUtils;
 public class YingyonghuiPlatform implements Iplatform {
 
 	private YYHToolBar mBar; // 工具条
+	
+	/** 测试 */
+	private String appid = "10029900000001100299";
+	private String notifyurl = "http://ipay.appchina.com:5081/";
+	private String appkey = "QjQ5Q0VERDZCREI0NUEzMDAxRThFNjIyRDgzODdDMzlBMTdDQjA3M01USTJNVE0xT1RJM01qa3dPVEV4TlRjME16a3JNVFExTmpnM05UQXdPRFU0TURneE5qUTROVFl4T0RNek5Ua3lPVGsyTkRFek9EZzJNVGt6";
+
 
 	private AccountCenterListener acl = new AccountCenterListener() {
 
@@ -64,8 +70,8 @@ public class YingyonghuiPlatform implements Iplatform {
 			GameLoginListener gameLoginListener) {
 		int orientation = "0".equals(SDKUtils.getMeteData(mActivity,
 				"screenOrientation")) ? SDKApi.LANDSCAPE_SLIM : SDKApi.PORTRAIT;
-		String appid = SDKUtils.getMeteDataNoTag(mActivity,
-				"APPCHINA_ACCOUNT_APPKEY");
+		/*String appid = SDKUtils.getMeteDataNoTag(mActivity,
+				"APPCHINA_ACCOUNT_APPID");*/
 		SDKApi.init(mActivity, orientation, appid);
 		AccountManager.initSetting(mActivity);
 		AccountManager.openYYHSplash(mActivity,
@@ -198,8 +204,7 @@ public class YingyonghuiPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
-		// TODO Auto-generated method stub
-
+		gameLogoutListener.logoutSuccess();
 	}
 
 	@Override
@@ -211,10 +216,10 @@ public class YingyonghuiPlatform implements Iplatform {
 	public void pay(final Activity activity, String money, String order,
 			GameInfo model, String notifyUrl, String extInfo,
 			final OrderGenerateListener listener) {
-		String appid = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPID");
-		final String appkey = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPKEY");
+	/*	String appid = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPID");*/
+	/*	final String appkey = SDKUtils.getMeteDataNoTag(activity, "APPCHINA_ACCOUNT_APPKEY");*/
 		PayRequest payRequest = new PayRequest();
-		payRequest.addParam("notifyurl", notifyUrl);
+		payRequest.addParam("notifyurl", notifyurl);
 		payRequest.addParam("appid", appid);
 		payRequest.addParam("waresid", 7);
 		payRequest.addParam("quantity", 1);
