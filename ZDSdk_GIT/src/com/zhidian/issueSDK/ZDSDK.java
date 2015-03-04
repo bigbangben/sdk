@@ -1,6 +1,9 @@
 package com.zhidian.issueSDK;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.platform.Iplatform;
@@ -35,8 +38,10 @@ public class ZDSDK {
 	/**
 	 * 初始化
 	 * 
-	 * @param initInfo  初始化参数
-	 * @param callback  回调
+	 * @param initInfo
+	 *            初始化参数
+	 * @param callback
+	 *            回调
 	 */
 	public void sdkInit(Activity activity, ICallback callback) {
 		new InitService(activity, iplateform).init(callback);
@@ -53,13 +58,18 @@ public class ZDSDK {
 
 	/**
 	 * 提交角色信息
-	 * @param activity 上下文
-	 * @param gameInfo 角色信息
-	 * @param showFloat 是否显示浮动工具栏
-	 * @param callback 回调
+	 * 
+	 * @param activity
+	 *            上下文
+	 * @param gameInfo
+	 *            角色信息
+	 * @param showFloat
+	 *            是否显示浮动工具栏
+	 * @param callback
+	 *            回调
 	 */
-	public void setGameInfo(Activity activity,GameInfo gameInfo, boolean showFloat,
-			ICallback callback) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo,
+			boolean showFloat, ICallback callback) {
 		new SetGameInfoService(activity, iplateform).setGameInfo(gameInfo,
 				showFloat, callback);
 
@@ -72,55 +82,99 @@ public class ZDSDK {
 	 */
 	/**
 	 * 创建角色
-	 * @param activity 上下文
-	 * @param gameInfo 角色信息
-	 * @param callback 回调
+	 * 
+	 * @param activity
+	 *            上下文
+	 * @param gameInfo
+	 *            角色信息
+	 * @param callback
+	 *            回调
 	 */
-	public void createRole(Activity activity,GameInfo gameInfo, ICallback callback) {
-		new CreateRoleService(activity, iplateform).creatRole(gameInfo, callback);
+	public void createRole(Activity activity, GameInfo gameInfo,
+			ICallback callback) {
+		new CreateRoleService(activity, iplateform).creatRole(gameInfo,
+				callback);
 	};
 
 	/**
 	 * 注销
-	 * @param activity 上下文
-	 * @param gameInfo 角色信息
-	 * @param callback 回调
+	 * 
+	 * @param activity
+	 *            上下文
+	 * @param gameInfo
+	 *            角色信息
+	 * @param callback
+	 *            回调
 	 */
-	public void onSdkLogOut(Activity activity, GameInfo gameInfo, ICallback callback) {
+	public void onSdkLogOut(Activity activity, GameInfo gameInfo,
+			ICallback callback) {
 		new LogOutService(activity, iplateform).logout(gameInfo, callback);
 	};
 
 	/**
 	 * 退出
-	 * @param activity 上下文
-	 * @param gameInfo 角色信息
-	 * @param callback 回调
+	 * 
+	 * @param activity
+	 *            上下文
+	 * @param gameInfo
+	 *            角色信息
+	 * @param callback
+	 *            回调
 	 */
-	public void onSdkExit(Activity activity, GameInfo gameInfo, ICallback callback) {
-		new ExitService(activity, iplateform).exit(gameInfo, callback);
+	public void onSdkExit(final Activity activity, final GameInfo gameInfo,
+			final ICallback callback) {
+		if (iplateform.suportLogoutUI()) {
+			new ExitService(activity, iplateform).exit(gameInfo, callback);
+		} else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+					.setMessage("不多待一会吗？")
+					.setNegativeButton("取消", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new ExitService(activity, iplateform).exit(
+									gameInfo, callback);
+						}
+					}).setCancelable(false).create().show();
+
+		}
 	};
 
 	/**
 	 * 支付接口
-	 * @param activity 上下文
-	 * @param gameInfo 游戏用户信息
-	 * @param money 充值金额
-	 * @param cpOrderId CP订单号
-	 * @param extInfo 自定义参数
-	 * @param notifyUrl CP支付结果通知地址
-	 * @param callback 回调
+	 * 
+	 * @param activity
+	 *            上下文
+	 * @param gameInfo
+	 *            游戏用户信息
+	 * @param money
+	 *            充值金额
+	 * @param cpOrderId
+	 *            CP订单号
+	 * @param extInfo
+	 *            自定义参数
+	 * @param notifyUrl
+	 *            CP支付结果通知地址
+	 * @param callback
+	 *            回调
 	 */
-	public void doPay(Activity activity, GameInfo gameInfo, String money, String cpOrderId,
-			String extInfo, String notifyUrl, ICallback callback) {
+	public void doPay(Activity activity, GameInfo gameInfo, String money,
+			String cpOrderId, String extInfo, String notifyUrl,
+			ICallback callback) {
 		new OrderGenerateService(activity, iplateform).dopay(gameInfo, money,
 				cpOrderId, extInfo, notifyUrl, callback);
 	};
 
-
 	public void onSdkResume(Activity activity) {
 		iplateform.onResume(activity);
 	}
-	
+
 	/**
 	 * 暂停
 	 */

@@ -75,7 +75,7 @@ public class YingyonghuiPlatform implements Iplatform {
 		SDKApi.init(mActivity, orientation, appid);
 		AccountManager.initSetting(mActivity);
 		AccountManager.openYYHSplash(mActivity,
-				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, 3000,
+				orientation, 3000,
 				new SplashListener() {
 
 					@Override
