@@ -1,6 +1,9 @@
 package com.zhidian.issueSDK;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.platform.AnzhiPlatform;
@@ -96,8 +99,28 @@ public class ZDSDK {
 	 * @param gameInfo 角色信息
 	 * @param callback 回调
 	 */
-	public void onSdkExit(Activity activity, GameInfo gameInfo, ICallback callback) {
-		new ExitService(activity, iplateform).exit(gameInfo, callback);
+	public void onSdkExit(final Activity activity, final GameInfo gameInfo, final ICallback callback) {
+		if (iplateform.suportLogoutUI()) {
+			new ExitService(activity, iplateform).exit(gameInfo, callback);
+		} else {
+			new AlertDialog.Builder(activity).setTitle("退出游戏")
+					.setMessage("不多待一会吗？")
+					.setNegativeButton("取消", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).setPositiveButton("确定", new OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new ExitService(activity, iplateform).exit(
+									gameInfo, callback);
+						}
+					}).setCancelable(false).create().show();
+
+		}
 	};
 
 	/**
