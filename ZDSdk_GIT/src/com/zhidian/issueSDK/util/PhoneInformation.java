@@ -140,7 +140,6 @@ public class PhoneInformation {
                 .getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             deviceCode = telephonyManager.getDeviceId();
-            deviceCode=null;
             if (TextUtils.isEmpty(deviceCode)) {
                 deviceCode = generatorDeviceId();
             }
