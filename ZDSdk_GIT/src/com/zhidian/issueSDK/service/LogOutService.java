@@ -67,6 +67,10 @@ public class LogOutService {
 		@Override
 		public void requestError(String string) {
 			super.requestError(string);
+			if (callback != null) {
+				SDKLog.e("msg", "Logout Failed >> " + string);
+				callback.onError(ICallback.LOGOUT, "Logout Failed");
+			}
 		}
 
 		@Override
