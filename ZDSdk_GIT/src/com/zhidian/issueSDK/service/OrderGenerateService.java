@@ -15,6 +15,7 @@ import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
@@ -56,12 +57,18 @@ public class OrderGenerateService {
 
 		@Override
 		public void onSuccess() {
-			callback.paySuccess(notifyUrl);
+			if (callback != null) {
+				SDKLog.e("msg", "Pay Success");
+				callback.paySuccess(notifyUrl);
+			}
 		}
 
 		@Override
 		public void onFail(String value) {
-			callback.onError(ICallback.PAY, value);
+			if (callback != null) {
+				SDKLog.e("msg", "Pay Failed >> " + value);
+				callback.onError(ICallback.PAY, value);
+			}
 
 		}
 	};
@@ -95,6 +102,8 @@ public class OrderGenerateService {
 		@Override
 		public void requestError(String string) {
 			super.requestError(string);
+			SDKLog.e("msg", "Pay Failed >> " + string);
+			callback.onError(ICallback.PAY, "Pay Failed");
 		}
 
 		@Override
@@ -107,7 +116,8 @@ public class OrderGenerateService {
 					iplatform.pay(mActivity, money, orderId, model, notifyUrl,
 							extInfo, listener);
 				} else {
-					callback.onError(ICallback.PAY, "pay failed");
+					SDKLog.e("msg", "Pay Failed >> " + jsonObject.toString());
+					callback.onError(ICallback.PAY, "Pay Failed");
 				}
 			} else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
