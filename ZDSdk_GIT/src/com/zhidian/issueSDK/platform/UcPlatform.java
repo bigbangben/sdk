@@ -215,11 +215,13 @@ public class UcPlatform implements Iplatform {
 							// 登录失败。应该先执行初始化成功后再进行登录调用。
 							case UCGameSDKStatusCode.NO_INIT:
 								// 没有初始化就进行登录调用，需要游戏调用SDK初始化方法
+								gameLoginListener.LoginFail(msg);
 								break;
 
 							// 登录退出。该回调会在登录界面退出时执行。
 							case UCGameSDKStatusCode.LOGIN_EXIT:
 								// 登录界面关闭，游戏需判断此时是否已登录成功进行相应操作
+								gameLoginListener.LoginFail(msg);
 								break;
 
 							default:
