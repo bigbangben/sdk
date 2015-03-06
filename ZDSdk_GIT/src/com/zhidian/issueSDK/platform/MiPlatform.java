@@ -160,7 +160,6 @@ public class MiPlatform implements Iplatform {
 
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_LOGIN_FAIL:
-							SDKLog.e(TAG, "login fail");
 							gameLoginListener.LoginFail(code + "");
 							break;
 						case MiErrorCode.MI_XIAOMI_PAYMENT_ERROR_CANCEL:
@@ -171,6 +170,7 @@ public class MiPlatform implements Iplatform {
 							break;
 						default:
 							// 登录失败
+							gameLoginListener.LoginFail(code + "");
 							break;
 						}
 					}
@@ -179,7 +179,6 @@ public class MiPlatform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 
