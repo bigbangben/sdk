@@ -37,7 +37,10 @@ public class ExitService {
 		
 		@Override
 		public void onFail(String value) {
-			
+			if (callback != null) {
+				SDKLog.e("msg", "Exit Failed >>  " + value);
+				callback.onError(ICallback.EXIT, "Exit Failed");
+			}
 		}
 	};
 	private GameInfo gameInfo;
@@ -85,6 +88,10 @@ public class ExitService {
 			@Override
 			public void requestError(String string) {
 				super.requestError(string);
+				 if (callback != null) {
+						SDKLog.e("msg", "Exit Failed >>  " + string);
+						callback.onError(ICallback.EXIT, "Exit Failed");
+				 }
 			}
 
 			@Override
@@ -93,10 +100,11 @@ public class ExitService {
 			      if (callback != null) {
 			    	  if (code == 0) {
 							cleanCach();
+							SDKLog.e("msg", "Exit Success");
 							callback.exitSuccess();
-							SDKLog.e("", "Exit Success");
 						} else {
-							callback.onError(ICallback.EXIT, "Exit failed");
+							SDKLog.e("msg", "Exit Failed");
+							callback.onError(ICallback.EXIT, "Exit Failed");
 						}
 					}else {
 						Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
