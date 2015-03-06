@@ -183,6 +183,7 @@ public class UcPlatform implements Iplatform {
 									@Override
 									public void requestError(String string) {
 										super.requestError(string);
+										gameLoginListener.LoginFail(string);
 									}
 
 									@Override
