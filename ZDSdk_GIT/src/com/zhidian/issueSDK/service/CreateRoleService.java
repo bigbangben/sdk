@@ -12,6 +12,7 @@ import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 public class CreateRoleService {
@@ -51,7 +52,10 @@ public class CreateRoleService {
 		
 		@Override
 		public void onFail(String value) {
-			
+			if (callback != null) {
+				SDKLog.e("msg", "Create Role Failed >>  " + value);
+				callback.onError(ICallback.CREATE_ROLE, "创建角色失败");
+			}
 		}
 	};
 
@@ -75,6 +79,10 @@ public class CreateRoleService {
         @Override
         public void requestError(String string) {
             super.requestError(string);
+            if (callback != null) {
+            	SDKLog.e("msg", "Create Role Failed");
+        		callback.onError(ICallback.CREATE_ROLE, "create role failed");
+            }
         }
 
         @Override
@@ -82,8 +90,10 @@ public class CreateRoleService {
             int code = jsonObject.optInt("code") ;
             if (callback != null) {
             	if(code == 0) {
+            		SDKLog.e("msg", "Create Role Success");
             		callback.createRoleSuccess();
             	}else {
+            		SDKLog.e("msg", "Create Role Failed");
             		callback.onError(ICallback.CREATE_ROLE, "create role failed");
             	}
 			}else {

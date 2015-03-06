@@ -17,6 +17,7 @@ import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
@@ -30,7 +31,7 @@ public class LogOutService {
 	private Activity mActivity;
 	private ICallback callback;
 	private GameInfo gameInfo;
-	
+
 	public interface GameLogoutListener {
 		public void logoutSuccess();
 
@@ -45,7 +46,7 @@ public class LogOutService {
 	public void logout(GameInfo gameInfo, ICallback callback) {
 		this.callback = callback;
 		this.gameInfo = gameInfo;
-		iplatform.logOut(mActivity,listener);
+		iplatform.logOut(mActivity, listener);
 
 	}
 
@@ -71,16 +72,18 @@ public class LogOutService {
 		@Override
 		public void requestSuccess(JSONObject jsonObject) {
 			int code = jsonObject.optInt("code");
-		    if (callback != null) {
-            	if (code == 0) {
-            		cleanCach();
-            		callback.logoutSuccess();
-            	} else {
-            		callback.onError(ICallback.LOGOUT, "logout failed");
-            	}
-			}else {
+			if (callback != null) {
+				if (code == 0) {
+					cleanCach();
+					SDKLog.e("msg", "Logout Success");
+					callback.logoutSuccess();
+				} else {
+					SDKLog.e("msg", "Logout Failed");
+					callback.onError(ICallback.LOGOUT, "Logout Failed");
+				}
+			} else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
-				.show();
+						.show();
 			}
 		}
 	};
@@ -94,10 +97,13 @@ public class LogOutService {
 
 		@Override
 		public void logoutFail(String value) {
-			callback.onError(ICallback.LOGOUT, value);
+			if (callback != null) {
+				SDKLog.e("msg", "Logout Failed >> " + value);
+				callback.onError(ICallback.LOGOUT, "Logout Failed");
+			}
 		}
 	};
-	
+
 	private void cleanCach() {
 		LoginService.loginTime = "";
 		LoginService.isLogin = false;
