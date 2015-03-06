@@ -196,6 +196,9 @@ public class QihooPlatform implements Iplatform {
 		// 界面相关参数，360SDK界面是否以横屏显示。
 		bundle.putBoolean(ProtocolKeys.IS_SCREEN_ORIENTATION_LANDSCAPE,
 				isLandScape);
+		bundle.putBoolean(ProtocolKeys.IS_LOGIN_BG_TRANSPARENT,
+				false);
+		
 
 		// *** 以下非界面相关参数 ***
 
