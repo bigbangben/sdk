@@ -48,7 +48,7 @@ public class BaiduPlatform implements Iplatform {
 		BDGameSDKSetting mBDGameSDKSetting = new BDGameSDKSetting();
 		mBDGameSDKSetting.setAppID(Integer.parseInt(appId));// APPID设置
 		mBDGameSDKSetting.setAppKey(appKey);// APPKEY设置
-		mBDGameSDKSetting.setDomain(Domain.DEBUG);// 设置为正式模式
+		mBDGameSDKSetting.setDomain(Domain.RELEASE);// 设置为正式模式
 		mBDGameSDKSetting
 				.setOrientation((Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
 						: BDGameSDKSetting.Orientation.PORTRAIT);
@@ -105,6 +105,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void showFloat(Activity activity) {
+		
 	}
 
 	@Override
@@ -180,7 +181,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		return false;
+		return true;
 	}
 
 	@Override
