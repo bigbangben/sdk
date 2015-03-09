@@ -106,7 +106,7 @@ public class InitService {
 
 		@Override
 		public void LoginSuccess(UserInfoModel model) {
-			model.id = iplatform.getPlatformId() + "_" + model.id;
+			//model.id = iplatform.getPlatformId() + "_" + model.id;
 			LoginService.isLogin = true;
 			InitService.mUserInfoModel = model;
 			SDKLog.e("msg", "Login Success");
