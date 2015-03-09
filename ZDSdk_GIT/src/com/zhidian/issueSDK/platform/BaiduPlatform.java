@@ -8,6 +8,8 @@ import android.content.pm.ActivityInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.baidu.gamesdk.ActivityAdPage;
+import com.baidu.gamesdk.ActivityAdPage.Listener;
 import com.baidu.gamesdk.ActivityAnalytics;
 import com.baidu.gamesdk.BDGameSDK;
 import com.baidu.gamesdk.BDGameSDKSetting;
@@ -33,6 +35,8 @@ import com.zhidian.issueSDK.util.SDKUtils;
  */
 public class BaiduPlatform implements Iplatform {
 
+	private ActivityAdPage mActivityAdPage;
+
 	@Override
 	public String getPlatformId() {
 		return "1008";
@@ -41,7 +45,15 @@ public class BaiduPlatform implements Iplatform {
 	@Override
 	public void init(Activity activity,
 			final GameInitListener gameInitListener,
-			GameLoginListener gameLoginListener) {// 初始化游戏SDK
+			GameLoginListener gameLoginListener) {
+		mActivityAdPage = new ActivityAdPage(activity, new Listener() {
+			
+			@Override
+			public void onClose() {
+				
+			}
+		});
+		// 初始化游戏SDK
 		String appId = SDKUtils.getMeteData(activity, "appId");
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
 		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
@@ -70,6 +82,7 @@ public class BaiduPlatform implements Iplatform {
 							break;
 						default:
 							// 初始化失败
+							gameInitListener.initFail(resultDesc);
 						}
 
 					}
@@ -110,30 +123,8 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, final GameLogoutListener gameLogoutListener) {
-		if (suportLogoutUI()) {
 			BDGameSDK.logout();
 			gameLogoutListener.logoutSuccess();
-		}else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏")
-			.setMessage("不多待一会吗？")
-			.setNegativeButton("取消", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-				}
-			}).setPositiveButton("确定", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					BDGameSDK.logout();
-					gameLogoutListener.logoutSuccess();
-				}
-			}).setCancelable(false).create().show();
-
-
-			
-		}
 	}
 
 	@Override
@@ -181,7 +172,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -220,17 +211,24 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void onPause(Activity activity) {
+        mActivityAdPage.onPause();
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
-		
+		mActivityAdPage.onResume();
 	}
 
 	@Override
 	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
 			SetGameInfoListener listener) {
+		mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
+			
+			@Override
+			public void onClose() {
+				
+			}
+		});
 		listener.onSuccess();
 	}
 }
