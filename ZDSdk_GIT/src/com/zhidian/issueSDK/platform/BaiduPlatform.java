@@ -175,10 +175,6 @@ public class BaiduPlatform implements Iplatform {
 		return false;
 	}
 
-	@Override
-	public void onDestory() {
-		BDGameSDK.destroy();
-	}
 
 	/**
 	 * 构建订单信息
@@ -230,5 +226,16 @@ public class BaiduPlatform implements Iplatform {
 			}
 		});
 		listener.onSuccess();
+	}
+
+	@Override
+	public void onStop(Activity activity) {
+		mActivityAdPage.onStop();
+	}
+	
+	@Override
+	public void onDestory() {
+		mActivityAdPage.onDestroy();
+		BDGameSDK.destroy();
 	}
 }
