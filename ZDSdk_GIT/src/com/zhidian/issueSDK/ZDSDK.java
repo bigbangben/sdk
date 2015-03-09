@@ -153,6 +153,13 @@ public class ZDSDK {
 	public void onSdkPause(Activity activity) {
 		iplateform.onPause(activity);
 	}
+	
+	/**
+	 * 
+	 */
+	public void onSdkStop(Activity activity) {
+		iplateform.onStop(activity);
+	}
 
 	/**
 	 * 销毁

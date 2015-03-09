@@ -442,8 +442,10 @@ public class UcPlatform implements Iplatform {
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public void onStop(Activity activity) {
 	}
 	
 
