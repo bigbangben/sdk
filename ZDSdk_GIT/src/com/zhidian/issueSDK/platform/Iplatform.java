@@ -81,6 +81,8 @@ public interface Iplatform {
 	public boolean suportLogoutUI();
 
 	public void onPause(Activity activity);
+	
+	public void onStop(Activity activity);
 
 	public void onResume(Activity activity);
 
