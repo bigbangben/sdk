@@ -26,7 +26,6 @@ public class ZDSDK {
 	private ZDSDK() {
 		// 初始化 plateform
 		iplateform = new BaiduPlatform();
-
 	}
 
 	public static ZDSDK getInstance() {

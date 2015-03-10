@@ -7,8 +7,9 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
-
+import android.util.Log;
 import android.widget.Toast;
+
 import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.api.LogoutApi;
 import com.zhidian.issueSDK.model.GameInfo;

@@ -1,18 +1,14 @@
 package com.zhidian.issueSDK.net;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import android.util.Log;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
-
-import android.util.Log;
 
 /**
  * Created by Administrator on 2014/12/5.

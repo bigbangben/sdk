@@ -1,16 +1,12 @@
 package com.zhidian.issueSDK.platform;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.pm.ActivityInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.baidu.gamesdk.ActivityAdPage;
 import com.baidu.gamesdk.ActivityAdPage.Listener;
-import com.baidu.gamesdk.ActivityAnalytics;
 import com.baidu.gamesdk.BDGameSDK;
 import com.baidu.gamesdk.BDGameSDKSetting;
 import com.baidu.gamesdk.BDGameSDKSetting.Domain;
@@ -29,17 +25,12 @@ import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
 import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
-/**
- * @Description
- * @author ZengQBo
- * @time 2015年1月5日
- */
 public class BaiduPlatform implements Iplatform {
 
-/*	private ActivityAdPage mActivityAdPage;
-	private ActivityAnalytics mActivityAnalytics;
-	protected static Activity mActivity;
-	protected static GameLoginListener mGameLoginListener;*/
+	private ActivityAdPage mActivityAdPage;
+
+	public BaiduPlatform() {
+	}
 
 	@Override
 	public String getPlatformId() {
@@ -47,74 +38,54 @@ public class BaiduPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(Activity activity,
-			final GameInitListener gameInitListener,
+	public void init(Activity mActivity, final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
-/*		mActivity = activity;
-		mGameLoginListener = gameLoginListener;
-		//统计
-		mActivityAnalytics = new ActivityAnalytics(activity);
-		//停止页
-		mActivityAdPage = new ActivityAdPage(activity, new Listener() {
-			
+		   mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
+
 			@Override
 			public void onClose() {
-				
-			}
-		});*/
-		// 初始化游戏SDK
-		String appId = SDKUtils.getMeteData(activity, "appId");
-		String appKey = SDKUtils.getMeteData(activity, "appKey");
-		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
-		BDGameSDKSetting mBDGameSDKSetting = new BDGameSDKSetting();
-		mBDGameSDKSetting.setAppID(Integer.parseInt(appId));// APPID设置
-		mBDGameSDKSetting.setAppKey(appKey);// APPKEY设置
-		mBDGameSDKSetting.setDomain(Domain.DEBUG);// 设置为正式模式
-		mBDGameSDKSetting
-				.setOrientation((Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
-						: BDGameSDKSetting.Orientation.PORTRAIT);
 
-		BDGameSDK.init(activity, mBDGameSDKSetting,
-				new IResponse<Void>() {
+			}
+		   });
+			//初始化游戏SDK
+			String appId = SDKUtils.getMeteData(mActivity, "appId");
+			String appKey = SDKUtils.getMeteData(mActivity, "appKey");
+			String screenOrientation = SDKUtils.getMeteData(mActivity, "screenOrientation");
+				BDGameSDKSetting mBDGameSDKSetting = new BDGameSDKSetting();
+				mBDGameSDKSetting.setAppID(Integer.valueOf(appId));//APPID设置
+				mBDGameSDKSetting.setAppKey(appKey);//APPKEY设置
+				mBDGameSDKSetting.setDomain(Domain.RELEASE);//设置为正式模式
+				mBDGameSDKSetting.setOrientation((Integer.parseInt(screenOrientation) == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? BDGameSDKSetting.Orientation.LANDSCAPE
+						: BDGameSDKSetting.Orientation.PORTRAIT);
+				BDGameSDK.init(mActivity, mBDGameSDKSetting, new IResponse<Void>(){
 
 					@Override
 					public void onResponse(int resultCode, String resultDesc,
 							Void extraData) {
-						switch (resultCode) {
+						switch(resultCode){
 						case ResultCode.INIT_SUCCESS:
-							// 初始化成功
+							//初始化成功
 							gameInitListener.initSuccess(false, null);
 							break;
-
+							
 						case ResultCode.INIT_FAIL:
 							gameInitListener.initFail(resultDesc);
 							break;
+							
 						default:
-							// 初始化失败
 							gameInitListener.initFail(resultDesc);
+							//初始化失败
 						}
-
+						
 					}
-
-				});
+					
+				}); 
+			
 
 	}
 
 	@Override
-	public void login(Activity activity,
-			final GameLoginListener gameLoginListener) {
-/*		mActivity = activity;
-		mGameLoginListener = gameLoginListener;
-		//统计
-		mActivityAnalytics = new ActivityAnalytics(activity);
-		//停止页
-		mActivityAdPage = new ActivityAdPage(activity, new Listener() {
-			
-			@Override
-			public void onClose() {
-				
-			}
-		});*/
+	public void login(Activity activity, final GameLoginListener gameLoginListener) {
 		// 登录
 		BDGameSDK.login(new IResponse<Void>() {
 
@@ -138,31 +109,28 @@ public class BaiduPlatform implements Iplatform {
 				}
 			}
 		});
+
 	}
 
 	@Override
 	public void showFloat(Activity activity) {
-		
+
 	}
 
 	@Override
-	public void logOut(Activity activity, final GameLogoutListener gameLogoutListener) {
-			BDGameSDK.logout();
-			gameLogoutListener.logoutSuccess();
+	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
+		gameLogoutListener.logoutSuccess();
 	}
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
-		SDKLog.e("", "BDGameSDK.getLoginUid() >>>>>>  " + BDGameSDK.getLoginUid());//FIXME
-		SDKLog.e("", "BDGameSDK.isLogined() >>>>>>  " + BDGameSDK.isLogined());//FIXME
-		listener.onSuccess();
+             listener.onSuccess();
 	}
 
 	@Override
 	public void pay(Activity activity, String money, String order,
-			GameInfo model, String notifyUrl, String exInfo, final OrderGenerateListener listener) {
-		SDKLog.e("", "BDGameSDK.getLoginUid() >>>111>>>  " + BDGameSDK.getLoginUid());//FIXME
-		SDKLog.e("", "BDGameSDK.isLogined() >>>111>>>  " + BDGameSDK.isLogined());//FIXME
+			GameInfo model, String notifyUrl, String extInfo,
+			final OrderGenerateListener listener) {
 		PayOrderInfo payOrderInfo = buildOrderInfo(money,order,model);
 		if (payOrderInfo == null) {
 			return;
@@ -192,17 +160,50 @@ public class BaiduPlatform implements Iplatform {
 	}
 
 	@Override
-	public void createRole(Activity activity, GameInfo gameInfo, CreateRoleListener listener) {
+	public void createRole(Activity mActivity, GameInfo gameInfo,
+			CreateRoleListener listener) {
 		listener.onSuccess();
 	}
 
+	@Override
+	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
+			SetGameInfoListener listener) {
+		mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
+
+			@Override
+			public void onClose() {
+
+			}
+		});
+		listener.onSuccess();
+	}
 
 	@Override
 	public boolean suportLogoutUI() {
 		return false;
 	}
 
+	@Override
+	public void onPause(Activity activity) {
+		mActivityAdPage.onPause();
+	}
 
+	@Override
+	public void onStop(Activity activity) {
+		mActivityAdPage.onStop();
+	}
+
+	@Override
+	public void onResume(Activity activity) {
+		mActivityAdPage.onResume();
+		}
+
+	@Override
+	public void onDestory() {
+		mActivityAdPage.onDestroy();
+		//BDGameSDK.destroy();
+	}
+	
 	/**
 	 * 构建订单信息
 	 * @param model 
@@ -232,60 +233,4 @@ public class BaiduPlatform implements Iplatform {
 		return payOrderInfo;
 	}
 
-
-	@Override
-	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
-			SetGameInfoListener listener) {
-		SDKLog.e("", "BDGameSDK.getLoginUid() >>>setGameInfo>>>  " + BDGameSDK.getLoginUid());//FIXME
-		SDKLog.e("", "BDGameSDK.isLogined() >>>setGameInfo>>>  " + BDGameSDK.isLogined());//FIXME
-	/*	setSessionInvalidListener();
-		//统计
-		mActivityAnalytics = new ActivityAnalytics(mActivity);
-		//停止页
-		mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
-			
-			@Override
-			public void onClose() {
-				
-			}
-		});*/
-		listener.onSuccess();
-	}
-	
-	@Override
-	public void onPause(Activity activity) {
-    /*    mActivityAdPage.onPause();
-        mActivityAnalytics.onPause();*/
-	}
-
-	@Override
-	public void onResume(Activity activity) {
-		/*mActivityAdPage.onResume();
-		mActivityAnalytics.onResume();*/
-	}
-	@Override
-	public void onStop(Activity activity) {
-		//mActivityAdPage.onStop();
-	}
-	
-	@Override
-	public void onDestory() {
-		//mActivityAdPage.onDestroy();
-		BDGameSDK.destroy();
-	}
-	
-/*	private void setSessionInvalidListener(){
-		BDGameSDK.setSessionInvalidListener(new IResponse<Void>(){
-			@Override
-			public void onResponse(int resultCode, String resultDesc,
-					Void extraData) {
-				if(resultCode == ResultCode.SESSION_INVALID){
-					//会话失效，开发者需要重新登录或者重启游戏
-					login(mActivity, mGameLoginListener);
-				}
-				
-			}
-			
-		});
-	}*/
 }

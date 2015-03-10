@@ -7,7 +7,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
-
 import com.zhidian.issueSDK.service.InitService;
 
 public class InitLBS {
