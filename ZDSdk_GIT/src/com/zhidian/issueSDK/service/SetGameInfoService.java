@@ -13,6 +13,7 @@ import com.zhidian.issueSDK.net.JsonResponse;
 import com.zhidian.issueSDK.net.NetTask;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.util.PhoneInformation;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
@@ -56,7 +57,10 @@ public class SetGameInfoService {
 
 		@Override
 		public void onFail(String value) {
-
+			if (callback != null) {
+				SDKLog.e("msg", "Set Game Information Failed >> " + value);
+				callback.onError(ICallback.UPLOAD_GAME_INFO, "Set Game Information Failed");
+			}
 		}
 	};
 
@@ -82,6 +86,10 @@ public class SetGameInfoService {
 		@Override
 		public void requestError(String string) {
 			super.requestError(string);
+			if (callback != null) {
+				SDKLog.e("msg", "Set Game Information Failed >> " + string);
+				callback.onError(ICallback.UPLOAD_GAME_INFO, "Set Game Information Failed");
+			}
 		}
 
 		@Override
@@ -92,6 +100,7 @@ public class SetGameInfoService {
 					LoginService.loginTime = jsonObject.optString("loginTime");
 					// 启动心跳
 					Handler h = new Handler();
+					SDKLog.e("msg", "Set Game Information Success");
 					callback.setGameInfoSuccess(LoginService.loginTime);
 					h.post(new OnLineService(mActivity, h, iplatform, gameInfo));
 					if (showFloat) {
@@ -99,8 +108,9 @@ public class SetGameInfoService {
 						iplatform.showFloat(mActivity);
 					}
 				} else {
+					SDKLog.e("msg", "Set Game Information Failed >> " + jsonObject.toString());
 					callback.onError(ICallback.UPLOAD_GAME_INFO,
-							"Set game infomation failed");
+							"Set Game Information Failed");
 				}
 			}else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)

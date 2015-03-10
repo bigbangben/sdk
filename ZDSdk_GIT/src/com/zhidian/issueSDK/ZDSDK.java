@@ -69,11 +69,6 @@ public class ZDSDK {
 	};
 
 	/**
-	 * 
-	 * 
-	 * @param gameInfo
-	 */
-	/**
 	 * 创建角色
 	 * @param activity 上下文
 	 * @param gameInfo 角色信息
@@ -81,6 +76,13 @@ public class ZDSDK {
 	 */
 	public void createRole(Activity activity,GameInfo gameInfo, ICallback callback) {
 		new CreateRoleService(activity, iplateform).creatRole(gameInfo, callback);
+	};
+	
+	/**
+	 * 获取平台ID
+	 */
+	public String getPlatformId() {
+		return iplateform.getPlatformId();
 	};
 
 	/**
@@ -149,6 +151,13 @@ public class ZDSDK {
 	 */
 	public void onSdkPause(Activity activity) {
 		iplateform.onPause(activity);
+	}
+	
+	/**
+	 *
+	 */
+	public void onSdkStop(Activity activity) {
+		iplateform.onStop(activity);
 	}
 
 	/**

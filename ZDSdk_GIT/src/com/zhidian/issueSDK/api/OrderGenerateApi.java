@@ -22,6 +22,7 @@ public class OrderGenerateApi extends StringRequest {
 	public String uid;
 	public String zoneId;
 	public String roleId;
+	public String roleName;
 	public String cpOrderId;
 	public String extInfo;
 	public String amount;
@@ -52,6 +53,7 @@ public class OrderGenerateApi extends StringRequest {
 		paramMap.put("uid", uid);
 		paramMap.put("zoneId", zoneId);
 		paramMap.put("roleId", roleId);
+		paramMap.put("roleName", roleName);
 		paramMap.put("cpOrderId", cpOrderId);
 		paramMap.put("extInfo", extInfo);
 		paramMap.put("amount", amount);
