@@ -1,16 +1,14 @@
 package com.zhidian.issueSDK.platform;
 
 import android.app.Activity;
-import com.zhidian.issueSDK.ICallback;
+
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
 import com.zhidian.issueSDK.service.InitService;
 import com.zhidian.issueSDK.service.LogOutService;
 import com.zhidian.issueSDK.service.LoginService;
 import com.zhidian.issueSDK.service.OrderGenerateService;
-import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService;
 
 /**
@@ -83,6 +81,8 @@ public interface Iplatform {
 	public boolean suportLogoutUI();
 
 	public void onPause(Activity activity);
+	
+	public void onStop(Activity activity);
 
 	public void onResume(Activity activity);
 
