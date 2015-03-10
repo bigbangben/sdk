@@ -86,6 +86,7 @@ public class OrderGenerateService {
 		api.uid = InitService.mUserInfoModel.id;
 		api.zoneId = model.getZoneId();
 		api.roleId = model.getRoleId();
+		api.roleName = model.getRoleName();
 		api.cpOrderId = cpOrderId;
 		api.extInfo = extInfo;
 		api.amount = money;
