@@ -189,6 +189,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void onPause(Activity activity) {
+		mActivityAnalytics.onPause();
 		mActivityAdPage.onPause();
 	}
 
@@ -199,6 +200,7 @@ public class BaiduPlatform implements Iplatform {
 
 	@Override
 	public void onResume(Activity activity) {
+		mActivityAnalytics.onResume();
 		mActivityAdPage.onResume();
 		}
 
