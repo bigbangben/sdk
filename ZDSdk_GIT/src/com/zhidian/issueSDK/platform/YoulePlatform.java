@@ -10,7 +10,6 @@ import com.zhidian.gamesdk.listener.ILoginListener;
 import com.zhidian.gamesdk.listener.InitListener;
 import com.zhidian.gamesdk.manager.ZhiDianManager;
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
@@ -111,13 +110,8 @@ public class YoulePlatform implements Iplatform {
 			GameLoginListener gameLoginListener) {
 		this.gameInitListener = gameInitListener;
 		this.gameLoginListener = gameLoginListener;
-		InitInfo initInfo = new InitInfo();
-		initInfo.setAppId(SDKUtils.getMeteData(activity, "appId"));
-		initInfo.setAppKey(SDKUtils.getMeteData(activity, "appKey"));
-		initInfo.setScreenOrientation(Integer.parseInt(SDKUtils.getMeteData(
-				activity, "screenOrientation")));
-
-		ZhiDianManager.init(activity, initInfo.getScreenOrientation(),
+		ZhiDianManager.init(activity, Integer.parseInt(SDKUtils.getMeteData(
+				activity, "screenOrientation")),
 				mInitListener, loginListener);
 	}
 
@@ -209,6 +203,12 @@ public class YoulePlatform implements Iplatform {
 	public void onResume(Activity activity) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onStop(Activity activity) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

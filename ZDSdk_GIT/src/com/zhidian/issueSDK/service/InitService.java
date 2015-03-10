@@ -3,7 +3,6 @@ package com.zhidian.issueSDK.service;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.zhidian.issueSDK.ICallback;
@@ -54,6 +53,10 @@ public class InitService {
 		@Override
 		public void requestError(String string) {
 			super.requestError(string);
+			if (callback != null) {
+				SDKLog.e("msg", "Init Failed >> " + string);
+				callback.onError(ICallback.INIT, "Init Failed");
+			}
 		}
 
 		@Override
@@ -61,13 +64,14 @@ public class InitService {
 			int code = jsonObject.optInt("code");
 		    if (callback != null) {
 		    	if (code == 0) {
+		    		SDKLog.e("msg", "Init Success");
 					callback.initSuccess();
 					if (logined) {
 						callback.loginSuccess(mUserInfoModel);
 					}
 				} else {
+					SDKLog.e("msg", "Init failed >>" + jsonObject.toString());
 					callback.onError(ICallback.INIT, "Init failed");
-					SDKLog.e(TAG, jsonObject.toString());
 				}
 			}else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
@@ -81,7 +85,7 @@ public class InitService {
 		public void initSuccess(boolean hasAutoLogin, UserInfoModel model) {
 			logined = hasAutoLogin;
 			if (hasAutoLogin) {
-				SDKLog.e(TAG, "AutoLogin");
+				SDKLog.e(TAG, "---- AutoLogin ----");
 				mUserInfoModel = model;
 			}
 			initSDKServer();
@@ -90,7 +94,10 @@ public class InitService {
 
 		@Override
 		public void initFail(String value) {
-			callback.onError(ICallback.INIT, value);
+			if (callback != null) {
+				SDKLog.e("msg", "Init Failed >> " + value);
+				callback.onError(ICallback.INIT, "Init Failed");
+			}
 		}
 	};
 	
@@ -100,15 +107,16 @@ public class InitService {
 		@Override
 		public void LoginSuccess(UserInfoModel model) {
 			model.id = iplatform.getPlatformId() + "_" + model.id;
-			Log.e(TAG, model.sessionId + "--->" + model.id);
 			LoginService.isLogin = true;
 			InitService.mUserInfoModel = model;
+			SDKLog.e("msg", "Login Success");
 			callback.loginSuccess(model);
 		}
 
 		@Override
 		public void LoginFail(String value) {
-			callback.onError(ICallback.LOGIN, value);
+			SDKLog.e("msg", "Login Failed >> " + value);
+			callback.onError(ICallback.LOGIN, "Login Failed");
 		}
 	};
 
@@ -117,7 +125,6 @@ public class InitService {
 	}
 
 	private void initSDKServer() {
-		Log.e(TAG, "======= initSDKServer =======");// FIXME
 		PhoneInformation phoneInformation = new PhoneInformation(mActivity);
 		InitApi api = new InitApi();
 		api.appId = SDKUtils.getAppId(mActivity);
