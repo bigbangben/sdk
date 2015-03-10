@@ -8,6 +8,7 @@ import com.zhidian.issueSDK.ICallback;
 import com.zhidian.issueSDK.model.GameInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.platform.Iplatform;
+import com.zhidian.issueSDK.util.SDKLog;
 
 /**
  * @Description
@@ -43,11 +44,11 @@ public class LoginService {
 
 		@Override
 		public void LoginSuccess(UserInfoModel model) {
-			model.id = iplatform.getPlatformId() + "_" + model.id;
 			Log.e(TAG, model.sessionId + "--->" + model.id);
 			LoginService.isLogin = true;
 			InitService.mUserInfoModel = model;
 			if (callback != null) {
+				SDKLog.e("msg", "Login Success");
 				callback.loginSuccess(model);
 			}else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
@@ -58,7 +59,8 @@ public class LoginService {
 		@Override
 		public void LoginFail(String value) {
 			if (callback != null) {
-				callback.onError(ICallback.LOGIN, "login failed");
+				SDKLog.e("msg", "Login Failed >> " + value);
+				callback.onError(ICallback.LOGIN, "Login Failed");
 			}else {
 				Toast.makeText(mActivity, "Callback不能为空！", Toast.LENGTH_SHORT)
 				.show();
