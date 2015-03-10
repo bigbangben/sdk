@@ -155,7 +155,7 @@ public class ZDSDK {
 	}
 	
 	/**
-	 * 
+	 *
 	 */
 	public void onSdkStop(Activity activity) {
 		iplateform.onStop(activity);
