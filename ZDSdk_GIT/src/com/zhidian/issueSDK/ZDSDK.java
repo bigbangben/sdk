@@ -106,7 +106,7 @@ public class ZDSDK {
 			new ExitService(activity, iplateform).exit(gameInfo, callback);
 		} else {
 			new AlertDialog.Builder(activity).setTitle("退出游戏")
-					.setMessage("不多待一会吗？")
+					.setMessage("不多玩一会吗！")
 					.setNegativeButton("取消", new OnClickListener() {
 
 						@Override
