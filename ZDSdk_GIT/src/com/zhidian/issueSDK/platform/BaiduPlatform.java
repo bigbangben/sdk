@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.baidu.gamesdk.ActivityAdPage;
 import com.baidu.gamesdk.ActivityAdPage.Listener;
+import com.baidu.gamesdk.ActivityAnalytics;
 import com.baidu.gamesdk.BDGameSDK;
 import com.baidu.gamesdk.BDGameSDKSetting;
 import com.baidu.gamesdk.BDGameSDKSetting.Domain;
@@ -22,12 +23,12 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
-import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 public class BaiduPlatform implements Iplatform {
 
 	private ActivityAdPage mActivityAdPage;
+	private ActivityAnalytics mActivityAnalytics;
 
 	public BaiduPlatform() {
 	}
@@ -40,6 +41,9 @@ public class BaiduPlatform implements Iplatform {
 	@Override
 	public void init(Activity mActivity, final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		   //统计
+		   mActivityAnalytics = new ActivityAnalytics(mActivity);
+		   //停止页
 		   mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
 
 			@Override
@@ -97,8 +101,6 @@ public class BaiduPlatform implements Iplatform {
 					UserInfoModel model = new UserInfoModel();
 					model.id = BDGameSDK.getLoginUid();
 					Log.e("", "id ======== " + model.id);
-					SDKLog.e("", "BDGameSDK.getLoginUid() >>>>>>  " + BDGameSDK.getLoginUid());//FIXME
-					SDKLog.e("", "BDGameSDK.isLogined() >>>>>>  " + BDGameSDK.isLogined());//FIXME
 					gameLoginListener.LoginSuccess(model);
 					break;
 				case ResultCode.LOGIN_CANCEL:
@@ -168,6 +170,8 @@ public class BaiduPlatform implements Iplatform {
 	@Override
 	public void setGameInfo(Activity mActivity, GameInfo gameInfo,
 			SetGameInfoListener listener) {
+		//统计
+		mActivityAnalytics = new ActivityAnalytics(mActivity);
 		mActivityAdPage = new ActivityAdPage(mActivity, new Listener() {
 
 			@Override
@@ -201,7 +205,7 @@ public class BaiduPlatform implements Iplatform {
 	@Override
 	public void onDestory() {
 		mActivityAdPage.onDestroy();
-		//BDGameSDK.destroy();
+		BDGameSDK.destroy();
 	}
 	
 	/**
