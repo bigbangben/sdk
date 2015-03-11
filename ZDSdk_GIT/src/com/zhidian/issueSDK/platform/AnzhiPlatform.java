@@ -10,11 +10,11 @@ import android.util.Log;
 
 import com.anzhi.usercenter.sdk.AnzhiUserCenter;
 import com.anzhi.usercenter.sdk.inter.AnzhiCallback;
+import com.anzhi.usercenter.sdk.inter.InitSDKCallback;
 import com.anzhi.usercenter.sdk.inter.KeybackCall;
 import com.anzhi.usercenter.sdk.item.CPInfo;
 import com.zhidian.issueSDK.R;
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
@@ -96,6 +96,13 @@ public class AnzhiPlatform implements Iplatform {
 			Log.e("", "st==========" + st);// 通过字符串来设置判断回调页面
 		}
 	};
+	private InitSDKCallback mInitCallback = new InitSDKCallback() {
+		
+		@Override
+		public void ininSdkCallcack() {
+			
+		}
+	};
 	private GameLoginListener gameLoginListener;
 	private GameLogoutListener gameLogoutListener;
 	private OrderGenerateListener orderGenerateListener;
@@ -111,21 +118,22 @@ public class AnzhiPlatform implements Iplatform {
 	@Override
 	public void init(Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
-		this.mActivity = activity;
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+		String appKey = SDKUtils.getMeteData(activity, "appKey");
+		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
+		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
 		final CPInfo info = new CPInfo();
 		info.setOpenOfficialLogin(false);// 官方账号登录接口，默认关闭
-		info.setAppKey(initInfo.getAppId());
-		info.setSecret(initInfo.getAppKey());
+		info.setAppKey(appKey);
+		info.setSecret(appSecret);
 		info.setChannel("AnZhi");// 传"AnZhi"
-		info.setGameName(mActivity.getResources().getString(R.string.app_name));
+		info.setGameName(activity.getResources().getString(R.string.app_name));
 		mAnzhiCenter = AnzhiUserCenter.getInstance();
-		mAnzhiCenter.isOpendTestLog = false;// 测试log开关
+		 mAnzhiCenter.azinitSDK(activity, info, mInitCallback);// 初始化方法
+		mAnzhiCenter.setOpendTestLog(true);// 调试log，开关
 		mAnzhiCenter.setCPInfo(info);
 		mAnzhiCenter.setCallback(mCallback);// 设置登录、登出、支付回调；
 		// mAnzhiCenter.setOfficialCallback(mOfficialCall);// 设置老帐户回调，未接入厂商忽略
-		mAnzhiCenter.setActivityOrientation(initInfo.getScreenOrientation());// 设置SDK横竖屏，0横屏,1竖屏,4根据物理感应来选择方向
+		mAnzhiCenter.setActivityOrientation(Integer.valueOf(screenOrientation));// 设置SDK横竖屏，0横屏,1竖屏,4根据物理感应来选择方向
 		mAnzhiCenter.setKeybackCall(mKeybackCall);// 设置通过back键回退到游戏的回调，涉及多个界面，详细请看回调
 	}
 
@@ -143,7 +151,7 @@ public class AnzhiPlatform implements Iplatform {
 	@Override
 	public void showFloat(Activity activity) {
 		this.mActivity = activity;
-		mAnzhiCenter.createFloatView(activity);
+		//mAnzhiCenter.createFloatView(activity);
 	}
 
 	@Override
@@ -218,6 +226,12 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStop(Activity activity) {
 		// TODO Auto-generated method stub
 		
 	}
