@@ -62,14 +62,11 @@ public class AnzhiPlatform implements Iplatform {
 					/*
 					 * 安智账号退出以后，所对应的游戏角色不能继续游戏。 前端流程表现为，游戏必须回到游戏的登录界面或安智的登录界面。
 					 */
-					int code = json.optInt("code"); // 账号退出成功标志位 ,200为成功
-					if (code == 200) {
 						gameLogoutListener.logoutSuccess();
-					} else {
-						gameLogoutListener.logoutFail(result);
-					}
+				
 				} else if ("key_login".equals(key)) {
 					int code = json.optInt("code");// 登入成功标志位
+					SDKLog.e("", "key_login >>>>> " + code);
 					String desc = json.optString("code_desc");
 					String uid = json.getString("uid");// uid是用户的唯一标示，用于标记安智用户
 					String sid = json.getString("sid");
@@ -111,8 +108,9 @@ public class AnzhiPlatform implements Iplatform {
 	}
 
 	@Override
-	public void init(final Activity activity, GameInitListener gameInitListener,
+	public void init(final Activity activity, final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
+		this.mActivity = activity;
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
 		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
 		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
@@ -129,7 +127,8 @@ public class AnzhiPlatform implements Iplatform {
     // 初始化接口所需实现的方法，SDK初始化之后回调此方法，在此方法中可以调用登录方法，完成自动登录的流程；
 			@Override
 			public void ininSdkCallcack() {
-				mAnzhiCenter.login(activity, true);				
+				gameInitListener.initSuccess(false, null);
+				//mAnzhiCenter.login(activity, true);				
 			}
 		});
 		mAnzhiCenter.setOpendTestLog(true);// 调试log，开关
@@ -154,36 +153,15 @@ public class AnzhiPlatform implements Iplatform {
 	@Override
 	public void showFloat(Activity activity) {
 		this.mActivity = activity;
-		//mAnzhiCenter.createFloatView(activity);
+		mAnzhiCenter.dismissFloaticon();
+		mAnzhiCenter.showFloaticon();// 展示悬浮窗口
 	}
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
 		this.mActivity = activity;
 		this.gameLogoutListener = gameLogoutListener;
-		if (suportLogoutUI()) {
 			mAnzhiCenter.logout(activity);
-		}else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏")
-			.setMessage("不多待一会吗？")
-			.setNegativeButton("取消", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-
-				}
-			}).setPositiveButton("确定", new OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					mAnzhiCenter.logout(mActivity);
-				}
-			}).setCancelable(false).create().show();
-
-
-			
-		}
-
 	}
 
 	@Override
@@ -196,7 +174,7 @@ public class AnzhiPlatform implements Iplatform {
 			GameInfo model, String notifyUrl, String exInfo, OrderGenerateListener orderGenerateListener) {
 		this.mActivity = activity;
 		this.orderGenerateListener = orderGenerateListener;
-		mAnzhiCenter.pay(activity, 0, Float.valueOf(money), "", "");
+		mAnzhiCenter.pay(activity, 0, Float.valueOf(money), "钻石吼吼", order);
 	}
 
 	@Override
@@ -212,7 +190,7 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public boolean suportLogoutUI() {
-		return false;
+		return true;
 	}
 
 
@@ -223,19 +201,16 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public void onPause(Activity activity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onStop(Activity activity) {
-		// TODO Auto-generated method stub
 		
 	}
 
