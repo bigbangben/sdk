@@ -36,7 +36,7 @@ public class AnzhiPlatform implements Iplatform {
 	private Activity mActivity;
 	private AnzhiUserCenter mAnzhiCenter;
 	private AnzhiCallback mCallback = new AnzhiCallback() {
-
+		  // 登录、登出、支付回调接口
 		@Override
 		public void onCallback(CPInfo cpInfo, String result) {
 			SDKLog.e("anzhi", "result " + result);// result 为json内容根据具体回调的类型而确定
@@ -96,13 +96,8 @@ public class AnzhiPlatform implements Iplatform {
 			Log.e("", "st==========" + st);// 通过字符串来设置判断回调页面
 		}
 	};
-	private InitSDKCallback mInitCallback = new InitSDKCallback() {
-		
-		@Override
-		public void ininSdkCallcack() {
-			
-		}
-	};
+
+    
 	private GameLoginListener gameLoginListener;
 	private GameLogoutListener gameLogoutListener;
 	private OrderGenerateListener orderGenerateListener;
@@ -112,15 +107,16 @@ public class AnzhiPlatform implements Iplatform {
 
 	@Override
 	public String getPlatformId() {
-		return null;
+		return "1004";
 	}
 
 	@Override
-	public void init(Activity activity, GameInitListener gameInitListener,
+	public void init(final Activity activity, GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
 		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
 		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
+		// 初始化方法
 		final CPInfo info = new CPInfo();
 		info.setOpenOfficialLogin(false);// 官方账号登录接口，默认关闭
 		info.setAppKey(appKey);
@@ -128,7 +124,14 @@ public class AnzhiPlatform implements Iplatform {
 		info.setChannel("AnZhi");// 传"AnZhi"
 		info.setGameName(activity.getResources().getString(R.string.app_name));
 		mAnzhiCenter = AnzhiUserCenter.getInstance();
-		 mAnzhiCenter.azinitSDK(activity, info, mInitCallback);// 初始化方法
+		mAnzhiCenter.azinitSDK(activity, info, new InitSDKCallback() {
+			
+    // 初始化接口所需实现的方法，SDK初始化之后回调此方法，在此方法中可以调用登录方法，完成自动登录的流程；
+			@Override
+			public void ininSdkCallcack() {
+				mAnzhiCenter.login(activity, true);				
+			}
+		});
 		mAnzhiCenter.setOpendTestLog(true);// 调试log，开关
 		mAnzhiCenter.setCPInfo(info);
 		mAnzhiCenter.setCallback(mCallback);// 设置登录、登出、支付回调；
