@@ -14,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
 import com.zhidian.issueSDK.model.GameInfo;
-import com.zhidian.issueSDK.model.InitInfo;
 import com.zhidian.issueSDK.model.UserInfoModel;
 import com.zhidian.issueSDK.service.CreateRoleService.CreateRoleListener;
 import com.zhidian.issueSDK.service.ExitService.GameExitListener;
@@ -42,11 +41,11 @@ public class OuWanPlatform implements Iplatform {
 	public void init(Activity activity,
 			final GameInitListener gameInitListener,
 			final GameLoginListener gameLoginListener) {
-		InitInfo initInfo = new InitInfo();
-		initInfo = SDKUtils.getMeteData(activity);
+		String appId = SDKUtils.getMeteData(activity, "appId");
+		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
 		GameParamInfo gameParamInfo = new GameParamInfo();
-		gameParamInfo.setAppId(String.valueOf(initInfo.getAppId()));// 设置AppID
-		gameParamInfo.setAppSecret(initInfo.getAppKey());// 设置AppSecret
+		gameParamInfo.setAppId(String.valueOf(appId));// 设置AppID
+		gameParamInfo.setAppSecret(appSecret);// 设置AppSecret
 		// gameParamInfo.setTestMode(false); //【可选】设置测试模式，默认为false
 		// gameParamInfo.setChannel("0","0"); //【可选】设置渠道及子渠道id
 		// 调用初始化接口
@@ -159,12 +158,12 @@ public class OuWanPlatform implements Iplatform {
 	}
 
 	@Override
-	public void createRole(GameInfo gameInfo, CreateRoleListener listener) {
+	public void createRole(Activity activity, GameInfo gameInfo, CreateRoleListener listener) {
 		listener.onSuccess();
 	}
 
 	@Override
-	public void setGameInfo(GameInfo gameInfo, SetGameInfoListener listener) {
+	public void setGameInfo(Activity activity, GameInfo gameInfo, SetGameInfoListener listener) {
         GameRolerInfo gameRolerInfo = new GameRolerInfo();
         gameRolerInfo.setServerId(gameInfo.getServerId());
         gameRolerInfo.setServerName("");
@@ -192,6 +191,12 @@ public class OuWanPlatform implements Iplatform {
 
 	@Override
 	public void onResume(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStop(Activity activity) {
 		// TODO Auto-generated method stub
 		
 	}
