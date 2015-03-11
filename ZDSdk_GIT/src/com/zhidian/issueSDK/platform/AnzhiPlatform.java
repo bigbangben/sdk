@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.util.Log;
 
 import com.anzhi.usercenter.sdk.AnzhiUserCenter;
@@ -62,8 +63,14 @@ public class AnzhiPlatform implements Iplatform {
 					/*
 					 * 安智账号退出以后，所对应的游戏角色不能继续游戏。 前端流程表现为，游戏必须回到游戏的登录界面或安智的登录界面。
 					 */
-						gameLogoutListener.logoutSuccess();
-				
+					    //mAnzhiCenter.dismissFloaticon();
+					SDKLog.e("", "++++++++++++++++++++ logoutSuccess ++++++++++++++++++++");// FIXME
+					Intent intent = mActivity.getIntent();
+					mActivity.overridePendingTransition(0, 0);
+				    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+				    mActivity.finish();
+				    mActivity.overridePendingTransition(0, 0);
+				    mActivity.startActivity(intent);
 				} else if ("key_login".equals(key)) {
 					int code = json.optInt("code");// 登入成功标志位
 					SDKLog.e("", "key_login >>>>> " + code);
@@ -153,8 +160,6 @@ public class AnzhiPlatform implements Iplatform {
 	@Override
 	public void showFloat(Activity activity) {
 		this.mActivity = activity;
-		mAnzhiCenter.dismissFloaticon();
-		mAnzhiCenter.showFloaticon();// 展示悬浮窗口
 	}
 
 	@Override
