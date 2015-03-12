@@ -65,12 +65,6 @@ public class AnzhiPlatform implements Iplatform {
 					 */
 					    //mAnzhiCenter.dismissFloaticon();
 					SDKLog.e("", "++++++++++++++++++++ logoutSuccess ++++++++++++++++++++");// FIXME
-					Intent intent = mActivity.getIntent();
-					mActivity.overridePendingTransition(0, 0);
-				    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-				    mActivity.finish();
-				    mActivity.overridePendingTransition(0, 0);
-				    mActivity.startActivity(intent);
 				} else if ("key_login".equals(key)) {
 					int code = json.optInt("code");// 登入成功标志位
 					SDKLog.e("", "key_login >>>>> " + code);
@@ -118,6 +112,7 @@ public class AnzhiPlatform implements Iplatform {
 	public void init(final Activity activity, final GameInitListener gameInitListener,
 			GameLoginListener gameLoginListener) {
 		this.mActivity = activity;
+		//activity.getWindowManager().addView(view, params)
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
 		String appSecret = SDKUtils.getMeteData(activity, "appSecret");
 		String screenOrientation = SDKUtils.getMeteData(activity, "screenOrientation");
