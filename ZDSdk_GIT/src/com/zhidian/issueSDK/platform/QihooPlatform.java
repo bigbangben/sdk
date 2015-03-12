@@ -4,9 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -35,8 +32,6 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
-import com.zhidian.issueSDK.util.ProgressUtil;
-import com.zhidian.issueSDK.util.QihooUserInfoTask;
 import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
@@ -50,10 +45,7 @@ public class QihooPlatform implements Iplatform {
 	private static TokenInfo mTokenInfo = null;
 	//
 	private static QihooUserInfo mUserInfo = null;
-	private QihooUserInfoTask mUserInfoTask;
 
-	// 进度等待框
-	private ProgressDialog mProgress;
 	private GameLoginListener gameLoginListener;
 
 	@Override
@@ -194,15 +186,11 @@ public class QihooPlatform implements Iplatform {
 		// 界面相关参数，360SDK界面是否以横屏显示。
 		bundle.putBoolean(ProtocolKeys.IS_SCREEN_ORIENTATION_LANDSCAPE,
 				isLandScape);
-		bundle.putBoolean(ProtocolKeys.IS_LOGIN_BG_TRANSPARENT,
-				false);
-		
 
 		// *** 以下非界面相关参数 ***
 
 		// 可选参数，登录界面的背景图片路径，必须是本地图片路径
-		bundle.putString(ProtocolKeys.UI_BACKGROUND_PICTRUE, "");
-
+		//bundle.putString(ProtocolKeys.UI_BACKGROUND_PICTRUE, "");
 		// 必需参数，使用360SDK的登录模块。
 		bundle.putInt(ProtocolKeys.FUNCTION_CODE,
 				ProtocolConfigs.FUNC_CODE_LOGIN);
@@ -267,28 +255,12 @@ public class QihooPlatform implements Iplatform {
 	 * 通过此方法返回UserInfo
 	 */
 	public void onGotTokenInfo(TokenInfo tokenInfo) {
+		UserInfoApi api = new UserInfoApi();
 		if (tokenInfo != null && tokenInfo.isValid()) {
 			mTokenInfo = tokenInfo;
 
 			isAccessTokenValid = true;
-
-			mUserInfoTask = QihooUserInfoTask.newInstance();
-
-			// 提示用户进度
-
-			mProgress = ProgressUtil.show(mActivity, "获取用户信息",
-					"正在请求应用服务器，请稍候……", new OnCancelListener() {
-
-						@Override
-						public void onCancel(DialogInterface dialog) {
-							if (mUserInfoTask != null) {
-								mUserInfoTask.doCancel();
-							}
-						}
-					});
-
 			// 请求应用服务器，用AccessToken换取UserInfo
-			UserInfoApi api = new UserInfoApi();
 			api.zdappId = SDKUtils.getAppId(mActivity);
 			api.access_token = tokenInfo.getAccessToken();
 			api.platformId = getPlatformId();
@@ -335,7 +307,6 @@ public class QihooPlatform implements Iplatform {
 			});
 			new NetTask().execute(api);
 		} else {
-			ProgressUtil.dismiss(mProgress);
 			gameLoginListener.LoginFail("未获取到Access Token");
 			Toast.makeText(mActivity, "未获取到Access Token", Toast.LENGTH_LONG)
 					.show();
