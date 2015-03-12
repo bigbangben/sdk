@@ -4,11 +4,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -495,13 +493,11 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void onPause(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void onResume(Activity activity) {
-		// TODO Auto-generated method stub
 
 	}
 	
@@ -539,4 +535,9 @@ public class QihooPlatform implements Iplatform {
         
         return userInfo;
     }
+
+	@Override
+	public void onStop(Activity activity) {
+		
+	}
 }
