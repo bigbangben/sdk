@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 
 import com.zhidian.issueSDK.model.GameInfo;
+import com.zhidian.issueSDK.platform.CoolpadPlatform;
 import com.zhidian.issueSDK.platform.Iplatform;
 import com.zhidian.issueSDK.service.CreateRoleService;
 import com.zhidian.issueSDK.service.ExitService;
@@ -24,6 +25,7 @@ public class ZDSDK {
 
 	private ZDSDK() {
 		// 初始化 plateform
+		iplateform = new CoolpadPlatform();
 	}
 
 	public static ZDSDK getInstance() {
