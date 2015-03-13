@@ -5,7 +5,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.text.TextUtils;
-import android.widget.Toast;
 
 /**
  * QihooUserInfo，是应用服务器请求360服务器得到的360用户信息数据。
@@ -24,74 +23,38 @@ public class QihooUserInfo {
 
     private String nick; // 360用户昵称，无值时候返回空。
 
-    private String error;// 错误码和错误信息
-
-    /***
-     * 从应用服务器返回的数据解析出QihooUserInfo。 此处数据格式由，应用服务器和应用客户端之间自行商议决定。
-     * 不必参考Demo的数据格式，只需应用服务器和应用客户端商定即可。
-     * 目的就是使用AccessToken，请求您的应用服务器，获取QihooUserInfo。
-     * （注：应用服务器和360服务器交互协议，请查看文档中，服务器端接口）
-     * 此处json示例：
-     * {
-     *   "data":{
-     *     "id":"13915949",
-     *     "name":"yyyyyyyyyyyyy",
-     *     "avatar":"http:\/\/u.qhimg.com\/qhimg\/quc\/48_48\/16\/03\/41\/1603414q9b57c.8e1eac.jpg?f=8689e00460eabb1e66277eb4232fde6f"
-     *   },
-     *   "error_code":"0"
-     * }
-     */
-    public static QihooUserInfo parseJson(String jsonString) {
+    public static QihooUserInfo parseUserInfo(JSONObject joInfo) {
         QihooUserInfo userInfo = null;
-        if (!TextUtils.isEmpty(jsonString)) {
+        if (joInfo != null) {
             try {
+                // 必须返回
+                String name = joInfo.getString("name");
+                String avatar = joInfo.getString("avatar");
+
                 userInfo = new QihooUserInfo();
+                userInfo.setName(name);
+                userInfo.setAvatar(avatar);
 
-                JSONObject jsonObj = new JSONObject(jsonString);
-
-                int errorCode = jsonObj.optInt("error_code");
-                if (errorCode == 0) {
-                    JSONObject dataJsonObj = jsonObj.getJSONObject("data");
-
-                    String id = dataJsonObj.getString("id");
-                    String name = dataJsonObj.getString("name");
-                    String avatar = dataJsonObj.getString("avatar");
-
-                    userInfo.setId(id);
-                    userInfo.setName(name);
-                    userInfo.setAvatar(avatar);
-
-                    // 非必返回项
-                    if (dataJsonObj.has("sex")) {
-                        String sex = dataJsonObj.getString("sex");
-                        userInfo.setSex(sex);
-                    }
-
-                    if (dataJsonObj.has("area")) {
-                        String area = dataJsonObj.getString("area");
-
-                        userInfo.setArea(area);
-                    }
-
-                    if (dataJsonObj.has("nick")) {
-                        String nick = dataJsonObj.getString("nick");
-                        userInfo.setNick(nick);
-                    }
-
-                } else {
-
-                    String errorMessage = jsonObj.optString("error");
-
-                    String error = "[" + errorCode + "]:" + errorMessage;
-                    userInfo.setError(error);
-
+                // 非必返回项
+                if (joInfo.has("sex")) {
+                    String sex = joInfo.getString("sex");
+                    userInfo.setSex(sex);
                 }
 
-            } catch (JSONException e) {
+                if (joInfo.has("area")) {
+                    String area = joInfo.getString("area");
+
+                    userInfo.setArea(area);
+                }
+
+                if (joInfo.has("nick")) {
+                    String nick = joInfo.getString("nick");
+                    userInfo.setNick(nick);
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
         return userInfo;
     }
 
@@ -145,36 +108,6 @@ public class QihooUserInfo {
 
     public void setNick(String nick) {
         this.nick = nick;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-
-    public String toJsonString() {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("error_code", 0);
-
-            JSONObject dataObj = new JSONObject();
-            dataObj.put("id", id);
-            dataObj.put("name", name);
-            dataObj.put("avatar", avatar);
-            dataObj.put("sex", sex);
-            dataObj.put("area", area);
-            dataObj.put("nick", nick);
-
-            obj.put("data", dataObj);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return obj.toString();
     }
 
 }
