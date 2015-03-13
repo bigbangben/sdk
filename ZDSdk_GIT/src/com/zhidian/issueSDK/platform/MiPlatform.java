@@ -301,4 +301,10 @@ public class MiPlatform implements Iplatform {
 
 	}
 
+	@Override
+	public void onStop(Activity activity) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
