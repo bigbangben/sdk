@@ -70,6 +70,7 @@ public class QihooPlatform implements Iplatform {
 		this.mActivity = activity;
 		this.gameLoginListener = gameLoginListener;
 		// 使用360SDK登录接口（横屏）
+		Matrix.init(activity);
 		doSdkLogin((orientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) ? true
 				: false);
 	}
@@ -82,11 +83,13 @@ public class QihooPlatform implements Iplatform {
 
 	@Override
 	public void logOut(Activity activity, GameLogoutListener gameLogoutListener) {
+		Matrix.init(activity);
 		gameLogoutListener.logoutSuccess();
 	}
 
 	@Override
-	public void exit(Activity mActivity, GameExitListener listener) {
+	public void exit(Activity mActivity, final GameExitListener listener) {
+		Matrix.init(mActivity);
         Bundle bundle = new Bundle();
 
         // 界面相关参数，360SDK界面是否以横屏显示。
@@ -112,6 +115,7 @@ public class QihooPlatform implements Iplatform {
 		                    case 0: // 用户关闭退出界面
 		                        return;
 		                    default:// 退出游戏
+		                    	listener.onSuccess();
 		                        return;
 		                }
 		            } catch (JSONException e) {
@@ -127,6 +131,7 @@ public class QihooPlatform implements Iplatform {
 			GameInfo model, String notifyUri, String extInfo,
 			OrderGenerateListener listener) {
 		this.mActivity = activity;
+		Matrix.init(activity);
 		PackageManager pm = activity.getPackageManager();
 		String name = (String) pm.getApplicationLabel(activity
 				.getApplicationInfo());
@@ -157,6 +162,7 @@ public class QihooPlatform implements Iplatform {
 	@Override
 	public void setGameInfo(Activity activity, GameInfo gameInfo,
 			SetGameInfoListener listener) {
+		Matrix.init(activity);
 		listener.onSuccess();
 	}
 
