@@ -1,9 +1,15 @@
 package com.zhidian.issueSDK.platform;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Text;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.text.TextUtils;
 
 import com.zhidian.gamesdk.listener.ILogOutListener;
 import com.zhidian.gamesdk.listener.ILoginListener;
@@ -57,6 +63,9 @@ public class YoulePlatform implements Iplatform {
 		}
 	};
 
+	protected ArrayList<UserInfoModel> userList;
+
+
 	/**
 	 * 登录监听器
 	 */
@@ -72,6 +81,8 @@ public class YoulePlatform implements Iplatform {
 			UserInfoModel model = new UserInfoModel();
 			model.sessionId = sessionId;
 			model.id = uid;
+			userList = new ArrayList<UserInfoModel>();
+			userList.add(model);
 			gameLoginListener.LoginSuccess(model);
 		}
 
@@ -118,8 +129,9 @@ public class YoulePlatform implements Iplatform {
 	@Override
 	public void login(Activity activity, GameLoginListener gameLoginListener) {
 		this.gameLoginListener = gameLoginListener;
-		ZhiDianManager.showLogin(activity, loginListener);
-
+		if (userList.size() == 0) {
+			ZhiDianManager.showLogin(activity, loginListener);
+		}
 	}
 
 	@Override
