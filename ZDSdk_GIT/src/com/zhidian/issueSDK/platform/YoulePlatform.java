@@ -24,6 +24,7 @@ import com.zhidian.issueSDK.service.LogOutService.GameLogoutListener;
 import com.zhidian.issueSDK.service.LoginService.GameLoginListener;
 import com.zhidian.issueSDK.service.OrderGenerateService.OrderGenerateListener;
 import com.zhidian.issueSDK.service.SetGameInfoService.SetGameInfoListener;
+import com.zhidian.issueSDK.util.SDKLog;
 import com.zhidian.issueSDK.util.SDKUtils;
 
 /**
@@ -38,6 +39,8 @@ public class YoulePlatform implements Iplatform {
 	private GameInitListener gameInitListener;
 
 	private GameLoginListener gameLoginListener;
+	
+	private static UserInfoModel model = new UserInfoModel();
 
 	/**
 	 * 初始化监听器
@@ -63,7 +66,6 @@ public class YoulePlatform implements Iplatform {
 		}
 	};
 
-	protected ArrayList<UserInfoModel> userList;
 
 
 	/**
@@ -78,11 +80,8 @@ public class YoulePlatform implements Iplatform {
 
 		@Override
 		public void loginSuccess(String sessionId, String uid) {
-			UserInfoModel model = new UserInfoModel();
 			model.sessionId = sessionId;
 			model.id = uid;
-			userList = new ArrayList<UserInfoModel>();
-			userList.add(model);
 			gameLoginListener.LoginSuccess(model);
 		}
 
@@ -129,7 +128,8 @@ public class YoulePlatform implements Iplatform {
 	@Override
 	public void login(Activity activity, GameLoginListener gameLoginListener) {
 		this.gameLoginListener = gameLoginListener;
-		if (userList.size() == 0) {
+		SDKLog.e(TAG, "login  model.id =====  " + model.id);
+		if (TextUtils.isEmpty(model.id)) {
 			ZhiDianManager.showLogin(activity, loginListener);
 		}
 	}
@@ -138,26 +138,12 @@ public class YoulePlatform implements Iplatform {
 	public void logOut(final Activity activity,
 			GameLogoutListener gameLogoutListener) {
 		this.gameLogoutListener = gameLogoutListener;
-		if (suportLogoutUI()) {
-			ZhiDianManager.logout(activity, iLogOutListener);
-		} else {
-			new AlertDialog.Builder(activity).setTitle("退出游戏")
-					.setMessage("不多待一会吗？")
-					.setNegativeButton("取消", new OnClickListener() {
+		cleanRes();
+		ZhiDianManager.logout(activity, iLogOutListener);
+	}
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-
-						}
-					}).setPositiveButton("确定", new OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							ZhiDianManager.logout(activity, iLogOutListener);
-						}
-					}).setCancelable(false).create().show();
-		}
-
+	private void cleanRes() {
+		model = null;
 	}
 
 	@Override
@@ -202,6 +188,7 @@ public class YoulePlatform implements Iplatform {
 
 	@Override
 	public void exit(Activity mActivity, GameExitListener listener) {
+		cleanRes();
 		listener.onSuccess();
 	}
 
