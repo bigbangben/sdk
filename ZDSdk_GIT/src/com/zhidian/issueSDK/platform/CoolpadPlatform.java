@@ -38,8 +38,8 @@ public class CoolpadPlatform implements Iplatform {
 		boolean isLandscape = "0" == screenOrientation ? true : false;
         String appId = SDKUtils.getMeteData(activity, "appId");
 		String appKey = SDKUtils.getMeteData(activity, "appKey");
-		   mCoolcloud = Coolcloud.createInstance(activity, appId, null);
-		   mCoolcloud.getConfiguration().setLandscape(true);
+		   mCoolcloud = Coolcloud.createInstance(activity, appId, appKey);
+		   mCoolcloud.get
         gameInitListener.initSuccess(false, null);
 
 	}
